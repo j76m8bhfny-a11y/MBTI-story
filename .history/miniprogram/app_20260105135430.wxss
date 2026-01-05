@@ -1,0 +1,59 @@
+page {
+  /* --- 📱 禁止页面滚动 --- */
+  overflow: hidden; /* 禁止滚动 */
+  height: 100vh;    /* 强制满屏 */
+  background-color: #FFFDF5; /* 确保背景色填充 */
+  
+  /* --- 🎨 Palette (Warm Eggshell V3.0) --- */
+  /* 背景：温暖蛋壳黄 */
+  --bg-color: #FFFDF5;
+  --van-background-color: #FFFDF5;
+  
+  /* 进度条 */
+  --progress-bg: #FFECEC; /* 浅粉 */
+  --progress-active: #FFB7B2; /* 深粉 */
+  
+  /* 卡片 */
+  --card-bg: #FFFFFF;
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* 更柔和的投影 */
+  
+  /* 字体 */
+  --text-title: #333333;
+  --text-body: #555555;
+  --text-answer: #FF8F8F; /* 选中答案的高亮色 */
+  
+  /* Vant 兼容变量 */
+  --van-primary-color: #FFB7B2;       /* Peach Pink */
+  --van-text-color: #555555;          /* Body Text */
+  --text-sub-color: #9B9B9B;          /* Neutral Grey: Sub Text */
+  --accent-color: #FFB7B2;            /* Peach: Highlights/Pointers */
+
+  /* --- 🧩 Shape & Feel --- */
+  --van-button-border-radius: 999px;  /* Pill Shape */
+  --van-button-default-height: 48px;
+  --van-button-default-background-color: rgba(255, 255, 255, 0.92); /* Pseudo-Glass */
+  --van-button-default-border-color: rgba(255, 255, 255, 0.5);
+  
+  /* --- 📝 Typography --- */
+  --van-font-size-md: 17px;           /* Large body text */
+  --van-line-height-md: 1.8;          /* High breathing room */
+  
+  /* --- 📦 Layout --- */
+  --van-cell-group-inset-padding: 0 24px;
+  --van-border-radius-lg: 24px;
+}
+
+/* Utility: Android-Safe Glass Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 24px rgba(191, 166, 217, 0.15);
+}
+
+/* Utility: F-Pattern Layout Helper */
+.scenario-text {
+  text-align: left;
+  font-weight: 400;
+  line-height: 1.8;
+  color: var(--van-text-color);
+}

@@ -1,0 +1,24 @@
+<wxs module="gesture" src="./gesture.wxs"></wxs>
+
+<view class="ruler-container"
+  data-track-width="{{trackWidth}}"
+  data-thumb-left="{{thumbLeft}}"
+  catch:touchstart="{{gesture.touchStart}}"
+  catch:touchmove="{{gesture.touchMove}}"
+  catch:touchend="{{gesture.touchEnd}}"
+>
+  <!-- 滑槽 (Track) -->
+  <view class="track" id="track">
+    <!-- 7 个小圆点作为吸附位提示 -->
+    <view class="track-dots">
+      <view wx:for="{{[0,1,2,3,4,5,6]}}" wx:key="*this" class="track-dot {{item===val ? 'active' : ''}}" style="left: {{item * 16.66}}%"></view>
+    </view>
+  </view>
+
+  <!-- 滑块头 (Thumb) -->
+  <view class="thumb {{isDragging ? 'dragging' : ''}}" id="thumb" style="left: {{thumbLeft}}px">
+    <view class="thumb-inner">
+      <text class="thumb-emoji">{{thumbEmoji}}</text>
+    </view>
+  </view>
+</view>

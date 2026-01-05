@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "ruler-slider": "/components/ruler-slider/ruler-slider"
+  }
+}

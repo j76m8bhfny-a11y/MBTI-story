@@ -1,0 +1,87 @@
+// 物理引擎 - 中心锚点逻辑
+
+var startX = 0;
+var startLeft = 140; // 核心修复：初始值设为中间 (280/2)，防止第一次触摸跳变
+var lastLeft = 140;  // 同步初始状态
+var TRACK_WIDTH = 280; // 有效滑动距离 (对应 CSS 中的滑动区域)
+
+/**
+ * 触摸开始
+ */
+function touchStart(event, ownerInstance) {
+  var touch = event.touches[0];
+  startX = touch.clientX;
+  
+  // 核心修复：获取当前视觉上的 left 值，作为物理运动的起点
+  // 这能确保无论滑块在哪，手指按下去的一瞬间都是连贯的
+  var cursor = ownerInstance.selectComponent('#thumb');
+  var computedStyle = cursor.getComputedStyle(['left']);
+  
+  // 容错处理：如果读不到，就用上次记录的 lastLeft
+  if (computedStyle && computedStyle.left && computedStyle.left !== 'auto') {
+    startLeft = parseInt(computedStyle.left);
+  } else {
+    startLeft = lastLeft;
+  }
+}
+
+/**
+ * 触摸移动 - 实时计算索引
+ */
+function touchMove(event, ownerInstance) {
+  var touch = event.touches[0];
+  var deltaX = touch.clientX - startX; // 计算手指移动了多少
+  
+  // 新位置 = 按下时的位置 + 手指移动距离
+  var newLeft = startLeft + deltaX;
+
+  // 边界限制
+  if (newLeft < 0) newLeft = 0;
+  if (newLeft > TRACK_WIDTH) newLeft = TRACK_WIDTH;
+
+  // 移动滑块
+  var cursor = ownerInstance.selectComponent('#thumb');
+  cursor.setStyle({
+    left: newLeft + 'px'
+  });
+
+  // 记录位置供下次使用
+  lastLeft = newLeft;
+
+  // 实时计算 Index (0-6)
+  var step = TRACK_WIDTH / 6;
+  var index = Math.round(newLeft / step);
+  
+  // 节流通讯：只有 Index 变了才通知
+  ownerInstance.callMethod('onProjectedIndexChange', { index: index });
+}
+
+/**
+ * 触摸结束
+ */
+function touchEnd(event, ownerInstance) {
+  // 吸附逻辑
+  var step = TRACK_WIDTH / 6;
+  var index = Math.round(lastLeft / step);
+  var snapLeft = index * step;
+
+  // 执行吸附动画 (直接设置位置)
+  var cursor = ownerInstance.selectComponent('#thumb');
+  cursor.setStyle({
+    left: snapLeft + 'px',
+    transition: 'left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)' // Q弹回弹
+  });
+  
+  // 更新最终位置
+  lastLeft = snapLeft;
+  // startLeft 不需要更新，它只在 touchStart 时有用
+  
+  // 发送最终确认事件
+  ownerInstance.callMethod('onProjectedIndexChange', { index: index });
+}
+
+module.exports = {
+  touchStart: touchStart,
+  touchMove: touchMove,
+  touchEnd: touchEnd
+};

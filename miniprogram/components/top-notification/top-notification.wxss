@@ -1,0 +1,29 @@
+.top-notification {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.top-notification.show {
+  transform: translateY(0);
+}
+
+.notification-content {
+  background: var(--van-primary-color);
+  padding: 24rpx 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(191, 166, 217, 0.3);
+}
+
+.notification-text {
+  font-size: 28rpx;
+  color: #FFFFFF;
+  text-align: center;
+  line-height: 1.5;
+}

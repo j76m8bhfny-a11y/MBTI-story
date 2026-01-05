@@ -1,0 +1,54 @@
+<view class="test-container">
+  <!-- 顶部标题 -->
+  <view class="header">
+    <text class="title">LifeMBTI</text>
+  </view>
+
+  <!-- 进度条 -->
+  <view class="progress-bar">
+    <view class="progress-fill" style="width: {{progressPercent}}%"></view>
+  </view>
+  <view class="progress-text">{{currentIndex + 1}} / 60</view>
+
+  <!-- 核心卡片 -->
+  <view class="card-container">
+    <!-- 插画区 -->
+    <view class="illustration-area">
+      <image class="illustration" src="/assets/images/fallback.svg" mode="aspectFit" />
+    </view>
+
+    <!-- 标签 -->
+    <view class="tag">#{{currentQuestion.dim}}#</view>
+
+    <!-- 题目 -->
+    <view class="question-text scenario-text">{{currentQuestion.txt}}</view>
+
+    <!-- 动态答案展示区 -->
+    <view class="answer-display">
+      <view class="emoji-feedback">{{currentEmoji}}</view>
+      <text class="answer-text">{{currentAnswerText}}</text>
+    </view>
+
+    <!-- 刻度尺组件 -->
+    <view class="ruler-wrapper">
+      <ruler-slider
+        value="{{rulerValue}}"
+        options="{{currentQuestion.opts}}"
+        bind:change="onRulerChange"
+        bind:changing="onRulerChanging"
+        bind:emoji-change="onEmojiChange"
+      />
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="button-wrapper">
+    <button 
+      class="next-button" 
+      bindtap="onNext"
+      disabled="{{!hasAnswered}}"
+    >
+      下一题 ->
+    </button>
+  </view>
+</view>

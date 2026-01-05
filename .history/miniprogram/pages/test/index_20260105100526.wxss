@@ -1,0 +1,86 @@
+.test-container {
+  min-height: 100vh;
+  padding: 40rpx 32rpx;
+  background: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 进度条 */
+.progress-bar {
+  width: 100%;
+  height: 8rpx;
+  background: var(--progress-bg);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 16rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--progress-active);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 28rpx;
+  color: var(--text-sub-color);
+  text-align: center;
+  margin-bottom: 60rpx;
+}
+
+/* 题目容器 */
+.question-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 0;
+}
+
+.question-text {
+  font-size: 36rpx;
+  line-height: 1.8;
+  color: var(--text-body);
+  text-align: center;
+}
+
+/* 刻度尺包装器 */
+.ruler-wrapper {
+  padding: 60rpx 0;
+}
+
+/* 按钮包装器 */
+.button-wrapper {
+  padding: 40rpx 0;
+}
+
+.next-button {
+  width: 100%;
+  height: 96rpx;
+  font-size: 32rpx;
+  color: var(--text-answer);
+  background: var(--card-bg);
+  border: 2rpx solid rgba(255, 183, 178, 0.3);
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: var(--card-shadow);
+}
+
+.next-button::after {
+  border: none;
+}
+
+.next-button[disabled] {
+  opacity: 0.4;
+  color: var(--text-sub-color);
+}
+
+.next-button:not([disabled]):active {
+  transform: scale(0.98);
+  background: rgba(255, 183, 178, 0.1);
+}

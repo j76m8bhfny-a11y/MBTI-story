@@ -1,0 +1,37 @@
+page {
+  /* --- 🎨 Palette (Morandi / Cream) --- */
+  --van-primary-color: #BFA6D9;       /* Haze Purple: Mystery/Subconscious */
+  --van-background-color: #FFFBF5;    /* Cream White: Paper texture */
+  --van-text-color: #4A4A4A;          /* Warm Grey: Main Text */
+  --text-sub-color: #9B9B9B;          /* Neutral Grey: Sub Text */
+  --accent-color: #FFB7B2;            /* Peach: Highlights/Pointers */
+
+  /* --- 🧩 Shape & Feel --- */
+  --van-button-border-radius: 999px;  /* Pill Shape */
+  --van-button-default-height: 48px;
+  --van-button-default-background-color: rgba(255, 255, 255, 0.92); /* Pseudo-Glass */
+  --van-button-default-border-color: rgba(255, 255, 255, 0.5);
+  
+  /* --- 📝 Typography --- */
+  --van-font-size-md: 17px;           /* Large body text */
+  --van-line-height-md: 1.8;          /* High breathing room */
+  
+  /* --- 📦 Layout --- */
+  --van-cell-group-inset-padding: 0 24px;
+  --van-border-radius-lg: 24px;
+}
+
+/* Utility: Android-Safe Glass Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 24px rgba(191, 166, 217, 0.15);
+}
+
+/* Utility: F-Pattern Layout Helper */
+.scenario-text {
+  text-align: left;
+  font-weight: 400;
+  line-height: 1.8;
+  color: var(--van-text-color);
+}

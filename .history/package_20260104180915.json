@@ -1,0 +1,19 @@
+{
+  "name": "lifembti",
+  "version": "1.0.0",
+  "description": "LifeMBTI - 重启人生 MBTI Simulator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mbti",
+    "miniprogram",
+    "wechat"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@vant/weapp": "^1.11.6"
+  }
+}

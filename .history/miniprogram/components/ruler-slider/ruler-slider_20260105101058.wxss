@@ -1,0 +1,84 @@
+/* 容器 */
+.ruler-container {
+  position: relative;
+  width: 100%;
+  height: 120rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+}
+
+/* 滑槽 (Track) */
+.track {
+  position: relative;
+  width: 100%;
+  height: 60rpx;
+  background: #F5F5F5;
+  border-radius: 30rpx;
+  overflow: hidden;
+}
+
+/* 轨道上的小圆点 */
+.track-dots {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.track-dot {
+  position: absolute;
+  top: 50%;
+  width: 8rpx;
+  height: 8rpx;
+  background: #E0E0E0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.track-dot.active {
+  background: var(--progress-active);
+  transform: translate(-50%, -50%) scale(1.5);
+}
+
+/* 滑块头 (Thumb) */
+.thumb {
+  position: absolute;
+  top: 50%;
+  width: 80rpx;
+  height: 80rpx;
+  transform: translate(-50%, -50%);
+  margin-top: -10rpx;
+  z-index: 10;
+  transition: left 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.thumb.dragging {
+  transition: none;
+}
+
+.thumb.dragging .thumb-inner {
+  transform: scale(1.1);
+}
+
+/* 滑块内部 */
+.thumb-inner {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 滑块上的 emoji */
+.thumb-emoji {
+  font-size: 40rpx;
+  line-height: 1;
+}

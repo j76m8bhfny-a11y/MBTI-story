@@ -1,0 +1,32 @@
+<view class="test-container">
+  <!-- 进度指示器 -->
+  <view class="progress-bar">
+    <view class="progress-fill" style="width: {{progressPercent}}%"></view>
+  </view>
+  <view class="progress-text">{{currentIndex + 1}} / 60</view>
+
+  <!-- 题目内容 -->
+  <view class="question-container">
+    <view class="question-text scenario-text">{{currentQuestion.txt}}</view>
+  </view>
+
+  <!-- 刻度尺组件 -->
+  <view class="ruler-wrapper">
+    <ruler-slider
+      value="{{rulerValue}}"
+      options="{{currentQuestion.opts}}"
+      bind:change="onRulerChange"
+    />
+  </view>
+
+  <!-- 下一题按钮 -->
+  <view class="button-wrapper">
+    <button 
+      class="next-button glass-effect" 
+      bindtap="onNext"
+      disabled="{{!hasAnswered}}"
+    >
+      下一题
+    </button>
+  </view>
+</view>

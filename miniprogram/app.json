@@ -1,0 +1,16 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/test/index",
+    "pages/result/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFFBF5",
+    "navigationBarTitleText": "LifeMBTI",
+    "navigationBarTextStyle": "black"
+  },
+  "darkmode": false,
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

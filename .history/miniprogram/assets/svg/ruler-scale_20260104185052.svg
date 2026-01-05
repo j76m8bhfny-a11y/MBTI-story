@@ -1,0 +1,29 @@
+<svg width="600" height="60" viewBox="0 0 600 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background line -->
+  <line x1="30" y1="30" x2="570" y2="30" stroke="#E0E0E0" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- -3: Star (Large) -->
+  <g transform="translate(30, 30)">
+    <polygon points="0,-12 3,-4 11,-4 5,1 7,9 0,5 -7,9 -5,1 -11,-4 -3,-4" fill="#BFA6D9"/>
+  </g>
+  
+  <!-- -2: Medium solid dot -->
+  <circle cx="120" cy="30" r="6" fill="#BFA6D9"/>
+  
+  <!-- -1: Small solid dot -->
+  <circle cx="210" cy="30" r="4" fill="#BFA6D9"/>
+  
+  <!-- 0: Hollow circle (center) -->
+  <circle cx="300" cy="30" r="8" fill="none" stroke="#BFA6D9" stroke-width="2"/>
+  
+  <!-- +1: Small solid dot -->
+  <circle cx="390" cy="30" r="4" fill="#BFA6D9"/>
+  
+  <!-- +2: Medium solid dot -->
+  <circle cx="480" cy="30" r="6" fill="#BFA6D9"/>
+  
+  <!-- +3: Star (Large) -->
+  <g transform="translate(570, 30)">
+    <polygon points="0,-12 3,-4 11,-4 5,1 7,9 0,5 -7,9 -5,1 -11,-4 -3,-4" fill="#BFA6D9"/>
+  </g>
+</svg>

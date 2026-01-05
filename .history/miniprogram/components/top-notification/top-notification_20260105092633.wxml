@@ -1,0 +1,5 @@
+<view class="top-notification {{show ? 'show' : ''}}">
+  <view class="notification-content">
+    <text class="notification-text">{{text}}</text>
+  </view>
+</view>

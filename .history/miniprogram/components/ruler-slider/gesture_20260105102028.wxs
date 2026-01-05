@@ -1,0 +1,61 @@
+// 物理引擎 - 实时拖动反馈
+
+var lastReportedIndex = -1; // 记录上次上报的索引
+
+/**
+ * 触摸开始
+ */
+function touchStart(event, ownerInstance) {
+  var touch = event.touches[0];
+  ownerInstance.callMethod('onTouchStart', {
+    clientX: touch.clientX
+  });
+}
+
+/**
+ * 触摸移动 - 实时计算索引
+ */
+function touchMove(event, ownerInstance) {
+  var touch = event.touches[0];
+  var instance = ownerInstance.getDataset();
+  
+  // 获取轨道宽度
+  var trackWidth = instance.trackWidth || 0;
+  
+  // 计算触摸点相对于轨道左侧的位置
+  var trackRect = instance.trackRect || { left: 0 };
+  var relativeX = touch.clientX - trackRect.left;
+  
+  // 限制范围
+  var clampedX = Math.max(0, Math.min(trackWidth, relativeX));
+  
+  // 计算对应的索引 (0-6)
+  var tempIndex = Math.round((clampedX / trackWidth) * 6);
+  
+  // 边界限制
+  if (tempIndex < 0) tempIndex = 0;
+  if (tempIndex > 6) tempIndex = 6;
+  
+  // 只有当索引变化时才通知逻辑层 (性能优化关键)
+  if (tempIndex !== lastReportedIndex) {
+    lastReportedIndex = tempIndex;
+    // 调用组件逻辑层的方法
+    ownerInstance.callMethod('onProjectedIndexChange', { 
+      index: tempIndex,
+      thumbLeft: clampedX
+    });
+  }
+}
+
+/**
+ * 触摸结束
+ */
+function touchEnd(event, ownerInstance) {
+  ownerInstance.callMethod('onTouchEnd', {});
+}
+
+module.exports = {
+  touchStart: touchStart,
+  touchMove: touchMove,
+  touchEnd: touchEnd
+};

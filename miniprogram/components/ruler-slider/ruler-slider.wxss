@@ -1,0 +1,75 @@
+/* 容器 */
+.ruler-container {
+  position: relative;
+  width: 600rpx; /* 锁定宽度 */
+  height: 100rpx;
+  margin: 0 auto; /* 居中 */
+}
+
+/* 滑槽 (Track) */
+.track {
+  width: 100%;
+  height: 60rpx;
+  background: #F5F5F5;
+  border-radius: 999px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20rpx; /* 给刻度点留出位置 */
+  box-sizing: border-box;
+}
+
+/* 轨道上的小圆点 */
+.track-dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* 核心：强制指定宽度为 280px (与 WXS 保持一致) */
+  width: 280px;
+  height: 100%;
+  
+  /* 居中放置在父容器里 */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  display: flex;
+  justify-content: space-between; /* 均匀分布 */
+  align-items: center;
+  z-index: 1;
+}
+
+.track-dot {
+  width: 8rpx;
+  height: 8rpx;
+  background: #E0E0E0;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.track-dot.active {
+  background: var(--progress-active);
+  transform: scale(1.5);
+}
+
+/* 滑块头 (Thumb) */
+.thumb {
+  position: absolute;
+  top: -10rpx;
+  left: 140px; /* 初始位置居中 (280/2) */
+  width: 80rpx;
+  height: 80rpx;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  /* 必须设置初始 transform，否则 wxs 可能读不到 */
+  transform: translateX(0px);
+  transition: left 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.thumb.dragging {
+  transition: none;
+}

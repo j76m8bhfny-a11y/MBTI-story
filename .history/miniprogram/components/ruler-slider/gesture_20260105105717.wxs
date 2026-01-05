@@ -1,0 +1,99 @@
+// 物理引擎 - 实时拖动反馈
+
+var startX = 0;
+var lastLeft = 0; // 记录上次滑块的位置
+var currentLeft = 0;
+var maxPixel = 0; // 轨道最大像素宽度
+
+// 初始化：计算最大宽度
+// 假设屏幕宽度 375px (iPhone 6 标准)，600rpx ≈ 300px
+// 为了保险，我们在 touchStart 里动态获取，或者这里直接给个估算值
+// 更好的方式是逻辑层传进来，但为了不报错，先估算：
+// 600rpx 在大多数手机上约为屏幕宽度的 0.8
+// 这里我们做个简单的设定：轨道有效滑动距离 = 轨道总宽 - 滑块宽度
+// 假设 300px (轨道) - 40px (滑块) = 260px
+
+/**
+ * 触摸开始
+ */
+function touchStart(event, ownerInstance) {
+  var touch = event.touches[0];
+  startX = touch.clientX;
+  
+  // 获取当前滑块位置
+  var thumb = ownerInstance.selectComponent('#thumb');
+  var dataset = thumb.getDataset();
+  currentLeft = dataset.thumbLeft || 0;
+  lastLeft = currentLeft;
+}
+
+/**
+ * 触摸移动 - 实时计算索引
+ */
+function touchMove(event, ownerInstance) {
+  var touch = event.touches[0];
+  var deltaX = touch.clientX - startX;
+  
+  // 核心修正：假定有效滑动宽度为 280px (根据 600rpx 估算)
+  var TRACK_WIDTH_PX = 280; 
+  
+  // 计算新位置
+  var newLeft = lastLeft + deltaX;
+
+  // 边界限制
+  if (newLeft < 0) newLeft = 0;
+  if (newLeft > TRACK_WIDTH_PX) newLeft = TRACK_WIDTH_PX;
+
+  // 移动滑块
+  var thumb = ownerInstance.selectComponent('#thumb');
+  thumb.setStyle({
+    left: newLeft + 'px'
+  });
+
+  // 实时计算 Index (0-6)
+  var step = TRACK_WIDTH_PX / 6;
+  var index = Math.round(newLeft / step);
+  
+  // 发送事件
+  ownerInstance.callMethod('onProjectedIndexChange', { index: index });
+  
+  // 不要在 move 里更新 lastLeft，因为那是基于 startX 的累加
+  // 只有在 touchEnd 确认后才更新 lastLeft
+}
+
+/**
+ * 触摸结束
+ */
+function touchEnd(event, ownerInstance) {
+  var touch = event.changedTouches[0]; // 注意 touchEnd 要用 changedTouches
+  var deltaX = touch.clientX - startX;
+  var TRACK_WIDTH_PX = 280;
+  
+  var finalLeft = lastLeft + deltaX;
+  if (finalLeft < 0) finalLeft = 0;
+  if (finalLeft > TRACK_WIDTH_PX) finalLeft = TRACK_WIDTH_PX;
+
+  // 计算吸附
+  var step = TRACK_WIDTH_PX / 6;
+  var index = Math.round(finalLeft / step);
+  var snapLeft = index * step;
+
+  // 执行吸附动画 (直接设置位置)
+  var thumb = ownerInstance.selectComponent('#thumb');
+  thumb.setStyle({
+    left: snapLeft + 'px',
+    transition: 'left 0.2s cubic-bezier(0.25, 0.8, 0.25, 1)' // CSS 动画回弹
+  });
+  
+  // 更新状态
+  lastLeft = snapLeft;
+  
+  // 延迟清除 transition，防止下次拖动有延迟感
+  // 也可以不清除，只要 touchMove 覆盖了 transition: none
+}
+
+module.exports = {
+  touchStart: touchStart,
+  touchMove: touchMove,
+  touchEnd: touchEnd
+};

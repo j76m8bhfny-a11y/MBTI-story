@@ -1,0 +1,26 @@
+<view class="ruler-container" catch:touchmove="onTouchMove" catch:touchstart="onTouchStart" catch:touchend="onTouchEnd">
+  <!-- 轨道背景 -->
+  <view class="ruler-track"></view>
+  
+  <!-- 刻度点 - 7个刻度 (0-6 对应 -3 到 +3) -->
+  <view class="ruler-scales">
+    <view wx:for="{{[0,1,2,3,4,5,6]}}" wx:key="*this" class="scale-item" style="left: {{item * 16.66}}%">
+      <!-- 刻度点样式：
+           - item===3 (中心0): 空心圆环
+           - item===0||item===6 (两端±3): 大光晕点
+           - 其他: 实心圆点，大小递增
+      -->
+      <view class="dot {{item===3 ? 'hollow' : ''}} {{item===0||item===6 ? 'large-glow' : ''}} {{item===1||item===5 ? 'medium' : ''}} {{item===2||item===4 ? 'small' : ''}} {{item===val ? 'active' : ''}}"></view>
+    </view>
+  </view>
+
+  <!-- 滑块光标 -->
+  <view class="ruler-cursor" style="left: {{cursorLeft}}px">
+    <view class="cursor-shape"></view>
+  </view>
+
+  <!-- 当前选项文字显示 -->
+  <view class="option-display" wx:if="{{currentOptionText}}">
+    <text class="option-text">{{currentOptionText}}</text>
+  </view>
+</view>

@@ -1,0 +1,26 @@
+<view class="ruler-container">
+  <!-- SVG Scale Background -->
+  <image class="ruler-scale" src="/assets/svg/ruler-slider.svg" mode="aspectFit" />
+  
+  <!-- Slider Track -->
+  <view class="slider-track">
+    <!-- Draggable Cursor -->
+    <view 
+      class="slider-cursor {{isDragging ? 'dragging' : ''}}"
+      style="transform: translateX({{cursorX}}px)"
+      bindtouchstart="handleTouchStart"
+      bindtouchmove="handleTouchMove"
+      bindtouchend="handleTouchEnd"
+      bindtouchcancel="handleTouchEnd"
+    >
+      <view class="cursor-inner"></view>
+    </view>
+  </view>
+  
+  <!-- Labels -->
+  <view class="labels-container">
+    <text class="label label-left">-3</text>
+    <text class="label label-center">0</text>
+    <text class="label label-right">+3</text>
+  </view>
+</view>

@@ -1,0 +1,16 @@
+<view class="ruler-container" catch:touchmove="onTouchMove" catch:touchstart="onTouchStart" catch:touchend="onTouchEnd">
+  <!-- 滑槽 (Track) -->
+  <view class="track">
+    <!-- 7 个小圆点作为吸附位提示 -->
+    <view class="track-dots">
+      <view wx:for="{{[0,1,2,3,4,5,6]}}" wx:key="*this" class="track-dot {{item===val ? 'active' : ''}}" style="left: {{item * 16.66}}%"></view>
+    </view>
+  </view>
+
+  <!-- 滑块头 (Thumb) -->
+  <view class="thumb {{isDragging ? 'dragging' : ''}}" style="left: {{thumbLeft}}px">
+    <view class="thumb-inner">
+      <text class="thumb-emoji">{{thumbEmoji}}</text>
+    </view>
+  </view>
+</view>
