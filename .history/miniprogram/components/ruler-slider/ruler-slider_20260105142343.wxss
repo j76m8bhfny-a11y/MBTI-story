@@ -1,7 +1,7 @@
 /* 1. 外层背景 (灰条) */
 .ruler-container {
   position: relative;
-  width: 100%;         /* 撑满父容器宽度 */
+  width: 660rpx;       /* 视觉总宽，稍微宽一点好看 */
   height: 80rpx;       /* 轨道高度 */
   background: #F0F2F5; /* 浅灰底色 */
   border-radius: 999px;
@@ -18,8 +18,6 @@
   position: relative;
   width: 280px;  /* ⚠️ 核心：必须是固定像素，与 WXS 一致 */
   height: 100%;
-  /* 确保幽灵容器在页面中居中 */
-  margin: 0 auto;
 }
 
 /* 3. 刻度点层 */
