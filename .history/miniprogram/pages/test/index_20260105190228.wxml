@@ -26,14 +26,15 @@
     <!-- 内容区域 -->
     <view class="content-area">
       <!-- 题目 -->
-      <view class="question-text scenario-text">{{currentQuestion.txt}}</view> 
+      <view class="question-text scenario-text">{{currentQuestion.txt}}</view>
+ 
       <!-- 双层卡片堆叠 -->
       <view class="answer-layout-wrapper">
         
         <!-- 底层垫片卡 -->
         <view class="card-layer background-card" style="{{backgroundTransform}}">
-          <view class="card-content">
-            <text class="common-card-text">{{previewText}}</text>
+          <view class="card-content faded-text">
+            <text>{{previewText}}</text>
           </view>
         </view>
 
@@ -51,8 +52,7 @@
           <view class="hint-arrow right {{hasMoved ? 'faded' : ''}}">›</view>
           
           <view class="card-content">
-            <text class="common-card-text">{{currentQuestion.opts[currentRulerIndex]}}</text>
-            
+            <text class="main-text">{{currentQuestion.opts[currentRulerIndex]}}</text>
             <text class="tap-hint {{hasMoved ? 'faded' : ''}}">点击确认</text>
           </view>
         </view>

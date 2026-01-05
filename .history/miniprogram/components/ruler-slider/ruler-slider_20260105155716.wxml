@@ -1,9 +1,6 @@
 <wxs module="gesture" src="./gesture.wxs"></wxs>
 
-<view class="ruler-container" 
-  change:syncValue="{{gesture.onValueChange}}"
-  syncValue="{{value}}"
->
+<view class="ruler-container">
   
   <view class="layout-guide">
     
@@ -18,7 +15,7 @@
       catch:touchmove="{{gesture.touchMove}}"
       catch:touchend="{{gesture.touchEnd}}"
     >
-      <view class="ruler-cursor {{isWiggling ? 'wiggle' : ''}}" id="ruler-cursor">
+      <view class="ruler-cursor {{isWiggling ? 'wiggle' : ''}}" id="ruler-cursor" style="left: {{thumbLeft}}px">
         <view class="cursor-shape"></view>
       </view>
     </view>

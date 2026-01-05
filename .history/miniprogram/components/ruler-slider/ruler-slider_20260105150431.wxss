@@ -115,17 +115,3 @@
   border-radius: 50%;
   background: #fff;
 }
-
-/* 定义微动动画 Keyframes */
-@keyframes rulerWiggle {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(20rpx); } /* 向右试探 */
-  50% { transform: translateX(-10rpx); } /* 回弹 */
-  75% { transform: translateX(5rpx); }
-  100% { transform: translateX(0); }
-}
-
-/* 应用动画 */
-.ruler-cursor.wiggle {
-  animation: rulerWiggle 0.8s ease-in-out;
-}

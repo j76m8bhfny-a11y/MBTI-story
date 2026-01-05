@@ -143,7 +143,6 @@
   transform-origin: 50% 120%; /* 旋转轴心在手握处 */
   will-change: transform;
   transition: transform 0.1s, background-color 0.2s;
-  border: 4rpx solid transparent; /* 预留边框空间，防止抖动 */
 }
 
 /* 物理按压效果 (代替复杂的 JS 动画，用 CSS 原生实现更流畅) */
@@ -152,55 +151,25 @@
   background-color: #FAFCFF !important;
 }
 
-/* 选中高亮态 - 强烈的视觉反馈 */
+/* 选中高亮态 */
 .selected-mode {
-  background-color: #E6EFFF !important; /* 明显的淡蓝色 */
-  border: 4rpx solid #5B8FF9 !important; /* 明显的边框 */
-  transform: scale(0.96) !important;      /* 明显的按压 */
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1) !important; /* 增强阴影 */
-  transition: all 0.1s ease-in-out !important; /* 瞬间响应 */
+  background-color: #F0F4FF !important;
+  border: 2rpx solid #BFA6D9; /* 边框细一点更精致 */
+  box-shadow: 0 4rpx 10rpx rgba(191, 166, 217, 0.3) !important;
 }
 
-/* --- 内容容器 --- */
+/* 内容文字 */
 .card-content {
-  width: 100%;
-  height: 100%;
-  padding: 0 40rpx; /* ⚠️ 关键：左右留白，防止文字贴边 */
-  box-sizing: border-box;
-  
-  /* Flex 居中布局 */
-  display: flex;
-  align-items: center;     /* 垂直居中 */
-  justify-content: center; /* 水平居中 */
-  overflow: hidden;        /* 防止极端情况溢出 */
-}
-
-/* --- 文字样式 --- */
-.common-card-text {
-  width: 100%;
-  /* ⚠️ 核心修复：允许换行 */
-  white-space: normal; 
-  word-break: break-word; 
+  padding: 0 40rpx;
   text-align: center;
-  
-  /* 样式调整 */
-  font-size: 36rpx;
-  line-height: 1.5;
-  color: #333;
-  font-weight: 600;
-  
-  /* 移除 height: 100%，让高度由文字内容撑开 */
-  max-height: 100%; /* 防止超出父容器 */
-  display: -webkit-box; /* 多行截断 (可选，防止万一太长) */
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4; /* 最多显示4行，超过显示省略号 */
-  overflow: hidden;
 }
 
-/* 针对底层预览文字的特殊处理 (仅透明度不同) */
-.background-card .common-card-text {
-  opacity: 0.5;      /* 预览时稍微淡一点 */
-  color: #333;       /* 颜色基调保持一致 */
+.main-text {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 16rpx;
 }
 
 /* 引导提示文字 */
@@ -211,11 +180,12 @@
   letter-spacing: 2rpx;
   opacity: 0.6;
   text-transform: uppercase;
-  position: absolute; /* 绝对定位，不干扰 Flex 居中 */
-  bottom: 20rpx;
-  left: 0;
-  width: 100%;
-  text-align: center;
+}
+
+/* 预览文字淡化 */
+.faded-text {
+  opacity: 0.5;
+  transition: opacity 0.2s;
 }
 
 /* 箭头容器 */

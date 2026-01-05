@@ -139,83 +139,24 @@
 .active-card {
   background-color: #F7F9FC; /* 明亮色 */
   z-index: 10;
-  box-shadow: 0 12rpx 40rpx rgba(0,0,0,0.1); /* 悬浮投影 */
+  box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.08); /* 悬浮投影 */
   transform-origin: 50% 120%; /* 旋转轴心在手握处 */
   will-change: transform;
-  transition: transform 0.1s, background-color 0.2s;
-  border: 4rpx solid transparent; /* 预留边框空间，防止抖动 */
 }
 
-/* 物理按压效果 (代替复杂的 JS 动画，用 CSS 原生实现更流畅) */
-.card-hover {
-  transform: scale(0.98) !important;
-  background-color: #FAFCFF !important;
-}
-
-/* 选中高亮态 - 强烈的视觉反馈 */
-.selected-mode {
-  background-color: #E6EFFF !important; /* 明显的淡蓝色 */
-  border: 4rpx solid #5B8FF9 !important; /* 明显的边框 */
-  transform: scale(0.96) !important;      /* 明显的按压 */
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1) !important; /* 增强阴影 */
-  transition: all 0.1s ease-in-out !important; /* 瞬间响应 */
-}
-
-/* --- 内容容器 --- */
+/* 内容文字 */
 .card-content {
-  width: 100%;
-  height: 100%;
-  padding: 0 40rpx; /* ⚠️ 关键：左右留白，防止文字贴边 */
-  box-sizing: border-box;
-  
-  /* Flex 居中布局 */
-  display: flex;
-  align-items: center;     /* 垂直居中 */
-  justify-content: center; /* 水平居中 */
-  overflow: hidden;        /* 防止极端情况溢出 */
-}
-
-/* --- 文字样式 --- */
-.common-card-text {
-  width: 100%;
-  /* ⚠️ 核心修复：允许换行 */
-  white-space: normal; 
-  word-break: break-word; 
+  padding: 0 40rpx;
   text-align: center;
-  
-  /* 样式调整 */
-  font-size: 36rpx;
-  line-height: 1.5;
+  font-size: 34rpx;
   color: #333;
-  font-weight: 600;
-  
-  /* 移除 height: 100%，让高度由文字内容撑开 */
-  max-height: 100%; /* 防止超出父容器 */
-  display: -webkit-box; /* 多行截断 (可选，防止万一太长) */
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4; /* 最多显示4行，超过显示省略号 */
-  overflow: hidden;
+  font-weight: 500;
 }
 
-/* 针对底层预览文字的特殊处理 (仅透明度不同) */
-.background-card .common-card-text {
-  opacity: 0.5;      /* 预览时稍微淡一点 */
-  color: #333;       /* 颜色基调保持一致 */
-}
-
-/* 引导提示文字 */
-.tap-hint {
-  display: block;
-  font-size: 20rpx;
-  color: #BFA6D9; /* 主题色 */
-  letter-spacing: 2rpx;
-  opacity: 0.6;
-  text-transform: uppercase;
-  position: absolute; /* 绝对定位，不干扰 Flex 居中 */
-  bottom: 20rpx;
-  left: 0;
-  width: 100%;
-  text-align: center;
+/* 预览文字淡化 */
+.faded-text {
+  opacity: 0.5;
+  transition: opacity 0.2s;
 }
 
 /* 箭头容器 */
@@ -243,10 +184,6 @@
   animation: none;
 }
 
-.tap-hint.faded {
-  opacity: 0 !important;
-}
-
 /* 定义呼吸动画 */
 @keyframes bounceLeft {
   0%, 100% { transform: translateX(0); }
@@ -266,41 +203,40 @@
   margin-top: auto; /* 双重保险：推到底部 */
 }
 
-/* ==================== 底部极简导航 ==================== */
-.footer-actions {
-  position: absolute;
-  bottom: calc(40rpx + env(safe-area-inset-bottom));
-  left: 0;
+/* 底部按钮 */
+.button-wrapper {
+  position: fixed;
+  bottom: 50rpx;
+  left: 40rpx;
+  right: 40rpx;
+}
+
+.next-button {
   width: 100%;
-  padding: 0 60rpx; /* 更宽的边距 */
-  box-sizing: border-box;
+  height: 96rpx;
+  font-size: 32rpx;
+  color: #fff;
+  background: linear-gradient(to right, #FFB7B2, #BFA6D9);
+  border: none;
+  border-radius: 999px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  z-index: 100;
-  pointer-events: box-none;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(191, 166, 217, 0.4);
+  transition: all 0.3s ease;
 }
 
-.text-action {
-  font-size: 28rpx;
-  padding: 20rpx;
-  pointer-events: auto;
-  transition: opacity 0.2s;
+.next-button::after {
+  border: none;
 }
 
-.secondary {
-  color: #999; /* 灰色，不抢眼 */
+.next-button[disabled] {
+  opacity: 0.4;
+  background: #ccc;
+  box-shadow: none;
 }
 
-.primary-text {
-  color: #333; /* 深色，稍微显眼一点点 */
-  font-weight: 500;
-}
-
-.text-hover {
-  opacity: 0.5;
-}
-
-.spacer {
-  width: 1px;
+.next-button:not([disabled]):active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 12px rgba(191, 166, 217, 0.3);
 }

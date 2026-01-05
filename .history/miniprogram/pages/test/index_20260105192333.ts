@@ -210,7 +210,7 @@ Page<TestPageData, any>({
   },
 
   /**
-   * 核心：飞出切换闭环（用于切换选项）
+   * 核心：飞出切换闭环
    */
   flyOutAndSwitch(isRight: boolean, nextIndex: number) {
     this.setData({ isAnimating: true });
@@ -228,7 +228,7 @@ Page<TestPageData, any>({
     });
 
     setTimeout(() => {
-      // B. 更新真实数据（切换选项）
+      // B. 更新真实数据
       this.updateIndex(nextIndex); // 使用已有的 updateIndex 方法
 
       // C. 顶层卡片瞬间归位 (隐形状态)
@@ -248,59 +248,12 @@ Page<TestPageData, any>({
           setTimeout(() => {
             this.setData({
               backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
-              previewText: ''
+              previewText: '' 
             });
             this.setData({ isAnimating: false });
             this.currentMoveX = 0;
           }, 200);
 
-        }, 50);
-      });
-    }, 200);
-  },
-
-  /**
-   * 专用动画：切换到下一题
-   * @param nextQIndex 下一题的题目索引
-   */
-  animateToNextQuestion(nextQIndex: number) {
-    this.setData({ isAnimating: true });
-
-    // 1. 飞出动画 (固定向左飞，代表去未来)
-    this.setData({
-      cardTransition: 'transition: transform 0.2s ease-in;',
-      cardTransform: 'transform: translateX(-400px) rotate(-20deg); opacity: 0;',
-      // 视觉欺骗：底层卡片暂时不动或最大化
-      backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
-    });
-
-    // 2. 动画结束，更新题目数据
-    setTimeout(() => {
-      // ⚠️ 关键修正：这里调用的是切题方法，而不是切滑块方法
-      this.updateQuestion(nextQIndex);
-
-      // 3. 顶层卡片瞬移归位 (隐形)
-      this.setData({
-        cardTransition: 'transition: none;',
-        cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 0;'
-      }, () => {
-        
-        // 4. 顶层卡片淡入 (Fade In)
-        setTimeout(() => {
-          this.setData({
-            cardTransition: 'transition: opacity 0.2s ease-out;',
-            cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;'
-          });
-
-          // 5. 底层/状态重置
-          setTimeout(() => {
-            this.setData({
-              backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
-              previewText: '',
-              isAnimating: false,
-              isCardSelected: false // 确保高亮取消
-            });
-          }, 200);
         }, 50);
       });
     }, 200);
@@ -333,10 +286,7 @@ Page<TestPageData, any>({
    * 点击卡片 - 沉浸式交互（增强视觉反馈）
    */
   onCardTap() {
-    console.log('Card Tapped! isAnimating:', this.data.isAnimating);
-    
-    // ⚠️ 修复：移除 hasAnswered 检查，允许用户随时点击确认
-    if (this.data.isAnimating) return;
+    if (this.data.isAnimating || this.data.hasAnswered) return;
 
     // A. 立即变色 (视觉确认)
     this.setData({ isCardSelected: true });
@@ -347,9 +297,8 @@ Page<TestPageData, any>({
     // C. 视觉暂留 (Wait 300ms)
     // 让用户看清楚卡片变色了，然后再飞走
     setTimeout(() => {
-       console.log('Executing onNextTap after 300ms delay');
        // 执行下一题逻辑
-       this.onNextTap();
+       this.onNextTap(); 
 
        // 稍后重置样式
        setTimeout(() => {
@@ -373,8 +322,8 @@ Page<TestPageData, any>({
       return;
     }
 
-    // ⚠️ 修正：调用切题专用动画
-    this.animateToNextQuestion(this.data.currentIndex + 1);
+    // 正常跳转
+    this.flyOutAndSwitch(false, this.data.currentIndex + 1);
   },
 
   /**

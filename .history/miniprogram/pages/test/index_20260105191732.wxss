@@ -143,7 +143,6 @@
   transform-origin: 50% 120%; /* 旋转轴心在手握处 */
   will-change: transform;
   transition: transform 0.1s, background-color 0.2s;
-  border: 4rpx solid transparent; /* 预留边框空间，防止抖动 */
 }
 
 /* 物理按压效果 (代替复杂的 JS 动画，用 CSS 原生实现更流畅) */
@@ -157,8 +156,7 @@
   background-color: #E6EFFF !important; /* 明显的淡蓝色 */
   border: 4rpx solid #5B8FF9 !important; /* 明显的边框 */
   transform: scale(0.96) !important;      /* 明显的按压 */
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1) !important; /* 增强阴影 */
-  transition: all 0.1s ease-in-out !important; /* 瞬间响应 */
+  transition: all 0.1s;                   /* 瞬间响应 */
 }
 
 /* --- 内容容器 --- */

@@ -1,0 +1,71 @@
+<view class="test-container">
+  <!-- 分段式进度条 -->
+  <view class="progress-header">
+    <view class="progress-track">
+      <view class="progress-fill" style="width: {{ (currentIndex + 1) / 60 * 100 }}%"></view>
+      
+      <view class="stage-marker" style="left: 16.66%"></view>
+      <view class="stage-marker" style="left: 33.33%"></view>
+      <view class="stage-marker" style="left: 50%"></view>
+      <view class="stage-marker" style="left: 66.66%"></view>
+      <view class="stage-marker" style="left: 83.33%"></view>
+    </view>
+    
+    <view class="stage-text">
+      进度 {{currentIndex + 1}} / 60
+    </view>
+  </view>
+ 
+  <!-- 核心卡片 -->
+  <view class="card-container">
+    <!-- 插画区 -->
+    <view class="illustration-area">
+      <image class="illustration" src="/assets/images/fallback.svg" mode="aspectFit" />
+    </view>
+ 
+    <!-- 内容区域 -->
+    <view class="content-area">
+      <!-- 题目 -->
+      <view class="question-text scenario-text">{{currentQuestion.txt}}</view>
+ 
+      <!-- 动态答案展示区 -->
+      <view
+        class="answer-display-area"
+        bindtouchstart="onCardTouchStart"
+        bindtouchend="onCardTouchEnd"
+      >
+        <view class="hint-arrow left {{hasMoved ? 'faded' : ''}}">
+          <text class="arrow-icon">‹</text>
+        </view>
+  
+        <view class="answer-text">
+          {{currentAnswerText}}
+        </view>
+  
+        <view class="hint-arrow right {{hasMoved ? 'faded' : ''}}">
+          <text class="arrow-icon">›</text>
+        </view>
+      </view>
+ 
+      <!-- 刻度尺组件 -->
+      <view class="ruler-wrapper">
+        <ruler-slider
+          value="{{rulerValue}}"
+          options="{{currentQuestion.opts}}"
+          bind:change="onRulerChange"
+          bind:changing="onRulerChanging"
+        />
+      </view>
+    </view>
+  </view>
+  <!-- 底部按钮 -->
+  <view class="button-wrapper">
+    <button 
+      class="next-button" 
+      bindtap="onNext"
+      disabled="{{!hasAnswered}}"
+    >
+      下一题 ->
+    </button>
+  </view>
+</view>
