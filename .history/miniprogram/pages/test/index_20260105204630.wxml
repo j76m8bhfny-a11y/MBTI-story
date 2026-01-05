@@ -1,7 +1,8 @@
 <view class="test-container">
+  <!-- 分段式进度条 -->
   <view class="progress-header">
     <view class="progress-track">
-      <view class="progress-fill" style="width: {{ (currentQIndex + 1) / 60 * 100 }}%"></view>
+      <view class="progress-fill" style="width: {{ (currentIndex + 1) / 60 * 100 }}%"></view>
       
       <view class="stage-marker" style="left: 16.66%"></view>
       <view class="stage-marker" style="left: 33.33%"></view>
@@ -11,44 +12,36 @@
     </view>
     
     <view class="stage-text">
-      {{currentQIndex + 1}} / 60
+      进度 {{currentIndex + 1}} / 60
     </view>
   </view>
-  
+ 
+  <!-- 核心卡片 -->
   <view class="card-container">
+    <!-- 插画区 -->
     <view class="illustration-area">
       <image
         class="illustration"
-        src="{{currentQuestion.img || '/assets/images/default_cover.png'}}"
+        src="{{currentQuestion.img || '/assets/images/fallback.svg'}}"
         mode="aspectFill"
       />
     </view>
-
+ 
+    <!-- 内容区域 -->
     <view class="content-area">
-      <view class="text-group">
-        <view class="tag-row">
-          <view class="category-capsule">
-            {{currentQuestion.tag || '美术课'}}
-          </view>
-        </view>
-
-        <text class="story-text">
-          {{currentQuestion.story || '老师发了一张白纸，全班都在埋头创作，只有你对着窗外发呆。'}}
-        </text>
-
-        <text class="question-highlight">
-          {{currentQuestion.question || '你手中的画笔决定画什么？'}}
-        </text>
-      </view>
-      
+      <!-- 题目 -->
+      <view class="question-text scenario-text">{{currentQuestion.txt}}</view> 
+      <!-- 双层卡片堆叠 -->
       <view class="answer-layout-wrapper">
         
+        <!-- 底层垫片卡 -->
         <view class="card-layer background-card" style="{{backgroundTransform}}">
           <view class="card-content">
             <text class="common-card-text">{{previewText}}</text>
           </view>
         </view>
 
+        <!-- 顶层交互卡 -->
         <view class="card-layer active-card {{isCardSelected ? 'selected-mode' : ''}}"
           bindtap="onCardTap"
           hover-class="card-hover"
@@ -63,12 +56,14 @@
           
           <view class="card-content">
             <text class="common-card-text">{{currentQuestion.opts[currentRulerIndex]}}</text>
+            
             <text class="tap-hint {{hasMoved ? 'faded' : ''}}">点击确认</text>
           </view>
         </view>
 
       </view>
-  
+ 
+      <!-- 刻度尺组件 -->
       <view class="ruler-wrapper">
         <ruler-slider
           value="{{rulerValue}}"
@@ -80,9 +75,10 @@
     </view>
   </view>
 
+  <!-- 底部极简导航 -->
   <view class="footer-actions">
     <view class="text-action secondary" 
-      wx:if="{{currentQIndex > 0}}" 
+      wx:if="{{currentIndex > 0}}" 
       catchtap="onPrevTap"
       hover-class="text-hover"
     >

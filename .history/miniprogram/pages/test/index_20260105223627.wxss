@@ -269,9 +269,9 @@
 /* 4. 选中高亮态 (光晕效果) */
 .selected-mode {
   /* 使用非常淡的渐变蓝背景 */
-  background: linear-gradient(135deg, #F5F9FF 0%, #FFFDF9 100%) !important;
+  background: linear-gradient(135deg, #FFF0F3 0%, #FFFDF9 100%) !important;
   /* 边框色更柔和 */
-  border-color: #8FB5F9 !important;
+  border-color: #FFD1D1 !important;
   transform: scale(0.96) !important;
   /* ⚠️ 核心升级：改为蓝色的扩散光晕，而不是黑色投影 */
   box-shadow: 0 8rpx 24rpx rgba(91, 143, 249, 0.25) !important;

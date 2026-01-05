@@ -697,9 +697,7 @@ export const questions: Question[] = [
       "不想大张旗鼓，可能会在社交媒体发张照片就算庆祝了",
       "只想静静地和家人待着，享受新房子的安宁",
       "千万别让人知道我搬哪了，我只想把这当成与世隔绝的避难所"
-    ],
-    img: "/assets/images/scenes/q41_housewarming.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 42,
@@ -714,9 +712,7 @@ export const questions: Question[] = [
       "必须要有一些独特的设计感，哪怕牺牲一点实用性",
       "打造某种特定的艺术氛围（如赛博朋克或侘寂风），不在乎别人看不看得懂",
       "完全打破常规，比如把客厅改成巨大的海洋球池，或者是充满隐喻的装置艺术空间"
-    ],
-    img: "/assets/images/scenes/q42_decoration.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 43,
@@ -731,9 +727,7 @@ export const questions: Question[] = [
       "用撒娇或者开玩笑的方式抱怨一下：你又乱丢啦~",
       "觉得这也是TA可爱的一部分，只要人好，这点小事无所谓",
       "默默帮TA盖好捡好，内心毫无波澜甚至充满爱意，完全包容"
-    ],
-    img: "/assets/images/scenes/q43_partner_habit.jpg",
-    tag: "爱情"
+    ]
   },
   {
     id: 44,
@@ -748,9 +742,7 @@ export const questions: Question[] = [
       "睡到自然醒，孩子想干嘛就陪他干嘛",
       "完全没有计划，可能突然决定带孩子去楼下抓虫子",
       "随性而至，甚至可能被孩子带着玩，这才是快乐童年！"
-    ],
-    img: "/assets/images/scenes/q44_parenting.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 45,
@@ -765,9 +757,7 @@ export const questions: Question[] = [
       "默默潜水围观，从来不说话",
       "屏蔽群消息，在电梯里遇到邻居都低头看手机假装没看见",
       "完全不知道有这回事，甚至连隔壁住的是男是女都不清楚"
-    ],
-    img: "/assets/images/scenes/q45_neighbors.jpg",
-    tag: "社交"
+    ]
   },
   {
     id: 46,
@@ -782,9 +772,7 @@ export const questions: Question[] = [
       "戏剧表演或创意绘画，培养表达能力和想象力",
       "哲学启蒙或天文观测，拓展思维广度的",
       "完全放养，把钱花在带孩子去没人去过的森林里发呆，感悟自然"
-    ],
-    img: "/assets/images/scenes/q46_education.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 47,
@@ -799,9 +787,7 @@ export const questions: Question[] = [
       "委婉地劝说，如果老人生气了就先顺着他们，过后偷偷倒掉",
       "理解老人的苦心，不仅不怪罪，还安慰老人说谢谢妈",
       "完全顺从老人，觉得老话总有道理，不想伤了大家感情"
-    ],
-    img: "/assets/images/scenes/q47_family_conflict.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 48,
@@ -816,9 +802,7 @@ export const questions: Question[] = [
       "大概心里有个数，只要卡里还有钱就行",
       "完全不记账，经常不知道钱怎么就没了",
       "今朝有酒今朝醉，没钱了再说，理财是对生活激情的束缚"
-    ],
-    img: "/assets/images/scenes/q48_finance.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 49,
@@ -833,9 +817,7 @@ export const questions: Question[] = [
       "买一辆复古摩托车或者专业摄影器材，重拾年轻时的爱好",
       "去报一个昂贵的禅修班，或者去南极探险的船票",
       "投资一个看起来很荒谬但很酷的艺术项目，或者买一颗星星的命名权"
-    ],
-    img: "/assets/images/scenes/q49_midlife_reward.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 50,
@@ -850,9 +832,7 @@ export const questions: Question[] = [
       "虽然担心钱，但更担心TA不开心，所以勉强同意",
       "表示支持，哪怕生活质量下降，也不想看TA遗憾终生",
       "无条件全力支持！去吧！家里的钱我来挣，你的梦想无价！"
-    ],
-    img: "/assets/images/scenes/q50_partner_dream.jpg",
-    tag: "爱情"
+    ]
   },
   {
     id: 51,
@@ -867,9 +847,7 @@ export const questions: Question[] = [
       "在阳台养养花、喂喂鱼，享受一个人的清净",
       "躲在书房里写回忆录，或者钻研书法，不想被人打扰",
       "搬到乡下老宅或深山里，过隐居生活，切断不必要的社交"
-    ],
-    img: "/assets/images/scenes/q51_retirement.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 52,
@@ -884,9 +862,7 @@ export const questions: Question[] = [
       "去探索未知的领域，哪怕失败了也没关系。",
       "去做梦吧！去改变世界，去追求你心中最疯狂的想法！",
       "你是宇宙的孩子，去寻找灵魂的归宿，工作不重要。"
-    ],
-    img: "/assets/images/scenes/q52_grandkids.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 53,
@@ -901,9 +877,7 @@ export const questions: Question[] = [
       "虽然大儿子不缺钱，但他最近来看我比较少，我心里不舒服，不想给他",
       "谁平时陪我多、谁更贴心，我就把钱全留给谁，哪怕他不会理财",
       "凭感情行事，把传家宝偷偷塞给那个让我最心疼的孩子，不在乎公不公平"
-    ],
-    img: "/assets/images/scenes/q53_will.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 54,
@@ -918,9 +892,7 @@ export const questions: Question[] = [
       "只买了去程机票，到了当地再看心情决定去哪个城市",
       "完全没计划，可能在机场看到哪个航班便宜就去哪",
       "流浪式旅行，不看地图，不看时间，期待迷路带来的惊喜"
-    ],
-    img: "/assets/images/scenes/q54_travel.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 55,
@@ -935,9 +907,7 @@ export const questions: Question[] = [
       "单人间，服务员送饭到门口就行，别进来打扰我",
       "那种在这个城市边缘的、人少安静的高端疗养院",
       "深山里的修道院式养老，最好一个月都见不到一个陌生人"
-    ],
-    img: "/assets/images/scenes/q55_nursing_home.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 56,
@@ -952,9 +922,7 @@ export const questions: Question[] = [
       "那个时代的氛围，以及历史车轮滚滚向前的宿命感",
       "照片背后的象征意义，感觉自己像是在看一部关于时间的电影",
       "完全脱离了画面，思考起存在与虚无的哲学命题"
-    ],
-    img: "/assets/images/scenes/q56_memories.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 57,
@@ -969,9 +937,7 @@ export const questions: Question[] = [
       "年轻时对爱人不够体贴，或者没有多陪陪父母",
       "伤害了某个好朋友的心，至今没有道歉（关乎情感）",
       "没有勇敢地去追求那段刻骨铭心的爱情，后悔了一辈子"
-    ],
-    img: "/assets/images/scenes/q57_regrets.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 58,
@@ -986,9 +952,7 @@ export const questions: Question[] = [
       "想起来就跑两圈，想不起来就躺着",
       "完全管不住嘴，今天想吃红烧肉就吃，明天的事明天再说",
       "生死有命，富贵在天，彻底放飞自我，绝不被养生表束缚"
-    ],
-    img: "/assets/images/scenes/q58_health.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 59,
@@ -1003,9 +967,7 @@ export const questions: Question[] = [
       "人类要被机器取代了，这背后的伦理问题很大。",
       "想象着未来人类意识上传云端的可能性，感到兴奋",
       "透过这些光影，看到了人类文明向着某种精神体进化的终极图景"
-    ],
-    img: "/assets/images/scenes/q59_tech.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 60,
@@ -1020,8 +982,6 @@ export const questions: Question[] = [
       "他/她爱过，也被爱过。",
       "一个温暖的灵魂，带给周围人无数欢笑和泪水。",
       "只刻一句只有爱人才懂的情诗，或者一个代表爱的符号"
-    ],
-    img: "/assets/images/scenes/q60_epitaph.jpg",
-    tag: "家庭"
+    ]
   }
 ];

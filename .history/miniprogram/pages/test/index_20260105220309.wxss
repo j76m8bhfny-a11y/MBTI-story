@@ -116,32 +116,14 @@
   padding: 50rpx 40rpx 30rpx 40rpx; /* 顶部 padding 加大，因为圆角占空间 */
 }
 
-/* --- 文字组容器 (固定高度版) --- */
+/* --- 文字组容器 --- */
 .text-group {
   width: 100%;
-  
-  /* ⚠️ 核心修复：锁定高度 */
-  /* 计算逻辑：
-     标签(40rpx) +
-     叙事3行(32*1.8*3 ≈ 172rpx) +
-     间距(48rpx) +
-     提问2行(40*1.4*2 ≈ 112rpx)
-     ≈ 372rpx -> 取整 380rpx
-  */
-  height: 380rpx;
-  
-  /* 布局控制 */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-start; /* 内容置顶 */
-  
-  /* 间距保持 */
-  margin-bottom: 20rpx;
-  padding: 0 10rpx;
-  
-  /* 安全网：如果遇到超级长的文字，允许内部滚动，但不撑开容器 */
-  overflow-y: auto;
+  margin-bottom: 40rpx; /* 增加底部留白 */
+  padding: 0 10rpx;     /* 微调左右内边距 */
 }
 
 /* 1. 场景标签 (莫兰迪紫胶囊) */
@@ -192,19 +174,19 @@
 /* 3. 提问文本 (黑体 - 力量感) */
 .question-highlight {
   /* 字体栈：系统默认黑体 (PingFang / Roboto) */
-  font-family: "Songti SC", "Noto Serif SC", "SimSun", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
 
   /* 间距：24px -> 48rpx */
-  margin-top: 0rpx;
+  margin-top: 48rpx;
 
   /* 字号：20px -> 40rpx */
-  font-size: 35rpx;
+  font-size: 30rpx;
 
   /* 颜色：纯黑，强调视觉重心 */
   color: #4A3B3B;
 
   /* 字重：加粗 */
-  font-weight: 600;
+  font-weight: 500;
 
   line-height: 1.4;
   text-align: left;
@@ -214,8 +196,8 @@
 .answer-layout-wrapper {
   position: relative;
   width: 100%;
-  height: 300rpx; /* 稍微调低一点，配合整体布局 */
-  margin-bottom: 80rpx;
+  height: 200rpx; /* 稍微调低一点，配合整体布局 */
+  margin-bottom: 20rpx;
 }
 
 .card-layer {
@@ -234,7 +216,7 @@
 /* 1. 底层垫片 (制造凹槽感) */
 .background-card {
   /* 颜色稍微加深一点，偏冷灰 */
-  background-color: #F2EFE9;
+  background-color: #EDF1F7;
   z-index: 1;
   /* 增加一个微妙的内阴影，让它看起来是凹陷下去的 */
   box-shadow: inset 0 4rpx 12rpx rgba(0,0,0,0.05);
@@ -246,7 +228,7 @@
 /* 2. 顶层操作卡 (制造悬浮感) */
 .active-card {
   /* 改为纯白，更干净，对比度更高 */
-  background-color: #FFFDF9;
+  background-color: #FFFFFF;
   z-index: 10;
   /* ⚠️ 核心升级：使用更柔和、扩散的双层投影，制造高级悬浮感 */
   box-shadow:
@@ -263,13 +245,13 @@
 /* 3. 物理按压态 */
 .card-hover {
   transform: scale(0.98) !important;
-  background-color: #F7F4F0 !important;
+  background-color: #FAFCFF !important;
 }
 
 /* 4. 选中高亮态 (光晕效果) */
 .selected-mode {
   /* 使用非常淡的渐变蓝背景 */
-  background: linear-gradient(135deg, #F5F9FF 0%, #FFFDF9 100%) !important;
+  background: linear-gradient(135deg, #F5F9FF 0%, #ECF3FF 100%) !important;
   /* 边框色更柔和 */
   border-color: #8FB5F9 !important;
   transform: scale(0.96) !important;
@@ -292,10 +274,10 @@
   white-space: normal;
   word-break: break-word;
   text-align: center;
-  font-size: 32rpx;
+  font-size: 34rpx;
   line-height: 1.4;
-  color: #4A4A4A; /* 稍微加深一点 */
-  font-weight: 400;
+  color: #222; /* 稍微加深一点 */
+  font-weight: 600;
   max-height: 100%;
   display: -webkit-box;
   -webkit-box-orient: vertical;

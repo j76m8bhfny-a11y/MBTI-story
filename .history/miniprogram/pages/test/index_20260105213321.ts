@@ -27,9 +27,6 @@ const FLY_DISTANCE = SCREEN_WIDTH * 1.5; // 屏幕宽度的 1.5 倍，绝对安�
 const THRESHOLD = 80; // 触发切换的距离阈值
 
 Page<TestPageData, any>({
-  // --- 新增：定时器池，用于存储所有动画延时 ---
-  _timerList: [] as number[],
-
   data: {
     currentQIndex: 0, // ⚠️ 必须叫 currentQIndex，与 WXML 对应
     currentQuestion: questions[0],
@@ -46,23 +43,6 @@ Page<TestPageData, any>({
     previewText: '',
     isAnimating: false,
     isCardSelected: false
-  },
-
-  // --- 新增：辅助方法 ---
-  // 添加定时器
-  addTimer(fn: Function, delay: number) {
-    const id = setTimeout(() => {
-      fn();
-      // 执行完后移除自己 (非必须，但好习惯)
-    }, delay);
-    this._timerList.push(id);
-    return id;
-  },
-
-  // 清除所有定时器 (强制打断动画)
-  clearAllTimers() {
-    this._timerList.forEach((id: number) => clearTimeout(id));
-    this._timerList = [];
   },
 
   // 临时变量 (不放在 data 里以优化性能)
@@ -87,23 +67,18 @@ Page<TestPageData, any>({
    * 卡片触摸开始 - 记录起点
    */
   onCardTouchStart(e: WechatMiniprogram.TouchEvent) {
-    // 1. ⚡️ 核心：立即杀死所有正在跑的动画定时器
-    this.clearAllTimers();
+    // 1. 只要正在飞出（大动作），就拦截。
+    // 但如果是回弹这种小动画，其实可以允许打断（这里为了稳妥先拦截）
+    if (this.data.isAnimating) return;
 
-    // 2. ⚡️ 核心：强制重置状态 (无论之前在干嘛，现在听手指的)
-    // 即使上一张卡片还没飞完，直接强行重置，让用户感觉"抓住了"新卡片
-    this.setData({
-      isAnimating: false,           // 强制解锁
-      cardTransition: 'transition: none;', // 移除动画惯性，实现跟手
-      // 如果上一张还没飞走就被抓住了，这里可能会有点跳变，
-      // 但为了流畅性，我们假设用户是想操作当前这张
-      cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
-      hasMoved: false
-    });
-
-    // 3. 记录坐标
+    // 2. ⚠️ 核心修复：强制重置所有位移变量
     this.touchStartX = e.touches[0].clientX;
-    this.currentMoveX = 0;
+    this.currentMoveX = 0; // 必须清零，否则会累加之前的位移
+
+    this.setData({
+      cardTransition: 'transition: none;', // 零延迟跟手
+      hasMoved: false // 此时可以重置箭头显示状态
+    });
   },
 
   /**
@@ -247,51 +222,49 @@ Page<TestPageData, any>({
    * 核心：飞出切换闭环（用于切换选项）
    */
   flyOutAndSwitch(isRight: boolean, nextIndex: number) {
-    // 1. 锁定标记 (虽然会被 touchStart 强解，但流程内需要)
     this.setData({ isAnimating: true });
 
-    // 2. 执行飞出
+    // 1000px 保证飞出，0.2s 保证轻快
     const flyDist = isRight ? 1000 : -1000;
     const flyRotate = isRight ? 30 : -30;
 
     this.setData({
       cardTransition: 'transition: transform 0.2s ease-in;',
       cardTransform: `transform: translateX(${flyDist}px) rotate(${flyRotate}deg); opacity: 0;`,
-      // 保持底层不动
       backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
     });
 
-    // 3. 这里的 setTimeout 改用 addTimer 管理
-    // 时间压缩到 200ms (与动画时长一致，不留缓冲，追求极速)
-    this.addTimer(() => {
-
-      // 更新数据
+    // ⚠️ 极限压缩：只等 220ms (动画0.2s + 缓冲0.02s)
+    setTimeout(() => {
+      // 1. 更新数据 (瞬间完成)
       this.updateIndex(nextIndex);
 
-      // 瞬间归位
+      // 2. 顶层归位 (隐形状态)
       this.setData({
         cardTransition: 'transition: none;',
         cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 0;'
       }, () => {
 
-        // 淡入
-        this.addTimer(() => {
-          this.setData({
-            cardTransition: 'transition: opacity 0.15s ease-out;', // 淡入再快一点
-            cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
+        // 3. 开始淡入 (Fade In)
+        // ⚠️ 关键优化：虽然我们在做淡入动画，但此时卡片已经归位了
+        // 我们完全可以在这里就"解锁"，允许用户立刻开始下一次拖拽！
+        this.setData({
+          cardTransition: 'transition: opacity 0.2s ease-out;',
+          cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
 
-            // 底层复位
-            backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
-            previewText: '',
+          // 底层同时也开始缩回
+          backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
+          previewText: '',
 
-            // 解锁
-            isAnimating: false,
-            isCardSelected: false
-          });
-          this.currentMoveX = 0;
-        }, 30); // 极短的帧间隔
+          // 🔥 立即解锁！不需要等淡入完成！
+          // 用户感觉到的是：卡片刚出现，我就可以拖它了
+          isAnimating: false,
+          isCardSelected: false
+        });
+
+        this.currentMoveX = 0; // 安全清理
       });
-    }, 200);
+    }, 220);
   },
 
   /**
@@ -299,39 +272,36 @@ Page<TestPageData, any>({
    * @param nextQIndex 下一题的题目索引
    */
   animateToNextQuestion(nextQIndex: number) {
-    // 1. 锁定
     this.setData({ isAnimating: true });
-
-    // 2. 飞出
     const flyDist = -1000;
+
     this.setData({
       cardTransition: 'transition: transform 0.2s ease-in;',
       cardTransform: `transform: translateX(${flyDist}px) rotate(-30deg); opacity: 0;`,
       backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
     });
 
-    // 3. 定时器托管
-    this.addTimer(() => {
+    // 等待 220ms
+    setTimeout(() => {
       this.updateQuestion(nextQIndex);
 
       this.setData({
         cardTransition: 'transition: none;',
         cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 0;'
       }, () => {
-        this.addTimer(() => {
-          this.setData({
-            cardTransition: 'transition: opacity 0.15s ease-out;',
-            cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
+        // 立即解锁
+        this.setData({
+          cardTransition: 'transition: opacity 0.2s ease-out;',
+          cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
 
-            backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
-            previewText: '',
+          backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
+          previewText: '',
 
-            isAnimating: false,
-            isCardSelected: false
-          });
-        }, 30);
+          isAnimating: false, // 🔥 立即解锁
+          isCardSelected: false
+        });
       });
-    }, 200);
+    }, 220);
   },
 
   /**
@@ -426,32 +396,9 @@ Page<TestPageData, any>({
 
     const defaultRulerIndex = 3; // 强制重置到中间 (Index 3)
 
-    // ⚠️ 数据拆分：将原始文本拆分为 tag、story、question
-    const rawText = nextQ.txt;
-
-    // 1. 提取标签 (正则匹配 【xxx】)
-    const tagMatch = rawText.match(/【(.*?)】/);
-    const tag = tagMatch ? tagMatch[1] : '场景';
-
-    // 2. 移除标签后的剩余文本
-    let content = rawText.replace(/【.*?】/, '');
-
-    // 3. 简单拆分 Story 和 Question (假设最后一句是问题)
-    const parts = content.split('，'); // 或根据句号拆分
-    const question = parts.pop(); // 取最后一句作为问题
-    const story = parts.join('，'); // 剩下的作为情境
-
-    // 构造新的显示对象
-    const displayQ = {
-      ...nextQ,
-      tag: tag,
-      story: story,
-      question: question
-    };
-
     this.setData({
       currentQIndex: qIndex, // ⚠️ 关键修正：更新正确的变量名
-      currentQuestion: displayQ, // ⚠️ 关键修复：必须更新题目对象，否则文字不会变
+      currentQuestion: nextQ, // ⚠️ 关键修复：必须更新题目对象，否则文字不会变
       currentRulerIndex: defaultRulerIndex,
       rulerValue: defaultRulerIndex, // 同步给组件
       hasAnswered: false,

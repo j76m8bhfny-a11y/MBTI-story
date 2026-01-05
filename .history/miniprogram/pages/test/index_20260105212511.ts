@@ -3,7 +3,7 @@ import { Answer, MBTIResult } from '../../types';
 import { calculateMBTI } from '../../utils/mbti-core';
 
 interface TestPageData {
-  currentQIndex: number; // ⚠️ 必须叫 currentQIndex，与 WXML 对应
+  currentIndex: number;
   currentQuestion: typeof questions[0];
   rulerValue: number; // 当前刻度索引 (0-6)，对应 -3 到 +3 的 7 个选项
   currentRulerIndex: number; // 当前刻度索引 (0-6)
@@ -27,11 +27,8 @@ const FLY_DISTANCE = SCREEN_WIDTH * 1.5; // 屏幕宽度的 1.5 倍，绝对安�
 const THRESHOLD = 80; // 触发切换的距离阈值
 
 Page<TestPageData, any>({
-  // --- 新增：定时器池，用于存储所有动画延时 ---
-  _timerList: [] as number[],
-
   data: {
-    currentQIndex: 0, // ⚠️ 必须叫 currentQIndex，与 WXML 对应
+    currentIndex: 0,
     currentQuestion: questions[0],
     rulerValue: 3, // 修复：传递索引 (0-6) 而不是值 (-3 到 3)
     currentRulerIndex: 3, // 默认中间位置 (索引3对应值0)
@@ -46,23 +43,6 @@ Page<TestPageData, any>({
     previewText: '',
     isAnimating: false,
     isCardSelected: false
-  },
-
-  // --- 新增：辅助方法 ---
-  // 添加定时器
-  addTimer(fn: Function, delay: number) {
-    const id = setTimeout(() => {
-      fn();
-      // 执行完后移除自己 (非必须，但好习惯)
-    }, delay);
-    this._timerList.push(id);
-    return id;
-  },
-
-  // 清除所有定时器 (强制打断动画)
-  clearAllTimers() {
-    this._timerList.forEach((id: number) => clearTimeout(id));
-    this._timerList = [];
   },
 
   // 临时变量 (不放在 data 里以优化性能)
@@ -87,23 +67,11 @@ Page<TestPageData, any>({
    * 卡片触摸开始 - 记录起点
    */
   onCardTouchStart(e: WechatMiniprogram.TouchEvent) {
-    // 1. ⚡️ 核心：立即杀死所有正在跑的动画定时器
-    this.clearAllTimers();
-
-    // 2. ⚡️ 核心：强制重置状态 (无论之前在干嘛，现在听手指的)
-    // 即使上一张卡片还没飞完，直接强行重置，让用户感觉"抓住了"新卡片
-    this.setData({
-      isAnimating: false,           // 强制解锁
-      cardTransition: 'transition: none;', // 移除动画惯性，实现跟手
-      // 如果上一张还没飞走就被抓住了，这里可能会有点跳变，
-      // 但为了流畅性，我们假设用户是想操作当前这张
-      cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
-      hasMoved: false
-    });
-
-    // 3. 记录坐标
+    if (this.data.isAnimating) return;
     this.touchStartX = e.touches[0].clientX;
-    this.currentMoveX = 0;
+    this.setData({
+      cardTransition: 'transition: none;' // 拖拽时移除过渡，实现0延迟跟随
+    });
   },
 
   /**
@@ -247,51 +215,51 @@ Page<TestPageData, any>({
    * 核心：飞出切换闭环（用于切换选项）
    */
   flyOutAndSwitch(isRight: boolean, nextIndex: number) {
-    // 1. 锁定标记 (虽然会被 touchStart 强解，但流程内需要)
     this.setData({ isAnimating: true });
 
-    // 2. 执行飞出
+    // ⚠️ 暴力修正：直接给 1000px，确保在任何宽屏/折叠屏上都能飞出去
+    // 往右飞 +1000，往左飞 -1000
     const flyDist = isRight ? 1000 : -1000;
-    const flyRotate = isRight ? 30 : -30;
+    const flyRotate = isRight ? 30 : -30; // 角度也加大一点
 
+    // A. 顶层卡片飞出
     this.setData({
+      // 动画时间 0.2s
       cardTransition: 'transition: transform 0.2s ease-in;',
       cardTransform: `transform: translateX(${flyDist}px) rotate(${flyRotate}deg); opacity: 0;`,
       // 保持底层不动
       backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
     });
 
-    // 3. 这里的 setTimeout 改用 addTimer 管理
-    // 时间压缩到 200ms (与动画时长一致，不留缓冲，追求极速)
-    this.addTimer(() => {
-
-      // 更新数据
+    // ⚠️ 关键修正：等待 300ms (比动画多 100ms)，绝对安全
+    setTimeout(() => {
+      // 1. 更新数据
       this.updateIndex(nextIndex);
 
-      // 瞬间归位
+      // 2. 瞬间归位 (无动画)
       this.setData({
         cardTransition: 'transition: none;',
         cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 0;'
       }, () => {
-
-        // 淡入
-        this.addTimer(() => {
+        // 3. 淡入 (Fade In)
+        setTimeout(() => {
           this.setData({
-            cardTransition: 'transition: opacity 0.15s ease-out;', // 淡入再快一点
-            cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
-
-            // 底层复位
-            backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
-            previewText: '',
-
-            // 解锁
-            isAnimating: false,
-            isCardSelected: false
+            cardTransition: 'transition: opacity 0.2s ease-out;',
+            cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;'
           });
-          this.currentMoveX = 0;
-        }, 30); // 极短的帧间隔
+
+          // 4. 解锁与重置
+          setTimeout(() => {
+            this.setData({
+              backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
+              previewText: '',
+              isAnimating: false
+            });
+            this.currentMoveX = 0;
+          }, 200);
+        }, 50);
       });
-    }, 200);
+    }, 300); // 这里的 300ms 是关键！
   },
 
   /**
@@ -299,39 +267,43 @@ Page<TestPageData, any>({
    * @param nextQIndex 下一题的题目索引
    */
   animateToNextQuestion(nextQIndex: number) {
-    // 1. 锁定
     this.setData({ isAnimating: true });
 
-    // 2. 飞出
+    // ⚠️ 暴力修正
     const flyDist = -1000;
+
+    // 1. 飞出动画 (固定向左飞，代表去未来)
     this.setData({
       cardTransition: 'transition: transform 0.2s ease-in;',
       cardTransform: `transform: translateX(${flyDist}px) rotate(-30deg); opacity: 0;`,
       backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
     });
 
-    // 3. 定时器托管
-    this.addTimer(() => {
+    // ⚠️ 关键修正：等待 300ms
+    setTimeout(() => {
       this.updateQuestion(nextQIndex);
 
       this.setData({
         cardTransition: 'transition: none;',
         cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 0;'
       }, () => {
-        this.addTimer(() => {
+        setTimeout(() => {
           this.setData({
-            cardTransition: 'transition: opacity 0.15s ease-out;',
-            cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
-
-            backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
-            previewText: '',
-
-            isAnimating: false,
-            isCardSelected: false
+            cardTransition: 'transition: opacity 0.2s ease-out;',
+            cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;'
           });
-        }, 30);
+
+          setTimeout(() => {
+            this.setData({
+              backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
+              previewText: '',
+              isAnimating: false,
+              isCardSelected: false
+            });
+          }, 200);
+        }, 50);
       });
-    }, 200);
+    }, 300);
   },
 
   /**
@@ -391,28 +363,28 @@ Page<TestPageData, any>({
    */
   onNextTap() {
     if (this.data.isAnimating) return;
-
+    
     // 获取题目总数
     const maxIndex = questions.length - 1;
 
     // ⚠️ 边界防御：如果是最后一题，禁止跳转下一题，而是去结算
-    if (this.data.currentQIndex >= maxIndex) {
+    if (this.data.currentIndex >= maxIndex) {
       this.goToResult(); // 跳转结算页
       return;
     }
 
     // ⚠️ 修正：调用切题专用动画
-    this.animateToNextQuestion(this.data.currentQIndex + 1);
+    this.animateToNextQuestion(this.data.currentIndex + 1);
   },
 
   /**
    * 上一题
    */
   onPrevTap() {
-    if (this.data.isAnimating || this.data.currentQIndex <= 0) return;
-
+    if (this.data.isAnimating || this.data.currentIndex <= 0) return;
+    
     // 简单切换，不飞出
-    this.updateQuestion(this.data.currentQIndex - 1);
+    this.updateQuestion(this.data.currentIndex - 1);
   },
 
   /**
@@ -426,32 +398,9 @@ Page<TestPageData, any>({
 
     const defaultRulerIndex = 3; // 强制重置到中间 (Index 3)
 
-    // ⚠️ 数据拆分：将原始文本拆分为 tag、story、question
-    const rawText = nextQ.txt;
-
-    // 1. 提取标签 (正则匹配 【xxx】)
-    const tagMatch = rawText.match(/【(.*?)】/);
-    const tag = tagMatch ? tagMatch[1] : '场景';
-
-    // 2. 移除标签后的剩余文本
-    let content = rawText.replace(/【.*?】/, '');
-
-    // 3. 简单拆分 Story 和 Question (假设最后一句是问题)
-    const parts = content.split('，'); // 或根据句号拆分
-    const question = parts.pop(); // 取最后一句作为问题
-    const story = parts.join('，'); // 剩下的作为情境
-
-    // 构造新的显示对象
-    const displayQ = {
-      ...nextQ,
-      tag: tag,
-      story: story,
-      question: question
-    };
-
     this.setData({
-      currentQIndex: qIndex, // ⚠️ 关键修正：更新正确的变量名
-      currentQuestion: displayQ, // ⚠️ 关键修复：必须更新题目对象，否则文字不会变
+      currentIndex: qIndex,
+      currentQuestion: nextQ, // ⚠️ 关键修复：必须更新题目对象，否则文字不会变
       currentRulerIndex: defaultRulerIndex,
       rulerValue: defaultRulerIndex, // 同步给组件
       hasAnswered: false,
@@ -507,8 +456,8 @@ Page<TestPageData, any>({
     }, 500);
 
     // 记录当前题目的答案
-    const { currentQIndex, rulerValue, answers } = this.data;
-    const currentQuestion = questions[currentQIndex];
+    const { currentIndex, rulerValue, answers } = this.data;
+    const currentQuestion = questions[currentIndex];
 
     const newAnswer: Answer = {
       q_id: currentQuestion.id,
@@ -518,14 +467,14 @@ Page<TestPageData, any>({
     const updatedAnswers = [...answers, newAnswer];
 
     // 判断是否还有下一题
-    if (currentQIndex < questions.length - 1) {
+    if (currentIndex < questions.length - 1) {
       // 切换到下一题
-      const nextIndex = currentQIndex + 1;
+      const nextIndex = currentIndex + 1;
       const nextQuestion = questions[nextIndex];
       const defaultIndex = 3; // 中间位置
-
+      
       this.setData({
-        currentQIndex: nextIndex, // ⚠️ 关键修正：更新正确的变量名
+        currentIndex: nextIndex,
         currentQuestion: nextQuestion, // ⚠️ 关键修复：必须更新题目对象
         rulerValue: defaultIndex, // 修复：传递索引 (0-6) 而不是值 (-3 到 3)
         currentRulerIndex: defaultIndex,
@@ -538,7 +487,7 @@ Page<TestPageData, any>({
     } else {
       // 所有题目完成，计算 MBTI 结果并跳转到结果页
       const result: MBTIResult = calculateMBTI(updatedAnswers, questions);
-
+      
       // 将结果存储到全局数据或缓存
       wx.setStorageSync('mbtiResult', result);
       wx.setStorageSync('testAnswers', updatedAnswers);

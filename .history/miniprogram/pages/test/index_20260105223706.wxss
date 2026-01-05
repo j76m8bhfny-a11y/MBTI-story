@@ -269,7 +269,7 @@
 /* 4. 选中高亮态 (光晕效果) */
 .selected-mode {
   /* 使用非常淡的渐变蓝背景 */
-  background: linear-gradient(135deg, #F5F9FF 0%, #FFFDF9 100%) !important;
+  background: linear-gradient(135deg, #F5F9FF 0%, #ECF3FF 100%) !important;
   /* 边框色更柔和 */
   border-color: #8FB5F9 !important;
   transform: scale(0.96) !important;

@@ -22,24 +22,11 @@
         src="{{currentQuestion.img || '/assets/images/default_cover.png'}}"
         mode="aspectFill"
       />
+      <view class="scenario-tag">{{currentQuestion.tag || '场景'}}</view>
     </view>
-
+  
     <view class="content-area">
-      <view class="text-group">
-        <view class="tag-row">
-          <view class="category-capsule">
-            {{currentQuestion.tag || '美术课'}}
-          </view>
-        </view>
-
-        <text class="story-text">
-          {{currentQuestion.story || '老师发了一张白纸，全班都在埋头创作，只有你对着窗外发呆。'}}
-        </text>
-
-        <text class="question-highlight">
-          {{currentQuestion.question || '你手中的画笔决定画什么？'}}
-        </text>
-      </view>
+      <view class="question-text">{{currentQuestion.txt}}</view> 
       
       <view class="answer-layout-wrapper">
         

@@ -34,9 +34,7 @@ export const questions: Question[] = [
       "房子长了翅膀，但整体结构还是房子",
       "一座悬浮在云端的各种几何体组成的城堡",
       "一团看不懂的色彩风暴，你说这是住在光里的意识流"
-    ],
-    img: "/assets/images/scenes/q2_art_class.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 3,
@@ -51,9 +49,7 @@ export const questions: Question[] = [
       "会不会是有人陷害他？这不合逻辑。",
       "我看他哭得这么伤心，肯定不是他！",
       "冲上去抱住朋友：不管证据怎样，我无条件相信你！"
-    ],
-    img: "/assets/images/scenes/q3_friendship.jpg",
-    tag: "友情"
+    ]
   },
   {
     id: 4,
@@ -68,9 +64,7 @@ export const questions: Question[] = [
       "心里想着要写，但身体很诚实地拿起了游戏机",
       "想起来就写两页，大部分时间在看电视",
       "扔到一边，痛快玩两个月，开学前一晚通宵狂补"
-    ],
-    img: "/assets/images/scenes/q4_homework.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 5,
@@ -85,9 +79,7 @@ export const questions: Question[] = [
       "还不错，有些自由自在",
       "很开心，终于可以安静地做自己的事了",
       "简直是天堂！这就是我最享受的时刻！"
-    ],
-    img: "/assets/images/scenes/q5_home_alone.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 6,
@@ -102,9 +94,7 @@ export const questions: Question[] = [
       "有点抗拒，怕表现不好拖后腿",
       "尽量往后缩，希望老师看不见我",
       "极度反感，找个借口请病假溜回家"
-    ],
-    img: "/assets/images/scenes/q6_sports_day.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 7,
@@ -119,9 +109,7 @@ export const questions: Question[] = [
       "稍微倾向B，因为不想班级气氛太压抑",
       "倾向投B，A太凶了，大家都不喜欢他",
       "绝对投B，我就选让我觉得舒服开心的人！"
-    ],
-    img: "/assets/images/scenes/q7_election.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 8,
@@ -136,9 +124,7 @@ export const questions: Question[] = [
       "也就是把衣服叠了一下，桌子还是很乱",
       "翻出旧玩具玩了一个小时，房间比原来更乱了",
       "完全没动，你觉得这种凌乱美方便你随时找东西"
-    ],
-    img: "/assets/images/scenes/q8_cleaning.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 9,
@@ -153,9 +139,7 @@ export const questions: Question[] = [
       "走一条没走过的小巷子，看看里面有什么",
       "故意绕远路，去探索那个传说中的鬼屋",
       "闭着眼睛瞎走，幻想着自己在森林探险，走到哪算哪"
-    ],
-    img: "/assets/images/scenes/q9_way_home.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 10,
@@ -170,9 +154,7 @@ export const questions: Question[] = [
       "叹口气，为了继续玩下去，假装同意他的说法",
       "立刻道歉哄他开心，游戏规则不重要",
       "为了让他不哭，主动承认是自己记错了，甚至故意输给他"
-    ],
-    img: "/assets/images/scenes/q10_playground.jpg",
-    tag: "友情"
+    ]
   },
   {
     id: 11,
@@ -187,9 +169,7 @@ export const questions: Question[] = [
       "主动申请做后勤道具组，坚决不上台",
       "虽然坐在台下当观众，但内心祈祷不要有互动环节",
       "那天我想办法请病假，或者躲在图书馆直到活动结束"
-    ],
-    img: "/assets/images/scenes/q11_school_festival.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 12,
@@ -204,9 +184,7 @@ export const questions: Question[] = [
       "思考这个定理背后的逻辑推导过程",
       "联想到其他数学模型，思考它在四维空间是否成立",
       "盯着图形发呆，脑海里已经把它抽象成了宇宙运行的某种规律"
-    ],
-    img: "/assets/images/scenes/q12_math_class.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 13,
@@ -221,9 +199,7 @@ export const questions: Question[] = [
       "陪TA一起骂那个渣男/渣女，虽然你其实觉得那是误会",
       "感同身受地抱着TA一起哭，心疼坏了",
       "完全被TA的情绪感染，整晚陪护，甚至自己比TA还伤心"
-    ],
-    img: "/assets/images/scenes/q13_heartbreak.jpg",
-    tag: "友情"
+    ]
   },
   {
     id: 14,
@@ -238,9 +214,7 @@ export const questions: Question[] = [
       "计划赶不上变化，经常复习着复习着就去看漫画了",
       "完全没有计划，最后三天开启生死时速狂背模式",
       "随缘复习，坚信临阵磨枪，不快也光，甚至打算裸考"
-    ],
-    img: "/assets/images/scenes/q14_exam_prep.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 15,
@@ -255,9 +229,7 @@ export const questions: Question[] = [
       "假装整理书包，用余光偷偷观察对方",
       "戴上耳机或者埋头看书，营造出别打扰我的气场",
       "心里极度紧张，祈祷老师别让我跟他搞什么互助小组"
-    ],
-    img: "/assets/images/scenes/q15_new_deskmate.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 16,
@@ -272,9 +244,7 @@ export const questions: Question[] = [
       "设想了一种还没发明的新技术，自己是那个领域的专家",
       "写了一个科幻故事，二十年后人类已经移民火星",
       "一篇意识流散文，探讨时间、存在和虚无，完全没有具体情节"
-    ],
-    img: "/assets/images/scenes/q16_essay.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 17,
@@ -289,9 +259,7 @@ export const questions: Question[] = [
       "担心他是不是生病或家里有事，先去关心一下情况",
       "帮他找借口拖延一下，甚至主动帮他分担一部分工作",
       "为了不破坏关系，宁愿自己累死帮他做完，也不好意思催他"
-    ],
-    img: "/assets/images/scenes/q17_group_work.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 18,
@@ -306,9 +274,7 @@ export const questions: Question[] = [
       "虽然想看书，但朋友一劝就心动了，拿着书包出门",
       "太好了！立马把书扔一边，换衣服出门",
       "我是随叫随到的，计划本来就是用来打破的！"
-    ],
-    img: "/assets/images/scenes/q18_weekend_ktv.jpg",
-    tag: "社交"
+    ]
   },
   {
     id: 19,
@@ -323,9 +289,7 @@ export const questions: Question[] = [
       "试图搞懂为什么A加B会变色，而不是只关注步骤",
       "心里痒痒，想试试如果把步骤3和步骤4颠倒会发生什么",
       "完全无视说明书，凭直觉把几种试剂混在一起，以此探索新元素"
-    ],
-    img: "/assets/images/scenes/q19_lab.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 20,
@@ -340,9 +304,7 @@ export const questions: Question[] = [
       "纠结很久，试图在两者之间找到折中方案（比如选理科平时看闲书）",
       "既然喜欢文科，那就选文科，开心最重要",
       "人活着就是为了追求灵魂的自由！不顾一切选文科，哪怕以后去流浪"
-    ],
-    img: "/assets/images/scenes/q20_subject_choice.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 21,
@@ -357,9 +319,7 @@ export const questions: Question[] = [
       "戴着耳机假装听歌，其实在偷听，但不说话",
       "完全不感兴趣，甚至觉得吵，想让他们闭嘴",
       "装睡，或者真的已经秒睡了，对集体聊天毫无波澜"
-    ],
-    img: "/assets/images/scenes/q21_dorm_chat.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 22,
@@ -374,9 +334,7 @@ export const questions: Question[] = [
       "西方哲学史或心理学导论，虽然没用但很有趣",
       "科幻电影赏析或未来学，充满想象力的课程",
       "神秘主义与符号学，听起来就很玄乎、很抽象的课"
-    ],
-    img: "/assets/images/scenes/q22_elective.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 23,
@@ -391,9 +349,7 @@ export const questions: Question[] = [
       "纠结，虽然穿名牌的不对，但他平时人缘好，给了他也好交代",
       "凭直觉给孤僻那个，觉得他太可怜了，想帮帮他",
       "私下找那个穿名牌的聊聊，被他的故事感动了，甚至想把名额给他"
-    ],
-    img: "/assets/images/scenes/q23_scholarship.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 24,
@@ -408,9 +364,7 @@ export const questions: Question[] = [
       "刚新建了一个名为最终版的空白文档",
       "每天都在焦虑，但每天都没动笔，打算最后通宵奇迹",
       "完全忘了这回事，直到导师在群里艾特才想起来"
-    ],
-    img: "/assets/images/scenes/q24_thesis.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 25,
@@ -425,9 +379,7 @@ export const questions: Question[] = [
       "摆摆手快速通过，不想被缠住",
       "低头看手机，绕开人群最密集的地方走",
       "根本就不会去那条路，直接躲在图书馆清净"
-    ],
-    img: "/assets/images/scenes/q25_club_fair.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 26,
@@ -442,9 +394,7 @@ export const questions: Question[] = [
       "给公众号写文章或做自媒体，虽然不稳定但有创作空间",
       "帮创业团队做头脑风暴，或者策划活动方案",
       "在此刻构思一个改变世界的创业点子，坚信它能拉到投资"
-    ],
-    img: "/assets/images/scenes/q26_part_time.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 27,
@@ -459,9 +409,7 @@ export const questions: Question[] = [
       "委婉地暗示：最近睡得不太好，是不是隔音太差了？",
       "跟他开玩笑式地说这事，怕伤了和气",
       "自己默默搬出去住，或者躲在被子里哭，不想发生正面冲突"
-    ],
-    img: "/assets/images/scenes/q27_roommate_conflict.jpg",
-    tag: "校园"
+    ]
   },
   {
     id: 28,
@@ -476,9 +424,7 @@ export const questions: Question[] = [
       "听起来不错，但我得先收个包。",
       "好啊！我有身份证和手机就够了。",
       "走！现在就走！这种说走就走的旅行才叫青春！"
-    ],
-    img: "/assets/images/scenes/q28_spontaneous_trip.jpg",
-    tag: "社交"
+    ]
   },
   {
     id: 29,
@@ -493,9 +439,7 @@ export const questions: Question[] = [
       "去初创公司，虽然风险大但能接触新事物",
       "成为自由职业者或数字游民，不被坐班束缚",
       "去当艺术家、流浪诗人或者探索宇宙奥秘的科学家"
-    ],
-    img: "/assets/images/scenes/q29_career.jpg",
-    tag: "职场"
+    ]
   },
   {
     id: 30,
@@ -510,9 +454,7 @@ export const questions: Question[] = [
       "管他呢，先谈了再说，船到桥头自然直",
       "既然相爱就能克服一切，我会努力去解决那些问题",
       "毫不犹豫地答应！爱能战胜一切现实，我只要和他/她在一起！"
-    ],
-    img: "/assets/images/scenes/q30_love_choice.jpg",
-    tag: "爱情"
+    ]
   },
   {
     id: 31,
@@ -527,9 +469,7 @@ export const questions: Question[] = [
       "躲在角落里吃烧烤，只跟身边的熟人聊两句",
       "找个借口溜回房间，戴上耳机打游戏或看书",
       "极度反感这种场合，全程黑脸躲在最后面，祈祷尽快结束"
-    ],
-    img: "/assets/images/scenes/q31_team_building.jpg",
-    tag: "职场"
+    ]
   },
   {
     id: 32,
@@ -544,9 +484,7 @@ export const questions: Question[] = [
       "我善于发现流程中的问题，并提出改进方案。",
       "我有敏锐的市场直觉，能看到未来的潜在机会。",
       "我拥有颠覆性的创新思维，能为公司开拓全新的赛道！"
-    ],
-    img: "/assets/images/scenes/q32_interview.jpg",
-    tag: "职场"
+    ]
   },
   {
     id: 33,
@@ -561,9 +499,7 @@ export const questions: Question[] = [
       "虽然委屈，但觉得领导也有难处，为了大局暂且忍耐",
       "躲在厕所里哭一场，觉得职场太黑暗了，甚至想辞职",
       "为了维护和领导的关系，主动站起来承认：对，是我的错。"
-    ],
-    img: "/assets/images/scenes/q33_backstab.jpg",
-    tag: "职场"
+    ]
   },
   {
     id: 34,
@@ -578,9 +514,7 @@ export const questions: Question[] = [
       "行啊，没问题。心态平和地接下任务",
       "正好想到一个新点子，兴奋地留下来加班研究",
       "完全不在意时间，既然来了灵感或者活儿，那就做到半夜也不累"
-    ],
-    img: "/assets/images/scenes/q34_overtime.jpg",
-    tag: "职场"
+    ]
   },
   {
     id: 35,
@@ -595,9 +529,7 @@ export const questions: Question[] = [
       "有点难受，需要时不时去楼道透透气",
       "必须戴降噪耳机才能工作，否则完全无法集中注意力",
       "精神崩溃，每天都在工位上像坐牢，迫切想要申请居家办公"
-    ],
-    img: "/assets/images/scenes/q35_open_office.jpg",
-    tag: "职场"
+    ]
   },
   {
     id: 36,
@@ -612,9 +544,7 @@ export const questions: Question[] = [
       "做一会儿就烦了，开始想有没有什么宏命令能自动处理",
       "极度痛苦，一直在想这种工作存在的意义是什么？",
       "根本做不下去，直接去找老板谈，建议开发一套AI系统来做"
-    ],
-    img: "/assets/images/scenes/q36_boring_task.jpg",
-    tag: "职场"
+    ]
   },
   {
     id: 37,
@@ -629,9 +559,7 @@ export const questions: Question[] = [
       "非常痛苦，跟他谈话时一直在道歉，心里充满负罪感",
       "为了保住他，去跟大老板吵架，甚至愿意分出自己的奖金",
       "坚决不裁，甚至威胁公司：如果要裁他，连我一起裁！"
-    ],
-    img: "/assets/images/scenes/q37_layoff.jpg",
-    tag: "职场"
+    ]
   },
   {
     id: 38,
@@ -646,9 +574,7 @@ export const questions: Question[] = [
       "把衣柜里的衣服随便抓几件塞进去，不管搭不搭配",
       "明天早上起来再收，坚信自己动作很快",
       "到了机场才发现没带身份证，或者带错了合同"
-    ],
-    img: "/assets/images/scenes/q38_business_trip.jpg",
-    tag: "职场"
+    ]
   },
   {
     id: 39,
@@ -663,9 +589,7 @@ export const questions: Question[] = [
       "提出了一些新概念，强调用故事打动老板",
       "没有太多数据，全是关于未来趋势的宏大叙事和愿景",
       "一张只有几个关键词的极简PPT，全靠现场即兴发挥画大饼"
-    ],
-    img: "/assets/images/scenes/q39_presentation.jpg",
-    tag: "职场"
+    ]
   },
   {
     id: 40,
@@ -680,9 +604,7 @@ export const questions: Question[] = [
       "因为舍不得现在的团队氛围，倾向于留下",
       "觉得这时候走就是背叛，良心上过不去",
       "果断拒绝挖角，因为士为知己者死，情义无价"
-    ],
-    img: "/assets/images/scenes/q40_job_offer.jpg",
-    tag: "职场"
+    ]
   },
   {
     id: 41,
@@ -697,9 +619,7 @@ export const questions: Question[] = [
       "不想大张旗鼓，可能会在社交媒体发张照片就算庆祝了",
       "只想静静地和家人待着，享受新房子的安宁",
       "千万别让人知道我搬哪了，我只想把这当成与世隔绝的避难所"
-    ],
-    img: "/assets/images/scenes/q41_housewarming.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 42,
@@ -714,9 +634,7 @@ export const questions: Question[] = [
       "必须要有一些独特的设计感，哪怕牺牲一点实用性",
       "打造某种特定的艺术氛围（如赛博朋克或侘寂风），不在乎别人看不看得懂",
       "完全打破常规，比如把客厅改成巨大的海洋球池，或者是充满隐喻的装置艺术空间"
-    ],
-    img: "/assets/images/scenes/q42_decoration.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 43,
@@ -731,9 +649,7 @@ export const questions: Question[] = [
       "用撒娇或者开玩笑的方式抱怨一下：你又乱丢啦~",
       "觉得这也是TA可爱的一部分，只要人好，这点小事无所谓",
       "默默帮TA盖好捡好，内心毫无波澜甚至充满爱意，完全包容"
-    ],
-    img: "/assets/images/scenes/q43_partner_habit.jpg",
-    tag: "爱情"
+    ]
   },
   {
     id: 44,
@@ -748,9 +664,7 @@ export const questions: Question[] = [
       "睡到自然醒，孩子想干嘛就陪他干嘛",
       "完全没有计划，可能突然决定带孩子去楼下抓虫子",
       "随性而至，甚至可能被孩子带着玩，这才是快乐童年！"
-    ],
-    img: "/assets/images/scenes/q44_parenting.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 45,
@@ -765,9 +679,7 @@ export const questions: Question[] = [
       "默默潜水围观，从来不说话",
       "屏蔽群消息，在电梯里遇到邻居都低头看手机假装没看见",
       "完全不知道有这回事，甚至连隔壁住的是男是女都不清楚"
-    ],
-    img: "/assets/images/scenes/q45_neighbors.jpg",
-    tag: "社交"
+    ]
   },
   {
     id: 46,
@@ -782,9 +694,7 @@ export const questions: Question[] = [
       "戏剧表演或创意绘画，培养表达能力和想象力",
       "哲学启蒙或天文观测，拓展思维广度的",
       "完全放养，把钱花在带孩子去没人去过的森林里发呆，感悟自然"
-    ],
-    img: "/assets/images/scenes/q46_education.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 47,
@@ -799,9 +709,7 @@ export const questions: Question[] = [
       "委婉地劝说，如果老人生气了就先顺着他们，过后偷偷倒掉",
       "理解老人的苦心，不仅不怪罪，还安慰老人说谢谢妈",
       "完全顺从老人，觉得老话总有道理，不想伤了大家感情"
-    ],
-    img: "/assets/images/scenes/q47_family_conflict.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 48,
@@ -816,9 +724,7 @@ export const questions: Question[] = [
       "大概心里有个数，只要卡里还有钱就行",
       "完全不记账，经常不知道钱怎么就没了",
       "今朝有酒今朝醉，没钱了再说，理财是对生活激情的束缚"
-    ],
-    img: "/assets/images/scenes/q48_finance.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 49,
@@ -833,9 +739,7 @@ export const questions: Question[] = [
       "买一辆复古摩托车或者专业摄影器材，重拾年轻时的爱好",
       "去报一个昂贵的禅修班，或者去南极探险的船票",
       "投资一个看起来很荒谬但很酷的艺术项目，或者买一颗星星的命名权"
-    ],
-    img: "/assets/images/scenes/q49_midlife_reward.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 50,
@@ -850,9 +754,7 @@ export const questions: Question[] = [
       "虽然担心钱，但更担心TA不开心，所以勉强同意",
       "表示支持，哪怕生活质量下降，也不想看TA遗憾终生",
       "无条件全力支持！去吧！家里的钱我来挣，你的梦想无价！"
-    ],
-    img: "/assets/images/scenes/q50_partner_dream.jpg",
-    tag: "爱情"
+    ]
   },
   {
     id: 51,
@@ -867,9 +769,7 @@ export const questions: Question[] = [
       "在阳台养养花、喂喂鱼，享受一个人的清净",
       "躲在书房里写回忆录，或者钻研书法，不想被人打扰",
       "搬到乡下老宅或深山里，过隐居生活，切断不必要的社交"
-    ],
-    img: "/assets/images/scenes/q51_retirement.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 52,
@@ -884,9 +784,7 @@ export const questions: Question[] = [
       "去探索未知的领域，哪怕失败了也没关系。",
       "去做梦吧！去改变世界，去追求你心中最疯狂的想法！",
       "你是宇宙的孩子，去寻找灵魂的归宿，工作不重要。"
-    ],
-    img: "/assets/images/scenes/q52_grandkids.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 53,
@@ -901,9 +799,7 @@ export const questions: Question[] = [
       "虽然大儿子不缺钱，但他最近来看我比较少，我心里不舒服，不想给他",
       "谁平时陪我多、谁更贴心，我就把钱全留给谁，哪怕他不会理财",
       "凭感情行事，把传家宝偷偷塞给那个让我最心疼的孩子，不在乎公不公平"
-    ],
-    img: "/assets/images/scenes/q53_will.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 54,
@@ -918,9 +814,7 @@ export const questions: Question[] = [
       "只买了去程机票，到了当地再看心情决定去哪个城市",
       "完全没计划，可能在机场看到哪个航班便宜就去哪",
       "流浪式旅行，不看地图，不看时间，期待迷路带来的惊喜"
-    ],
-    img: "/assets/images/scenes/q54_travel.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 55,
@@ -935,9 +829,7 @@ export const questions: Question[] = [
       "单人间，服务员送饭到门口就行，别进来打扰我",
       "那种在这个城市边缘的、人少安静的高端疗养院",
       "深山里的修道院式养老，最好一个月都见不到一个陌生人"
-    ],
-    img: "/assets/images/scenes/q55_nursing_home.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 56,
@@ -952,9 +844,7 @@ export const questions: Question[] = [
       "那个时代的氛围，以及历史车轮滚滚向前的宿命感",
       "照片背后的象征意义，感觉自己像是在看一部关于时间的电影",
       "完全脱离了画面，思考起存在与虚无的哲学命题"
-    ],
-    img: "/assets/images/scenes/q56_memories.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 57,
@@ -969,9 +859,7 @@ export const questions: Question[] = [
       "年轻时对爱人不够体贴，或者没有多陪陪父母",
       "伤害了某个好朋友的心，至今没有道歉（关乎情感）",
       "没有勇敢地去追求那段刻骨铭心的爱情，后悔了一辈子"
-    ],
-    img: "/assets/images/scenes/q57_regrets.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 58,
@@ -986,9 +874,7 @@ export const questions: Question[] = [
       "想起来就跑两圈，想不起来就躺着",
       "完全管不住嘴，今天想吃红烧肉就吃，明天的事明天再说",
       "生死有命，富贵在天，彻底放飞自我，绝不被养生表束缚"
-    ],
-    img: "/assets/images/scenes/q58_health.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 59,
@@ -1003,9 +889,7 @@ export const questions: Question[] = [
       "人类要被机器取代了，这背后的伦理问题很大。",
       "想象着未来人类意识上传云端的可能性，感到兴奋",
       "透过这些光影，看到了人类文明向着某种精神体进化的终极图景"
-    ],
-    img: "/assets/images/scenes/q59_tech.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 60,
@@ -1020,8 +904,6 @@ export const questions: Question[] = [
       "他/她爱过，也被爱过。",
       "一个温暖的灵魂，带给周围人无数欢笑和泪水。",
       "只刻一句只有爱人才懂的情诗，或者一个代表爱的符号"
-    ],
-    img: "/assets/images/scenes/q60_epitaph.jpg",
-    tag: "家庭"
+    ]
   }
 ];

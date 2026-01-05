@@ -426,32 +426,9 @@ Page<TestPageData, any>({
 
     const defaultRulerIndex = 3; // 强制重置到中间 (Index 3)
 
-    // ⚠️ 数据拆分：将原始文本拆分为 tag、story、question
-    const rawText = nextQ.txt;
-
-    // 1. 提取标签 (正则匹配 【xxx】)
-    const tagMatch = rawText.match(/【(.*?)】/);
-    const tag = tagMatch ? tagMatch[1] : '场景';
-
-    // 2. 移除标签后的剩余文本
-    let content = rawText.replace(/【.*?】/, '');
-
-    // 3. 简单拆分 Story 和 Question (假设最后一句是问题)
-    const parts = content.split('，'); // 或根据句号拆分
-    const question = parts.pop(); // 取最后一句作为问题
-    const story = parts.join('，'); // 剩下的作为情境
-
-    // 构造新的显示对象
-    const displayQ = {
-      ...nextQ,
-      tag: tag,
-      story: story,
-      question: question
-    };
-
     this.setData({
       currentQIndex: qIndex, // ⚠️ 关键修正：更新正确的变量名
-      currentQuestion: displayQ, // ⚠️ 关键修复：必须更新题目对象，否则文字不会变
+      currentQuestion: nextQ, // ⚠️ 关键修复：必须更新题目对象，否则文字不会变
       currentRulerIndex: defaultRulerIndex,
       rulerValue: defaultRulerIndex, // 同步给组件
       hasAnswered: false,

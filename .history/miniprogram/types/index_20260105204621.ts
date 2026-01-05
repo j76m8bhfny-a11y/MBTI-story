@@ -17,7 +17,6 @@ export interface Question {
   txt: string;        // 题干
   opts: string[];     // 选项文本数组
   img?: string;       // 题目配图路径（可选）
-  tag?: string;       // 场景标签（可选）
 }
 
 /**

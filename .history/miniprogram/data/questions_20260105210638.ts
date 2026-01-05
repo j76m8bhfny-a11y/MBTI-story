@@ -867,9 +867,7 @@ export const questions: Question[] = [
       "在阳台养养花、喂喂鱼，享受一个人的清净",
       "躲在书房里写回忆录，或者钻研书法，不想被人打扰",
       "搬到乡下老宅或深山里，过隐居生活，切断不必要的社交"
-    ],
-    img: "/assets/images/scenes/q51_retirement.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 52,
@@ -884,9 +882,7 @@ export const questions: Question[] = [
       "去探索未知的领域，哪怕失败了也没关系。",
       "去做梦吧！去改变世界，去追求你心中最疯狂的想法！",
       "你是宇宙的孩子，去寻找灵魂的归宿，工作不重要。"
-    ],
-    img: "/assets/images/scenes/q52_grandkids.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 53,
@@ -901,9 +897,7 @@ export const questions: Question[] = [
       "虽然大儿子不缺钱，但他最近来看我比较少，我心里不舒服，不想给他",
       "谁平时陪我多、谁更贴心，我就把钱全留给谁，哪怕他不会理财",
       "凭感情行事，把传家宝偷偷塞给那个让我最心疼的孩子，不在乎公不公平"
-    ],
-    img: "/assets/images/scenes/q53_will.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 54,
@@ -918,9 +912,7 @@ export const questions: Question[] = [
       "只买了去程机票，到了当地再看心情决定去哪个城市",
       "完全没计划，可能在机场看到哪个航班便宜就去哪",
       "流浪式旅行，不看地图，不看时间，期待迷路带来的惊喜"
-    ],
-    img: "/assets/images/scenes/q54_travel.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 55,
@@ -935,9 +927,7 @@ export const questions: Question[] = [
       "单人间，服务员送饭到门口就行，别进来打扰我",
       "那种在这个城市边缘的、人少安静的高端疗养院",
       "深山里的修道院式养老，最好一个月都见不到一个陌生人"
-    ],
-    img: "/assets/images/scenes/q55_nursing_home.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 56,
@@ -952,9 +942,7 @@ export const questions: Question[] = [
       "那个时代的氛围，以及历史车轮滚滚向前的宿命感",
       "照片背后的象征意义，感觉自己像是在看一部关于时间的电影",
       "完全脱离了画面，思考起存在与虚无的哲学命题"
-    ],
-    img: "/assets/images/scenes/q56_memories.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 57,
@@ -969,9 +957,7 @@ export const questions: Question[] = [
       "年轻时对爱人不够体贴，或者没有多陪陪父母",
       "伤害了某个好朋友的心，至今没有道歉（关乎情感）",
       "没有勇敢地去追求那段刻骨铭心的爱情，后悔了一辈子"
-    ],
-    img: "/assets/images/scenes/q57_regrets.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 58,
@@ -986,9 +972,7 @@ export const questions: Question[] = [
       "想起来就跑两圈，想不起来就躺着",
       "完全管不住嘴，今天想吃红烧肉就吃，明天的事明天再说",
       "生死有命，富贵在天，彻底放飞自我，绝不被养生表束缚"
-    ],
-    img: "/assets/images/scenes/q58_health.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 59,
@@ -1003,9 +987,7 @@ export const questions: Question[] = [
       "人类要被机器取代了，这背后的伦理问题很大。",
       "想象着未来人类意识上传云端的可能性，感到兴奋",
       "透过这些光影，看到了人类文明向着某种精神体进化的终极图景"
-    ],
-    img: "/assets/images/scenes/q59_tech.jpg",
-    tag: "家庭"
+    ]
   },
   {
     id: 60,
@@ -1020,8 +1002,6 @@ export const questions: Question[] = [
       "他/她爱过，也被爱过。",
       "一个温暖的灵魂，带给周围人无数欢笑和泪水。",
       "只刻一句只有爱人才懂的情诗，或者一个代表爱的符号"
-    ],
-    img: "/assets/images/scenes/q60_epitaph.jpg",
-    tag: "家庭"
+    ]
   }
 ];
