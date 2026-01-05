@@ -1,17 +1,11 @@
-/* 全局容器锁定 */
-page {
-  height: 100%;
-  overflow: hidden; /* ⛔️ 禁止页面级滚动 */
-}
-
 /* 确保页面容器占满屏幕 */
 .test-container {
   height: 100vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
-  overflow: hidden; /* ⛔️ 禁止容器级滚动 */
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  overflow: hidden;
   background-color: #F5F7FA; /* 增加一个极其淡的背景色，衬托白卡片 */
 }
 
@@ -64,38 +58,23 @@ page {
 
 /* 核心卡片容器 */
 .card-container {
-  /* 弹性充满 */
   flex: 1;
   display: flex;
   flex-direction: column;
-  
-  /* 边距微调：左右保持，上下收紧 */
-  margin: 10rpx 30rpx 20rpx 30rpx;
-  
+  margin: 10rpx 30rpx 30rpx 30rpx; /* 调整边距 */
   background: #fff;
   border-radius: 40rpx;
   box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.08); /* 更柔和的高级投影 */
   overflow: hidden;
   position: relative;
-  
-  /* ⛔️ 移除任何固定高度，依靠 Flex */
 }
 
-/* --- 插画区 (弹簧) --- */
+/* --- 插画区 (Header Image) --- */
 .illustration-area {
   width: 100%;
-  
-  /* ⚠️ 核心策略：
-     1. flex: 1 -> 占据剩余所有空间 (大屏图大，小屏图小)
-     2. min-height -> 保证最小可视度，不能消失
-  */
-  flex: 1;
-  min-height: 200rpx; /* 极限压缩高度 */
-  
+  height: 480rpx; /* ⚠️ 修改点：高度从 320rpx 增加到 480rpx，展示更多画面 */
   position: relative;
   background-color: #F0F2F5;
-  /* 既然高度可变，确保图片裁剪居中 */
-  overflow: hidden;
 }
 
 .illustration {
@@ -121,47 +100,47 @@ page {
   letter-spacing: 1rpx;
 }
 
-/* --- 内容区域 (刚性) --- */
+/* --- 内容区域 (叠层) --- */
 .content-area {
-  /* ⚠️ flex-shrink: 0 -> 禁止被压缩，保证功能区完整 */
-  flex-shrink: 0;
-  
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* 内容靠下对齐 */
-  
+  justify-content: space-between;
+
   margin-top: -40rpx; /* 向上重叠 */
   border-radius: 40rpx 40rpx 0 0;
   background: #fff;
   position: relative;
   z-index: 10;
-  
-  /* 紧凑内边距 */
-  padding: 40rpx 30rpx 20rpx 30rpx;
-  
-  /* ⛔️ 关闭滚动，我们靠压缩图片来适配 */
-  overflow: hidden;
+
+  padding: 50rpx 40rpx 30rpx 40rpx; /* 顶部 padding 加大，因为圆角占空间 */
 }
 
 /* --- 文字组容器 (固定高度版) --- */
 .text-group {
   width: 100%;
-  /* 稍微调低一点高度，为小屏手机省出 40rpx 空间 */
-  height: 340rpx;
+  
+  /* ⚠️ 核心修复：锁定高度 */
+  /* 计算逻辑：
+     标签(40rpx) +
+     叙事3行(32*1.8*3 ≈ 172rpx) +
+     间距(48rpx) +
+     提问2行(40*1.4*2 ≈ 112rpx)
+     ≈ 372rpx -> 取整 380rpx
+  */
+  height: 380rpx;
   
   /* 布局控制 */
   display: flex;
   flex-direction: column;
-  /* ⚠️ 修改：改为顶端对齐，防止标签位置跳动 */
-  justify-content: flex-start;
   align-items: flex-start;
+  justify-content: flex-start; /* 内容置顶 */
   
   /* 间距保持 */
   margin-bottom: 20rpx;
-  /* ⚠️ 新增：固定顶部内边距，确保标签位置稳定 */
-  padding: 10rpx 10rpx 0 10rpx;
+  padding: 0 10rpx;
   
-  /* 只有在极端情况下才允许文字内部滚动，不影响整体布局 */
+  /* 安全网：如果遇到超级长的文字，允许内部滚动，但不撑开容器 */
   overflow-y: auto;
 }
 
@@ -170,7 +149,7 @@ page {
   width: 100%;
   display: flex;
   justify-content: center; /* ⚠️ 核心：让标签居中 */
-  margin-bottom: 10rpx;    /* 保持下边距 */
+  margin-bottom: 30rpx;    /* 保持下边距 */
 }
 
 .category-capsule {
@@ -179,7 +158,7 @@ page {
   justify-content: center;
   
   /* 尺寸与排版 */
-  font-size: 40rpx;
+  font-size: 45rpx;
   font-weight: 700;       /* 加粗，看起来更饱满 */
   padding: 10rpx 32rpx;   /* 稍微加宽一点，显得更圆润 */
   border-radius: 999rpx;  /* 完全圆角 */
@@ -226,14 +205,14 @@ page {
   /* 字体栈：优先使用宋体，安卓回退到 Noto Serif 或衬线体 */
   font-family: "Songti SC", "Noto Serif SC", "SimSun", serif;
 
-  /* 字号：16px -> 30rpx (稍微调小一点，适配紧凑布局) */
-  font-size: 28rpx;
+  /* 字号：16px -> 32rpx */
+  font-size: 32rpx;
 
   /* 颜色：深碳灰，比纯黑更柔和 */
   color: #454545;
 
-  /* 行高：1.6 (稍微调小一点，适配紧凑布局) */
-  line-height: 1.6;
+  /* 行高：1.8 (高级感的来源) */
+  line-height: 1.8;
 
   /* 字重：宋体通常不需要加粗，Regular 最好看 */
   font-weight: 400;
@@ -247,11 +226,11 @@ page {
   /* 字体栈：系统默认黑体 (PingFang / Roboto) */
   font-family: "Songti SC", "Noto Serif SC", "SimSun", serif;
 
-  /* 间距：减小间隙 */
-  margin-top: 10rpx;
+  /* 间距：24px -> 48rpx */
+  margin-top: 0rpx;
 
-  /* 字号：稍微调小一点，适配紧凑布局 */
-  font-size: 30rpx;
+  /* 字号：20px -> 40rpx */
+  font-size: 35rpx;
 
   /* 颜色：纯黑，强调视觉重心 */
   color: #4A3B3B;
@@ -345,7 +324,7 @@ page {
   white-space: normal;
   word-break: break-word;
   text-align: center;
-  font-size: 30rpx;
+  font-size: 32rpx;
   line-height: 1.4;
   color: #4A4A4A; /* 稍微加深一点 */
   font-weight: 400;
@@ -402,10 +381,7 @@ page {
 
 .ruler-wrapper {
   width: 100%;
-  margin-top: 10rpx;
-  margin-bottom: 10rpx;
-  flex-shrink: 0; /* 绝对刚性，禁止压缩 */
-  height: 140rpx; /* 给定一个明确的高度区域 */
+  margin-top: auto;
 }
 
 /* 底部导航 */
@@ -436,10 +412,3 @@ page {
 .primary-text { color: #333; font-weight: 600; }
 .text-hover { opacity: 0.6; }
 .spacer { width: 1px; }
-
-/* 定义一个禁用态样式 */
-.btn-disabled {
-  opacity: 0.3; /* 变淡 */
-  filter: grayscale(100%); /* 去色 */
-  /* pointer-events: none; 这里不加 none，为了让用户点击时能弹出提示 */
-}

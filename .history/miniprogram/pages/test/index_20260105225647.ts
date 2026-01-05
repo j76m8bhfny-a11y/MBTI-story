@@ -365,29 +365,30 @@ Page<TestPageData, any>({
   onCardTap() {
     console.log('Card Tapped! isAnimating:', this.data.isAnimating);
     
-    // 1. 基础动画锁
+    // ⚠️ 修复：移除 hasAnswered 检查，允许用户随时点击确认
     if (this.data.isAnimating) return;
 
-    // ⚠️ 核心修改：移除拦截逻辑
-    // 点击卡片本身就是一种交互，代表用户认可当前滑块的值（哪怕是默认值）
-    
-    // 2. 标记为已交互 (这样也会点亮底部的下一题按钮)
+    // ⚠️ 核心拦截逻辑：如果没有交互过
     if (!this.data.hasInteracted) {
-      this.setData({ hasInteracted: true });
+      wx.vibrateLong();
+      wx.showToast({
+        title: '请拖动滑块表达倾向',
+        icon: 'none',
+        duration: 1500
+      });
+      return;
     }
 
-    // 3. 夺取控制权（防止连点）
-    this.clearAllTimers();
-    
-    // 4. 立即变色 (视觉确认)
+    // A. 立即变色 (视觉确认)
     this.setData({ isCardSelected: true });
     
-    // 5. 震动反馈
+    // B. 震动反馈
     wx.vibrateShort({ type: 'medium' });
 
-    // 6. 延迟跳转
-    this.addTimer(() => {
-       console.log('Executing onNextTap after 150ms delay');
+    // C. 视觉暂留 (Wait 300ms)
+    // 让用户看清楚卡片变色了，然后再飞走
+    setTimeout(() => {
+       console.log('Executing onNextTap after 300ms delay');
        // 执行下一题逻辑
        this.onNextTap();
 
@@ -395,7 +396,7 @@ Page<TestPageData, any>({
        setTimeout(() => {
          this.setData({ isCardSelected: false });
        }, 500);
-    }, 150); // 稍微缩短一点等待时间，更爽快
+    }, 300); // 300ms 停顿
   },
 
   /**
@@ -404,11 +405,11 @@ Page<TestPageData, any>({
   onNextTap() {
     if (this.data.isAnimating) return;
 
-    // 这里的拦截依然保留，专门针对直接点底部按钮的情况
+    // ⚠️ 核心拦截逻辑：如果没有交互过
     if (!this.data.hasInteracted) {
       wx.vibrateLong();
       wx.showToast({
-        title: '请拖动滑块或点击卡片确认', // 文案微调
+        title: '请先滑动滑块选择',
         icon: 'none',
         duration: 1500
       });

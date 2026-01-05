@@ -152,14 +152,13 @@ page {
   /* 布局控制 */
   display: flex;
   flex-direction: column;
-  /* ⚠️ 修改：改为顶端对齐，防止标签位置跳动 */
-  justify-content: flex-start;
+  /* 内容居中，防止文字少时显得空 */
+  justify-content: center;
   align-items: flex-start;
   
   /* 间距保持 */
   margin-bottom: 20rpx;
-  /* ⚠️ 新增：固定顶部内边距，确保标签位置稳定 */
-  padding: 10rpx 10rpx 0 10rpx;
+  padding: 0 10rpx;
   
   /* 只有在极端情况下才允许文字内部滚动，不影响整体布局 */
   overflow-y: auto;
