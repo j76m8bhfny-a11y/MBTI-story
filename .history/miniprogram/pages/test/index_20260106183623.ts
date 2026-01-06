@@ -404,7 +404,7 @@ Page<TestPageData, any>({
    * ⚠️ 新增：跳转到下一阶段过场页
    */
   goToNextStage(nextStage: string) {
-    wx.redirectTo({
+    wx.navigateTo({
       url: `/pages/transition/index?stage=${nextStage}`
     });
   },

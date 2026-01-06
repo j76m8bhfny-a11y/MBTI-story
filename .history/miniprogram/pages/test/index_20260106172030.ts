@@ -252,8 +252,11 @@ Page<TestPageData, any>({
       }
     }
 
-    // ⚠️ 修复：调用正确的飞出动画函数
-    this.flyOutAndSwitch(diff > 0, nextOptionIndex);
+    // ⚠️ 修复：调用"切选项"专用动画，而不是切题动画
+    this.switchOptionAnimation(diff > 0, nextOptionIndex);
+    
+    // ⚠️ 核心修复：阻止事件冒泡，防止触发父容器的 onTouchEnd
+    // 由于使用了 catchtouchend，这里不需要额外处理
   },
 
   /**
@@ -270,51 +273,29 @@ Page<TestPageData, any>({
   },
 
   /**
-   * 核心：飞出切换闭环（用于切换选项）
+   * ⚠️ 新增：切换选项专用动画 (Deck Swipe 效果)
+   * 只改变 rulerValue，不改变 currentQIndex
    */
-  flyOutAndSwitch(isRight: boolean, nextIndex: number) {
-    // 1. 锁定标记 (虽然会被 touchStart 强解，但流程内需要)
+  switchOptionAnimation(isRight: boolean, nextOptionIndex: number) {
     this.setData({ isAnimating: true });
 
-    // 2. 执行飞出
+    // 1. 飞出老卡片
     const flyDist = isRight ? 1000 : -1000;
     const flyRotate = isRight ? 30 : -30;
 
     this.setData({
-      cardTransition: 'transition: transform 0.2s ease-in, opacity 1.5s ease-in;',
+      cardTransition: 'transition: transform 0.2s ease-in;',
       cardTransform: `transform: translateX(${flyDist}px) rotate(${flyRotate}deg); opacity: 0;`,
-      // 保持底层不动
       backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
     });
 
-    // 3. 这里的 setTimeout 改用 addTimer 管理
-    // 时间压缩到 200ms (与动画时长一致，不留缓冲，追求极速)
+    // 2. 等待飞出动画完成后，再更新数据并归位
     this.addTimer(() => {
-      // 更新数据
-      this.updateIndex(nextIndex);
+      // A. 更新滑块和文字 (此时卡片已经飞出屏幕，用户看不到文字变化)
+      this.updateIndex(nextOptionIndex);
 
-      // 瞬间归位
-      this.setData({
-        cardTransition: 'transition: none;',
-        cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 0;'
-      }, () => {
-        // 淡入
-        this.addTimer(() => {
-          this.setData({
-            cardTransition: 'transition: opacity 0.15s ease-out;', // 淡入再快一点
-            cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
-
-            // 底层复位
-            backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
-            previewText: '',
-
-            // 解锁
-            isAnimating: false,
-            isCardSelected: false
-          });
-          this.currentMoveX = 0;
-        }, 30); // 极短的帧间隔
-      });
+      // B. 重置卡片 (新选项飞入/淡入)
+      this.resetCardAnimation();
     }, 200);
   },
 
@@ -404,7 +385,7 @@ Page<TestPageData, any>({
    * ⚠️ 新增：跳转到下一阶段过场页
    */
   goToNextStage(nextStage: string) {
-    wx.redirectTo({
+    wx.navigateTo({
       url: `/pages/transition/index?stage=${nextStage}`
     });
   },
@@ -429,7 +410,7 @@ Page<TestPageData, any>({
     const flyRotate = isRight ? 30 : -30;
 
     this.setData({
-      cardTransition: 'transition: transform 0.2s ease-in, opacity 1.5s ease-in;',
+      cardTransition: 'transition: transform 0.2s ease-in;',
       cardTransform: `transform: translateX(${flyDist}px) rotate(${flyRotate}deg); opacity: 0;`,
       backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
     });

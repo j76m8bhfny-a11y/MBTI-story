@@ -65,7 +65,7 @@
           style="{{cardTransform}}; {{cardTransition}}"
           catchtouchstart="onCardTouchStart"
           catchtouchmove="onCardTouchMove"
-          catchtouchend="onCardTouchEnd"
+          bindtouchend="onCardTouchEnd"
         >
           <view class="hint-arrow left {{hasMoved ? 'faded' : ''}}">‹</view>
           <view class="hint-arrow right {{hasMoved ? 'faded' : ''}}">›</view>

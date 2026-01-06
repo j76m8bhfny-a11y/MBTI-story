@@ -281,7 +281,7 @@ Page<TestPageData, any>({
     const flyRotate = isRight ? 30 : -30;
 
     this.setData({
-      cardTransition: 'transition: transform 0.2s ease-in, opacity 1.5s ease-in;',
+      cardTransition: 'transition: transform 0.2s ease-in;',
       cardTransform: `transform: translateX(${flyDist}px) rotate(${flyRotate}deg); opacity: 0;`,
       // 保持底层不动
       backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
@@ -404,7 +404,7 @@ Page<TestPageData, any>({
    * ⚠️ 新增：跳转到下一阶段过场页
    */
   goToNextStage(nextStage: string) {
-    wx.redirectTo({
+    wx.navigateTo({
       url: `/pages/transition/index?stage=${nextStage}`
     });
   },
@@ -429,7 +429,7 @@ Page<TestPageData, any>({
     const flyRotate = isRight ? 30 : -30;
 
     this.setData({
-      cardTransition: 'transition: transform 0.2s ease-in, opacity 1.5s ease-in;',
+      cardTransition: 'transition: transform 0.2s ease-in;',
       cardTransform: `transform: translateX(${flyDist}px) rotate(${flyRotate}deg); opacity: 0;`,
       backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
     });

@@ -25,17 +25,5 @@ Page({
         console.error('❌ Navigation failed:', err);
       }
     });
-  },
-  goToNextStage(nextStage: string) {
-    // ❌ 原代码：会导致页面栈不断累积，且有滑入动画
-    // wx.navigateTo({
-    //   url: `/pages/transition/index?stage=${nextStage}`
-    // });
-
-    // ✅ 修改后：使用 redirectTo (原地替换)
-    // 效果：无滑入动画，且保持页面栈清爽
-    wx.redirectTo({
-      url: `/pages/transition/index?stage=${nextStage}`
-    });
-  },
+  }
 });

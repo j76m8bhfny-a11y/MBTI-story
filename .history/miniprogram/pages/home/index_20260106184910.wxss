@@ -126,7 +126,7 @@
   animation: breath 4s infinite ease-in-out;
 }
 .start-btn text { color: #fff; font-size: 36rpx; font-weight: 600; letter-spacing: 4rpx; }
-.btn-pressed { transform: scale(0.98); opacity: 0.9;box-shadow: 0 2rpx 8rpx -10rpx rgba(0, 0, 0, 0.2) !important;}
+.btn-pressed { transform: scale(0.98); opacity: 0.9;box-shadow: 0 2rpx 8rpx -4rpx rgba(0, 0, 0, 0.2) !important;}
 
 /* 动画定义 */
 @keyframes fadeIn { from { opacity: 0; } to { opacity:1; } }
