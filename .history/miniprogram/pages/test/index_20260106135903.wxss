@@ -115,7 +115,7 @@ page {
      2. min-height -> 保证最小可视度，不能消失
   */
   flex: 1;
-  min-height: 400rpx; /* 极限压缩高度 */
+  min-height: 200rpx; /* 极限压缩高度 */
   
   position: relative;
   background-color: #F0F2F5;
@@ -161,8 +161,8 @@ page {
   position: relative;
   z-index: 10;
   
-  /* 紧凑内边距 - 减少 padding-top 让图片漏出来更多 */
-  padding: 0rpx 30rpx 20rpx 30rpx;
+  /* 紧凑内边距 */
+  padding: 40rpx 30rpx 20rpx 30rpx;
   
   /* ⛔️ 关闭滚动，我们靠压缩图片来适配 */
   overflow: hidden;
@@ -183,7 +183,7 @@ page {
   
   /* 间距保持 */
   margin-bottom: 20rpx;
-  margin-top: 60rpx; /* 往下移动 60rpx */
+  margin-top: 50rpx; /* 移除上边距 */
   /* ⚠️ 新增：固定顶部内边距，确保标签位置稳定 */
   padding: 0 10rpx 0 10rpx; /* ⚠️ 减少 padding-top 让小标题和文本往上移 */
   
@@ -294,7 +294,7 @@ page {
   position: relative;
   width: 100%;
   height: 220rpx; /* 稍微调低一点，配合整体布局 */
-  margin-top: -120rpx;
+  margin-top: 80rpx;
   margin-bottom: 60rpx;
 }
 
@@ -429,7 +429,7 @@ page {
 
 .ruler-wrapper {
   width: 100%;
-  margin-top: 20rpx;
+  margin-top: 70rpx;
   margin-bottom: 10rpx;
   flex-shrink: 0; /* 绝对刚性，禁止压缩 */
   height: 140rpx; /* 给定一个明确的高度区域 */
@@ -470,4 +470,3 @@ page {
   filter: grayscale(100%); /* 去色 */
   /* pointer-events: none; 这里不加 none，为了让用户点击时能弹出提示 */
 }
-

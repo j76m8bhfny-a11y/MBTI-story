@@ -2,14 +2,6 @@ import { questions } from '../../data/questions';
 import { Answer, MBTIResult } from '../../types';
 import { calculateMBTI } from '../../utils/mbti-core';
 
-// ⚠️ 新增：阶段映射配置
-const STAGE_MAP: Record<string, { start: number, end: number, nextStage: string | null }> = {
-  '1': { start: 0,  end: 9,  nextStage: '2' }, // 0-9 是 10 道题
-  '2': { start: 10, end: 19, nextStage: '3' },
-  '3': { start: 20, end: 29, nextStage: '4' },
-  '4': { start: 30, end: 39, nextStage: null }, // 最后阶段
-};
-
 interface TestPageData {
   currentQIndex: number; // ⚠️ 必须叫 currentQIndex，与 WXML 对应
   currentQuestion: typeof questions[0];
@@ -28,7 +20,6 @@ interface TestPageData {
   isCardSelected: boolean; // 卡片选中状态
   hasInteracted: boolean; // ⚠️ 新增：是否已操作滑块
   isSceneReady: boolean; // ⚠️ 新增：场景是否准备好（用于揭幕）
-  currentStage: string; // ⚠️ 新增：当前阶段
 }
 
 // 常量定义
@@ -58,8 +49,7 @@ Page<TestPageData, any>({
     isAnimating: false,
     isCardSelected: false,
     hasInteracted: false, // ⚠️ 新增：是否已操作滑块
-    isSceneReady: false, // ⚠️ 新增：场景是否准备好（用于揭幕）
-    currentStage: '1' // ⚠️ 新增：默认第一阶段
+    isSceneReady: false // ⚠️ 新增：场景是否准备好（用于揭幕）
   },
 
   // --- 新增：辅助方法 ---
@@ -83,25 +73,14 @@ Page<TestPageData, any>({
   touchStartX: 0,
   currentMoveX: 0,
 
-  onLoad(options: { stage?: string }) {
-    // ⚠️ 核心修复：获取阶段参数，设置正确的题目索引
-    const stageKey = options.stage || '1';
-    const stageConfig = STAGE_MAP[stageKey];
-    
-    // 根据阶段计算起始题目索引
-    const startQIndex = stageConfig ? stageConfig.start : 0;
-    
-    // 设置当前阶段
-    this.setData({ currentStage: stageKey });
-    
-    // 强制初始化一次，让 UI 显示对应阶段的题目
-    const firstQuestion = questions[startQIndex];
+  onLoad() {
+    // 强制初始化一次，让 UI 显示默认文案
+    const firstQuestion = questions[0];
     const defaultIndex = 3; // 中间位置 (索引3对应值0)
     
     this.setData({
-      currentQIndex: startQIndex, // ⚠️ 关键：设置正确的题目索引
       currentQuestion: firstQuestion,
-      progressPercent: Math.round((startQIndex / questions.length) * 100),
+      progressPercent: 0,
       currentAnswerText: firstQuestion.opts[defaultIndex] || '',
       currentRulerIndex: defaultIndex,
       rulerValue: defaultIndex // 修复：传递索引 (0-6) 而不是值 (-3 到 3)
@@ -214,7 +193,7 @@ Page<TestPageData, any>({
   },
 
   /**
-   * 卡片触摸结束 - 结算 (用于切换答案选项)
+   * 卡片触摸结束 - 结算
    */
   onCardTouchEnd() {
     if (this.data.isAnimating) return;
@@ -222,40 +201,44 @@ Page<TestPageData, any>({
     const diff = this.currentMoveX;
     const absDiff = Math.abs(diff);
 
-    // 1. 移动距离不够 -> 回弹
+    // 情况 A: 移动距离不够 -> 回弹复位
     if (absDiff < THRESHOLD) {
-      // ⚠️ 核心修复：由于 WXML 中使用了 catchtouchend，标准 tap 事件会被阻断
-      // 因此我们需要在这里手动检测"点击"行为
-      // 如果移动距离极小 (< 5px)，则视为点击，手动触发 onCardTap
-      if (absDiff < 5) {
-        this.onCardTap();
-      } else {
-        this.resetCard();
-      }
+      this.resetCard();
       return;
     }
 
-    // 2. 计算下一个选项索引 (不是题目索引！)
+    // 情况 B: 触发切换
     const currentIndex = this.data.currentRulerIndex;
-    let nextOptionIndex = currentIndex;
-    const maxIndex = 6; // 0-6
+    let nextIndex = currentIndex;
+    const maxIndex = 6;
 
-    if (diff < 0) { // 向左滑 -> 选右边的项 (Index + 1)
+    // 向左滑(diff < 0) -> 下一题(Index+1) -> 往左飞
+    // 向右滑(diff > 0) -> 上一题(Index-1) -> 往右飞
+    if (diff < 0) {
+      // ⚠️ 核心修复：必须严格检查 < 6
       if (currentIndex < maxIndex) {
-        nextOptionIndex = currentIndex + 1;
+        nextIndex = currentIndex + 1;
       } else {
-        this.resetCard(); return;
+        // 如果是最后一题还往左滑，可以做个回弹提示，或者直接去结算
+        // 这里简单处理：回弹，不准滑出去变白
+        this.resetCard(); 
+        return;
       }
-    } else { // 向右滑 -> 选左边的项 (Index - 1)
+    } else if (diff > 0) {
+      // ⚠️ 核心修复：必须严格检查 > 0
       if (currentIndex > 0) {
-        nextOptionIndex = currentIndex - 1;
+        nextIndex = currentIndex - 1;
       } else {
-        this.resetCard(); return;
+        this.resetCard();
+        return;
       }
+    } else {
+      this.resetCard();
+      return;
     }
 
-    // ⚠️ 修复：调用"切选项"专用动画，而不是切题动画
-    this.switchOptionAnimation(diff > 0, nextOptionIndex);
+    // 执行飞出动画
+    this.flyOutAndSwitch(diff > 0, nextIndex);
   },
 
   /**
@@ -272,151 +255,53 @@ Page<TestPageData, any>({
   },
 
   /**
-   * ⚠️ 新增：切换选项专用动画 (Deck Swipe 效果)
-   * 只改变 rulerValue，不改变 currentQIndex
+   * 核心：飞出切换闭环（用于切换选项）
    */
-  switchOptionAnimation(isRight: boolean, nextOptionIndex: number) {
+  flyOutAndSwitch(isRight: boolean, nextIndex: number) {
+    // 1. 锁定标记 (虽然会被 touchStart 强解，但流程内需要)
     this.setData({ isAnimating: true });
 
-    // 1. 飞出老卡片
+    // 2. 执行飞出
     const flyDist = isRight ? 1000 : -1000;
     const flyRotate = isRight ? 30 : -30;
 
     this.setData({
       cardTransition: 'transition: transform 0.2s ease-in;',
       cardTransform: `transform: translateX(${flyDist}px) rotate(${flyRotate}deg); opacity: 0;`,
+      // 保持底层不动
       backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
     });
 
-    // 2. 更新数据并归位
+    // 3. 这里的 setTimeout 改用 addTimer 管理
+    // 时间压缩到 200ms (与动画时长一致，不留缓冲，追求极速)
     this.addTimer(() => {
-      // A. 更新滑块和文字
-      this.updateIndex(nextOptionIndex);
 
-      // B. 重置卡片 (新选项飞入/淡入)
-      this.resetCardAnimation();
-    }, 200);
-  },
+      // 更新数据
+      this.updateIndex(nextIndex);
 
-  /**
-   * ⚠️ 新增：页面级触摸结束 (用于切换上一题/下一题)
-   * 绑定在 card-container 上
-   */
-  onTouchEnd(e: any) {
-    // 如果正在动画，或者不是从顶部图片区域开始滑的，忽略
-    if (this.data.isAnimating || !this.touchStartX) return;
+      // 瞬间归位
+      this.setData({
+        cardTransition: 'transition: none;',
+        cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 0;'
+      }, () => {
 
-    const diff = this.currentMoveX;
-    const absDiff = Math.abs(diff);
+        // 淡入
+        this.addTimer(() => {
+          this.setData({
+            cardTransition: 'transition: opacity 0.15s ease-out;', // 淡入再快一点
+            cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
 
-    // 移动距离不够 -> 回弹
-    if (absDiff < THRESHOLD) {
-      this.resetCard();
-      return;
-    }
+            // 底层复位
+            backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
+            previewText: '',
 
-    // 判断是否切换题目
-    const isRight = diff > 0;
-    const nextQIndex = isRight ? this.data.currentQIndex - 1 : this.data.currentQIndex + 1;
-
-    // 边界检查
-    if (nextQIndex < 0 || nextQIndex >= questions.length) {
-      this.resetCard();
-      return;
-    }
-
-    // 调用切题动画
-    this.animateQuestionSwitch(isRight, nextQIndex);
-  },
-
-  /**
-   * ⚠️ 新增：统一处理下一步去向 (无论是滑过去的，还是点过去的)
-   */
-  handleNextStep(nextQIndex: number) {
-    const currentStageStr = this.data.currentStage;
-    const stageConfig = STAGE_MAP[currentStageStr];
-
-    // 🛑 核心判断：越界检查
-    // 如果下一题的索引 (比如 10) 大于本阶段的结束索引 (比如 9)
-    if (stageConfig && nextQIndex > stageConfig.end) {
-      
-      // A. 触发阶段跳转
-      if (stageConfig.nextStage) {
-        this.goToNextStage(stageConfig.nextStage);
-      } else {
-        this.finishAllTests();
-      }
-      return; // ⛔️ 拦截成功，不再加载题目
-    }
-
-    // B. 未越界 -> 正常加载下一题
-    this.updateQuestion(nextQIndex);
-    
-    // C. 归位动画 (新卡片淡入)
-    this.resetCardAnimation();
-  },
-
-  /**
-   * ⚠️ 新增：辅助：重置卡片动画 (抽离出来复用)
-   */
-  resetCardAnimation() {
-    this.setData({
-      cardTransition: 'transition: none;',
-      cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 0;'
-    }, () => {
-      // 使用 addTimer 或 setTimeout
-      setTimeout(() => {
-        this.setData({
-          cardTransition: 'transition: opacity 0.2s ease-out;',
-          cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
-          backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
-          previewText: '',
-          isAnimating: false,
-          isCardSelected: false,
-          hasInteracted: false // 记得重置交互状态
-        });
-        this.currentMoveX = 0;
-      }, 50);
-    });
-  },
-
-  /**
-   * ⚠️ 新增：跳转到下一阶段过场页
-   */
-  goToNextStage(nextStage: string) {
-    wx.navigateTo({
-      url: `/pages/transition/index?stage=${nextStage}`
-    });
-  },
-
-  /**
-   * ⚠️ 新增：完成所有测试
-   */
-  finishAllTests() {
-    wx.showToast({ title: '测试完成', icon: 'success' });
-    // 实际跳转逻辑
-    // wx.navigateTo({ url: '/pages/result/index' });
-  },
-
-  /**
-   * ⚠️ 重构：切换题目专用动画
-   * 原 flyOutAndSwitch 改名而来，专门处理 handleNextStep
-   */
-  animateQuestionSwitch(isRight: boolean, nextQIndex: number) {
-    this.setData({ isAnimating: true });
-
-    const flyDist = isRight ? 1000 : -1000;
-    const flyRotate = isRight ? 30 : -30;
-
-    this.setData({
-      cardTransition: 'transition: transform 0.2s ease-in;',
-      cardTransform: `transform: translateX(${flyDist}px) rotate(${flyRotate}deg); opacity: 0;`,
-      backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
-    });
-
-    this.addTimer(() => {
-      // ⚠️ 这里才是调用 handleNextStep (切题)
-      this.handleNextStep(nextQIndex);
+            // 解锁
+            isAnimating: false,
+            isCardSelected: false
+          });
+          this.currentMoveX = 0;
+        }, 30); // 极短的帧间隔
+      });
     }, 200);
   },
 
@@ -425,8 +310,39 @@ Page<TestPageData, any>({
    * @param nextQIndex 下一题的题目索引
    */
   animateToNextQuestion(nextQIndex: number) {
-    // ⚠️ 修改：调用切题专用动画
-    this.animateQuestionSwitch(false, nextQIndex);
+    // 1. 锁定
+    this.setData({ isAnimating: true });
+
+    // 2. 飞出
+    const flyDist = -1000;
+    this.setData({
+      cardTransition: 'transition: transform 0.2s ease-in;',
+      cardTransform: `transform: translateX(${flyDist}px) rotate(-30deg); opacity: 0;`,
+      backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
+    });
+
+    // 3. 定时器托管
+    this.addTimer(() => {
+      this.updateQuestion(nextQIndex);
+
+      this.setData({
+        cardTransition: 'transition: none;',
+        cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 0;'
+      }, () => {
+        this.addTimer(() => {
+          this.setData({
+            cardTransition: 'transition: opacity 0.15s ease-out;',
+            cardTransform: 'transform: translateX(0) rotate(0deg); opacity: 1;',
+
+            backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;',
+            previewText: '',
+
+            isAnimating: false,
+            isCardSelected: false
+          });
+        }, 30);
+      });
+    }, 200);
   },
 
   /**
@@ -668,14 +584,5 @@ Page<TestPageData, any>({
     }
   },
 
-  _isDebouncing: false,
-
-  /**
-   * ⚠️ 新增：空函数，专门用于阻止事件冒泡
-   * 防止滑块区域的触摸事件冒泡到父容器触发切题逻辑
-   */
-  preventBubble() {
-    // Do nothing, just stop propagation
-    return;
-  }
+  _isDebouncing: false
 });

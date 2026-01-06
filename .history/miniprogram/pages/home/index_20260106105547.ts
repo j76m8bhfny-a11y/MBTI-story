@@ -13,18 +13,7 @@ Page({
     this.setData({ userCode: randomNum.toString(), dateStr });
   },
   onStartTap() {
-    console.log('👆 Start button tapped');
     wx.vibrateShort({ type: 'medium' });
-    
-    wx.navigateTo({
-      url: '/pages/transition/index?stage=1',
-      success: () => {
-        console.log('✅ Navigation success');
-      },
-      fail: (err) => {
-        console.error('❌ Navigation failed:', err);
-        wx.showToast({ title: '跳转失败: ' + err.errMsg, icon: 'none' });
-      }
-    });
+    wx.navigateTo({ url: '/pages/transition/index?stage=1' });
   }
 });

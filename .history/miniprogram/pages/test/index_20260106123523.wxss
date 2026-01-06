@@ -94,8 +94,8 @@ page {
   display: flex;
   flex-direction: column;
   
-  /* 边距微调：左右保持，上下收紧 */
-  margin: 10rpx 30rpx 20rpx 30rpx;
+  /* 边距微调：左右保持，上边距增加让内容下移 */
+  margin: 60rpx 30rpx 20rpx 30rpx;
   
   background: #fff;
   border-radius: 40rpx;
@@ -111,11 +111,13 @@ page {
   width: 100%;
   
   /* ⚠️ 核心策略：
-     1. flex: 1 -> 占据剩余所有空间 (大屏图大，小屏图小)
-     2. min-height -> 保证最小可视度，不能消失
+     1. flex: 0.2 -> 大幅减少占据空间，让内容区域下移
+     2. max-height -> 限制最大高度
+     3. min-height -> 保证最小可视度，不能消失
   */
-  flex: 1;
-  min-height: 400rpx; /* 极限压缩高度 */
+  flex: 0.2;
+  max-height: 300rpx; /* 限制最大高度 */
+  min-height: 150rpx; /* 极限压缩高度 */
   
   position: relative;
   background-color: #F0F2F5;
@@ -153,16 +155,16 @@ page {
   
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* 内容靠下对齐 */
+  justify-content: flex-start; /* 内容靠上对齐 */
   
-  margin-top: -40rpx; /* 向上重叠 */
+  margin-top: 0; /* 移除上边距 */
   border-radius: 40rpx 40rpx 0 0;
   background: #fff;
   position: relative;
   z-index: 10;
   
-  /* 紧凑内边距 - 减少 padding-top 让图片漏出来更多 */
-  padding: 0rpx 30rpx 20rpx 30rpx;
+  /* ⚠️ 使用 padding-top 让内容下移 */
+  padding: 300rpx 30rpx 20rpx 30rpx;
   
   /* ⛔️ 关闭滚动，我们靠压缩图片来适配 */
   overflow: hidden;
@@ -171,8 +173,8 @@ page {
 /* --- 文字组容器 (固定高度版) --- */
 .text-group {
   width: 100%;
-  /* 增加高度，避免文字滚动 */
-  height: 450rpx;
+  /* ⚠️ 减少高度，让答题框和滑轨下移 */
+  height: 200rpx;
   
   /* 布局控制 */
   display: flex;
@@ -183,9 +185,9 @@ page {
   
   /* 间距保持 */
   margin-bottom: 20rpx;
-  margin-top: 60rpx; /* 往下移动 60rpx */
-  /* ⚠️ 新增：固定顶部内边距，确保标签位置稳定 */
-  padding: 0 10rpx 0 10rpx; /* ⚠️ 减少 padding-top 让小标题和文本往上移 */
+  margin-top: 0; /* 移除上边距 */
+  /* ⚠️ 使用 padding-top 让内容下移 */
+  padding: 10rpx 10rpx 0 10rpx;
   
   /* 只有在极端情况下才允许文字内部滚动，不影响整体布局 */
   overflow-y: auto;
@@ -294,7 +296,7 @@ page {
   position: relative;
   width: 100%;
   height: 220rpx; /* 稍微调低一点，配合整体布局 */
-  margin-top: -120rpx;
+  margin-top: 200rpx; /* ⚠️ 修改：大幅增加上边距让答题框下移 */
   margin-bottom: 60rpx;
 }
 
@@ -429,7 +431,7 @@ page {
 
 .ruler-wrapper {
   width: 100%;
-  margin-top: 20rpx;
+  margin-top: 150rpx; /* ⚠️ 修改：大幅增加上边距让滑轨下移 */
   margin-bottom: 10rpx;
   flex-shrink: 0; /* 绝对刚性，禁止压缩 */
   height: 140rpx; /* 给定一个明确的高度区域 */
@@ -470,4 +472,3 @@ page {
   filter: grayscale(100%); /* 去色 */
   /* pointer-events: none; 这里不加 none，为了让用户点击时能弹出提示 */
 }
-

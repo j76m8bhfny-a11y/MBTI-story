@@ -1,3 +1,4 @@
+<!-- 转场遮罩 -->
 <view class="scene-curtain {{isSceneReady ? 'fade-out' : ''}}"></view>
 
 <view class="test-container">
@@ -17,11 +18,7 @@
     </view>
   </view>
   
-  <view class="card-container"
-    bindtouchstart="onCardTouchStart"
-    bindtouchmove="onCardTouchMove"
-    bindtouchend="onTouchEnd"
-  >
+  <view class="card-container">
     <view class="illustration-area">
       <image
         class="illustration"
@@ -30,11 +27,7 @@
       />
     </view>
 
-    <view class="content-area"
-      catchtouchstart="preventBubble"
-      catchtouchmove="preventBubble"
-      catchtap="onCardTap"
-    >
+    <view class="content-area">
       <view class="text-group">
         <view class="tag-row">
           <view class="category-capsule">
@@ -60,12 +53,13 @@
         </view>
 
         <view class="card-layer active-card {{isCardSelected ? 'selected-mode' : ''}}"
+          bindtap="onCardTap"
           hover-class="card-hover"
           hover-stay-time="100"
           style="{{cardTransform}}; {{cardTransition}}"
           bindtouchstart="onCardTouchStart"
           bindtouchmove="onCardTouchMove"
-          catchtouchend="onCardTouchEnd"
+          bindtouchend="onCardTouchEnd"
         >
           <view class="hint-arrow left {{hasMoved ? 'faded' : ''}}">‹</view>
           <view class="hint-arrow right {{hasMoved ? 'faded' : ''}}">›</view>

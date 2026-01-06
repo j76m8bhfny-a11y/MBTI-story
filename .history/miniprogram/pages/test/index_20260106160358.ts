@@ -224,14 +224,7 @@ Page<TestPageData, any>({
 
     // 1. 移动距离不够 -> 回弹
     if (absDiff < THRESHOLD) {
-      // ⚠️ 核心修复：由于 WXML 中使用了 catchtouchend，标准 tap 事件会被阻断
-      // 因此我们需要在这里手动检测"点击"行为
-      // 如果移动距离极小 (< 5px)，则视为点击，手动触发 onCardTap
-      if (absDiff < 5) {
-        this.onCardTap();
-      } else {
-        this.resetCard();
-      }
+      this.resetCard();
       return;
     }
 

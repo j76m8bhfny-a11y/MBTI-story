@@ -1,0 +1,16 @@
+<view class="transition-container" bindtap="onTap" style="opacity: {{opacity}}">
+  
+  <view class="border-frame"></view>
+
+  <view class="content-wrapper">
+    <text class="chapter-no">{{stageData.chapter}}</text>
+    
+    <text class="main-title">{{stageData.title}}</text>
+    
+    <view class="divider-line"></view>
+    
+    <text class="sub-text">{{stageData.subtitle}}</text>
+  </view>
+
+  <view class="skip-hint">点击跳过 ➝</view>
+</view>

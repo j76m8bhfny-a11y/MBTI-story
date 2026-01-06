@@ -1,0 +1,98 @@
+/* 容器：改回暖白背景，保持一致性 */
+.transition-container {
+  width: 100vw;
+  height: 100vh;
+  
+  /* 蛋壳暖白 */
+  background-color: #FFFDF5;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+  /* 关键：CSS 动效过渡 */
+  transition: opacity 0.6s ease-in-out;
+}
+
+/* 内部内容区 */
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+/* 章节号 (英文) */
+.chapter-no {
+  font-family: "Didot", serif;
+  font-size: 24rpx;
+  /* 深灰色 */
+  color: #999999;
+  letter-spacing: 6rpx;
+  margin-bottom: 20rpx;
+  text-transform: uppercase;
+}
+
+/* 主标题 (中文) */
+.main-title {
+  font-family: "Songti SC", "Noto Serif SC", serif;
+  font-size: 80rpx;
+  /* 深褐色 (复古感) */
+  color: #4A3B3B;
+  font-weight: bold;
+  letter-spacing: 10rpx;
+  margin-bottom: 40rpx;
+  
+  /* 呼吸动效 (稍微改柔和一点) */
+  animation: breath-light 4s infinite ease-in-out;
+}
+
+/* 分割线 */
+.divider-line {
+  width: 60rpx;
+  height: 2rpx;
+  /* 浅灰色 */
+  background-color: #E0E0E0;
+  margin-bottom: 40rpx;
+}
+
+/* 副标题 (叙事) */
+.sub-text {
+  font-family: "Songti SC", serif;
+  font-size: 32rpx;
+  /* 深碳灰 */
+  color: #555555;
+  letter-spacing: 4rpx;
+  font-weight: 300;
+  text-align: center;
+  max-width: 80%;
+  line-height: 1.8;
+}
+
+/* 底部跳过提示 */
+.skip-hint {
+  position: absolute;
+  bottom: 80rpx;
+  font-size: 20rpx;
+  /* 浅灰色 */
+  color: #AAAAAA;
+  letter-spacing: 2rpx;
+}
+
+/* 装饰边框 (改为浅色，或直接移除) */
+.border-frame {
+  position: absolute;
+  top: 40rpx; left: 40rpx; right: 40rpx; bottom: 40rpx;
+  /* 极淡的边框 */
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  pointer-events: none;
+}
+
+/* 新的呼吸动画 (针对浅色背景优化) */
+@keyframes breath-light {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+  /* 移除 text-shadow，保持干净 */
+}

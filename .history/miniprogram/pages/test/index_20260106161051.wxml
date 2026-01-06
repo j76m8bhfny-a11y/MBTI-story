@@ -1,3 +1,4 @@
+<!-- 转场遮罩 -->
 <view class="scene-curtain {{isSceneReady ? 'fade-out' : ''}}"></view>
 
 <view class="test-container">
@@ -33,6 +34,7 @@
     <view class="content-area"
       catchtouchstart="preventBubble"
       catchtouchmove="preventBubble"
+      catchtouchend="preventBubble"
       catchtap="onCardTap"
     >
       <view class="text-group">
@@ -65,7 +67,7 @@
           style="{{cardTransform}}; {{cardTransition}}"
           bindtouchstart="onCardTouchStart"
           bindtouchmove="onCardTouchMove"
-          catchtouchend="onCardTouchEnd"
+          bindtouchend="onCardTouchEnd"
         >
           <view class="hint-arrow left {{hasMoved ? 'faded' : ''}}">‹</view>
           <view class="hint-arrow right {{hasMoved ? 'faded' : ''}}">›</view>

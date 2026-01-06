@@ -214,7 +214,7 @@ Page<TestPageData, any>({
   },
 
   /**
-   * 卡片触摸结束 - 结算 (用于切换答案选项)
+   * 卡片触摸结束 - 结算
    */
   onCardTouchEnd() {
     if (this.data.isAnimating) return;
@@ -222,40 +222,44 @@ Page<TestPageData, any>({
     const diff = this.currentMoveX;
     const absDiff = Math.abs(diff);
 
-    // 1. 移动距离不够 -> 回弹
+    // 情况 A: 移动距离不够 -> 回弹复位
     if (absDiff < THRESHOLD) {
-      // ⚠️ 核心修复：由于 WXML 中使用了 catchtouchend，标准 tap 事件会被阻断
-      // 因此我们需要在这里手动检测"点击"行为
-      // 如果移动距离极小 (< 5px)，则视为点击，手动触发 onCardTap
-      if (absDiff < 5) {
-        this.onCardTap();
-      } else {
-        this.resetCard();
-      }
+      this.resetCard();
       return;
     }
 
-    // 2. 计算下一个选项索引 (不是题目索引！)
+    // 情况 B: 触发切换
     const currentIndex = this.data.currentRulerIndex;
-    let nextOptionIndex = currentIndex;
-    const maxIndex = 6; // 0-6
+    let nextIndex = currentIndex;
+    const maxIndex = 6;
 
-    if (diff < 0) { // 向左滑 -> 选右边的项 (Index + 1)
+    // 向左滑(diff < 0) -> 下一题(Index+1) -> 往左飞
+    // 向右滑(diff > 0) -> 上一题(Index-1) -> 往右飞
+    if (diff < 0) {
+      // ⚠️ 核心修复：必须严格检查 < 6
       if (currentIndex < maxIndex) {
-        nextOptionIndex = currentIndex + 1;
+        nextIndex = currentIndex + 1;
       } else {
-        this.resetCard(); return;
+        // 如果是最后一题还往左滑，可以做个回弹提示，或者直接去结算
+        // 这里简单处理：回弹，不准滑出去变白
+        this.resetCard(); 
+        return;
       }
-    } else { // 向右滑 -> 选左边的项 (Index - 1)
+    } else if (diff > 0) {
+      // ⚠️ 核心修复：必须严格检查 > 0
       if (currentIndex > 0) {
-        nextOptionIndex = currentIndex - 1;
+        nextIndex = currentIndex - 1;
       } else {
-        this.resetCard(); return;
+        this.resetCard();
+        return;
       }
+    } else {
+      this.resetCard();
+      return;
     }
 
-    // ⚠️ 修复：调用"切选项"专用动画，而不是切题动画
-    this.switchOptionAnimation(diff > 0, nextOptionIndex);
+    // 执行飞出动画
+    this.flyOutAndSwitch(diff > 0, nextIndex);
   },
 
   /**
@@ -269,64 +273,6 @@ Page<TestPageData, any>({
       backgroundTransform: 'transform: scale(0.95) translateY(10rpx); transition: transform 0.3s;'
     });
     this.currentMoveX = 0;
-  },
-
-  /**
-   * ⚠️ 新增：切换选项专用动画 (Deck Swipe 效果)
-   * 只改变 rulerValue，不改变 currentQIndex
-   */
-  switchOptionAnimation(isRight: boolean, nextOptionIndex: number) {
-    this.setData({ isAnimating: true });
-
-    // 1. 飞出老卡片
-    const flyDist = isRight ? 1000 : -1000;
-    const flyRotate = isRight ? 30 : -30;
-
-    this.setData({
-      cardTransition: 'transition: transform 0.2s ease-in;',
-      cardTransform: `transform: translateX(${flyDist}px) rotate(${flyRotate}deg); opacity: 0;`,
-      backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
-    });
-
-    // 2. 更新数据并归位
-    this.addTimer(() => {
-      // A. 更新滑块和文字
-      this.updateIndex(nextOptionIndex);
-
-      // B. 重置卡片 (新选项飞入/淡入)
-      this.resetCardAnimation();
-    }, 200);
-  },
-
-  /**
-   * ⚠️ 新增：页面级触摸结束 (用于切换上一题/下一题)
-   * 绑定在 card-container 上
-   */
-  onTouchEnd(e: any) {
-    // 如果正在动画，或者不是从顶部图片区域开始滑的，忽略
-    if (this.data.isAnimating || !this.touchStartX) return;
-
-    const diff = this.currentMoveX;
-    const absDiff = Math.abs(diff);
-
-    // 移动距离不够 -> 回弹
-    if (absDiff < THRESHOLD) {
-      this.resetCard();
-      return;
-    }
-
-    // 判断是否切换题目
-    const isRight = diff > 0;
-    const nextQIndex = isRight ? this.data.currentQIndex - 1 : this.data.currentQIndex + 1;
-
-    // 边界检查
-    if (nextQIndex < 0 || nextQIndex >= questions.length) {
-      this.resetCard();
-      return;
-    }
-
-    // 调用切题动画
-    this.animateQuestionSwitch(isRight, nextQIndex);
   },
 
   /**
@@ -399,24 +345,29 @@ Page<TestPageData, any>({
   },
 
   /**
-   * ⚠️ 重构：切换题目专用动画
-   * 原 flyOutAndSwitch 改名而来，专门处理 handleNextStep
+   * 核心：飞出切换闭环（用于切换选项）
    */
-  animateQuestionSwitch(isRight: boolean, nextQIndex: number) {
+  flyOutAndSwitch(isRight: boolean, nextIndex: number) {
+    // 1. 锁定标记 (虽然会被 touchStart 强解，但流程内需要)
     this.setData({ isAnimating: true });
 
+    // 2. 执行飞出
     const flyDist = isRight ? 1000 : -1000;
     const flyRotate = isRight ? 30 : -30;
 
     this.setData({
       cardTransition: 'transition: transform 0.2s ease-in;',
       cardTransform: `transform: translateX(${flyDist}px) rotate(${flyRotate}deg); opacity: 0;`,
+      // 保持底层不动
       backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
     });
 
+    // 3. 这里的 setTimeout 改用 addTimer 管理
+    // 时间压缩到 200ms (与动画时长一致，不留缓冲，追求极速)
     this.addTimer(() => {
-      // ⚠️ 这里才是调用 handleNextStep (切题)
-      this.handleNextStep(nextQIndex);
+      // ⚠️ 修改：调用统一处理方法 handleNextStep
+      // 以前是 this.updateIndex(nextIndex) -> 现在是 handleNextStep
+      this.handleNextStep(nextIndex);
     }, 200);
   },
 
@@ -425,8 +376,22 @@ Page<TestPageData, any>({
    * @param nextQIndex 下一题的题目索引
    */
   animateToNextQuestion(nextQIndex: number) {
-    // ⚠️ 修改：调用切题专用动画
-    this.animateQuestionSwitch(false, nextQIndex);
+    // 1. 锁定
+    this.setData({ isAnimating: true });
+
+    // 2. 飞出
+    const flyDist = -1000;
+    this.setData({
+      cardTransition: 'transition: transform 0.2s ease-in;',
+      cardTransform: `transform: translateX(${flyDist}px) rotate(-30deg); opacity: 0;`,
+      backgroundTransform: 'transform: scale(1.0) translateY(0); transition: none;'
+    });
+
+    // 3. 定时器托管
+    this.addTimer(() => {
+      // ⚠️ 修改：调用统一处理方法 handleNextStep
+      this.handleNextStep(nextQIndex);
+    }, 200);
   },
 
   /**
