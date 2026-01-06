@@ -147,7 +147,7 @@ page {
 .text-group {
   width: 100%;
   /* 稍微调低一点高度，为小屏手机省出 40rpx 空间 */
-  height: 300rpx;
+  height: 340rpx;
   
   /* 布局控制 */
   display: flex;
@@ -267,8 +267,8 @@ page {
 .answer-layout-wrapper {
   position: relative;
   width: 100%;
-  height: 220rpx; /* 稍微调低一点，配合整体布局 */
-  margin-bottom: 60rpx;
+  height: 240rpx; /* 稍微调低一点，配合整体布局 */
+  margin-bottom: 80rpx;
 }
 
 .card-layer {
