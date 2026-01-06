@@ -1,0 +1,30 @@
+<view class="home-container">
+  <view class="noise-overlay"></view>
+
+  <view class="top-slogan">如果人生可以重来...</view>
+
+  <view class="hero-collage">
+    <view class="doodle-star star-1">✦</view>
+    <view class="doodle-star star-2">✨</view>
+    
+    <image class="obj-item obj-gamepad float-delay-1" src="/assets/images/home/gamepad.png" mode="widthFix" />
+    <image class="obj-item obj-letter float-delay-2" src="/assets/images/home/letter.png" mode="widthFix" />
+    <image class="obj-item obj-coffee float-delay-3" src="/assets/images/home/coffee.png" mode="widthFix" />
+    <image class="obj-item obj-main float-delay-0" src="/assets/images/home/cat.png" mode="widthFix" />
+  </view>
+
+  <view class="title-area">
+    <text class="main-title">LifeMBTI</text>
+    <text class="sub-title">RE-DISCOVER YOURSELF</text>
+  </view>
+
+  <view class="receipt-card">
+    <view class="receipt-line">No. {{userCode}} 位体验者</view>
+    <view class="receipt-line time">档案建立日：{{dateStr}}</view>
+    <view class="receipt-barcode">||| || ||| | ||</view>
+  </view>
+
+  <view class="start-btn" bindtap="onStartTap" hover-class="btn-pressed">
+    <text>开启人生重启计划</text>
+  </view>
+</view>

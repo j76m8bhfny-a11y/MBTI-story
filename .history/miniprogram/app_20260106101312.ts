@@ -33,9 +33,9 @@ App({
     wx.cloud.callFunction({
       name: 'userHandshake',
       data: {}
-    }).then((res: any) => {
+    }).then(res => {
       console.log('静默登录成功', res);
-      const openid = res.result?.openid || res.result?.OPENID;
+      const openid = res.result.openid;
       
       // 存储到全局变量
       this.globalData.openid = openid;
