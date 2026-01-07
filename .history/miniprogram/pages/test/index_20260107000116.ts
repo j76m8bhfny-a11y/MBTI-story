@@ -694,20 +694,79 @@ Page<TestPageData, any>({
    * 下一题按钮点击事件（带防抖）
    */
   onNext() {
-    // 防抖逻辑
-    if (this._isDebouncing) return;
+    // 防抖：500ms 内只允许点击一次
+    if (this._isDebouncing) {
+      return;
+    }
     this._isDebouncing = true;
-    setTimeout(() => { this._isDebouncing = false; }, 500);
 
-    const { currentQIndex } = this.data;
-    const maxIndex = questions.length - 1;
+    setTimeout(() => {
+      this._isDebouncing = false;
+    }, 500);
 
-    if (currentQIndex < maxIndex) {
-      // 动画切题 -> 动画结束后会自动调用 handleNextStep -> 自动保存答案
-      this.animateToNextQuestion(currentQIndex + 1);
+    // 记录当前题目的答案
+    const { currentQIndex, rulerValue, answers } = this.data;
+    const currentQuestion = questions[currentQIndex];
+
+    const newAnswer: Answer = {
+      q_id: currentQuestion.id,
+      selected_index: rulerValue // 修复：rulerValue 已经是索引 (0-6)，不需要转换
+    };
+
+    const updatedAnswers = [...answers, newAnswer];
+
+    // 判断是否还有下一题
+    if (currentQIndex < questions.length - 1) {
+      // 切换到下一题
+      const nextIndex = currentQIndex + 1;
+      const nextQuestion = questions[nextIndex];
+      const defaultIndex = 3; // 中间位置
+
+      this.setData({
+        currentQIndex: nextIndex, // ⚠️ 关键修正：更新正确的变量名
+        currentQuestion: nextQuestion, // ⚠️ 关键修复：必须更新题目对象
+        rulerValue: defaultIndex, // 修复：传递索引 (0-6) 而不是值 (-3 到 3)
+        currentRulerIndex: defaultIndex,
+        hasAnswered: false,
+        answers: updatedAnswers,
+        progressPercent: Math.round((nextIndex / questions.length) * 100),
+        currentAnswerText: nextQuestion.opts[defaultIndex] || '',
+        hasMoved: false
+      });
     } else {
-      // 已经是最后一题 -> 直接结算
-      this.finishAllTests();
+      wx.showLoading({ title: '生成人格中...' });
+
+      try {
+        // 1. 实例化核心引擎
+        const core = new LogicCore();
+
+        // 2. 注入所有答案进行计算
+        // updatedAnswers 是刚才生成的完整答案数组
+        updatedAnswers.forEach((ans: any, index: number) => {
+          // 获取对应的题目对象 (确保顺序一致)
+          const qItem = questions[index];
+          // 传入题目和用户的选择索引 (0-6)
+          core.processAnswer(qItem, ans.selected_index);
+        });
+
+        // 3. 获取最终结果 (Raw Result)
+        const rawResult = core.getFinalResult();
+        console.log('计算完成:', rawResult);
+
+        // 4. 存入缓存 (Key 必须叫 USER_MBTI_RESULT，结果页是读这个 Key)
+        wx.setStorageSync('USER_MBTI_RESULT', rawResult);
+
+        // 5. 跳转结果页
+        wx.hideLoading();
+        wx.reLaunch({
+          url: '/pages/result/index'
+        });
+
+      } catch (err) {
+        console.error('计算出错:', err);
+        wx.hideLoading();
+        wx.showToast({ title: '计算失败', icon: 'error' });
+      }
     }
   },
 
