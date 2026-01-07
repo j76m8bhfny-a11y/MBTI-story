@@ -1,0 +1,62 @@
+<view class="page-container">
+  <view class="ambient-glow"></view>
+
+  <view class="result-card">
+
+    <view class="header-section">
+      <text class="slogan-sub">{{ui.poster.life_script || '致 独一无二的你'}}</text>
+      <text class="role-title">{{ui.poster.title}}</text>
+    </view>
+
+    <view class="mbti-main">
+      <text class="sparkle s-left">✨</text>
+      <text class="mbti-code">{{ui.poster.type}}</text>
+      <text class="sparkle s-right">✨</text>
+    </view>
+
+    <view class="letter-section">
+      <text class="letter-text">{{ui.poster.summary}}</text>
+    </view>
+
+    <view class="gauge-list">
+      <block wx:for="{{['EI', 'SN', 'TF', 'JP']}}" wx:key="*this" wx:for-item="dimKey">
+        <view class="gauge-item">
+          <view class="gauge-labels">
+            <text class="char-left">{{dimKey[0]}}</text>
+            <text class="status-text">{{ui.gauge[dimKey].tag}}</text>
+            <text class="char-right">{{dimKey[1]}}</text>
+          </view>
+
+          <view class="progress-track">
+            <view class="progress-fill"
+                  style="width: {{ui.gauge[dimKey].score}}%; background: {{_utils.getBarColor(dimKey, ui.gauge[dimKey].score)}}">
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <view class="sticker-area">
+      <block wx:for="{{ui.stickers}}" wx:key="text">
+        <view class="sticker-tag {{item.type}}" style="transform: rotate({{index % 2 === 0 ? '-2deg' : '2deg'}})">
+          {{item.text}}
+        </view>
+      </block>
+    </view>
+
+  </view>
+
+  <view class="action-bar">
+    <button class="btn-share" open-type="share">分享给朋友</button>
+    <view class="btn-save" bindtap="onSaveImage">保存纪念卡片</view>
+  </view>
+</view>
+
+<wxs module="_utils">
+module.exports.getBarColor = function(dim, score) {
+  if (dim === 'EI') return 'linear-gradient(90deg, #F6D365 0%, #FDA085 100%)';
+  if (dim === 'SN') return 'linear-gradient(90deg, #84FAB0 0%, #8FD3F4 100%)';
+  if (dim === 'TF') return 'linear-gradient(90deg, #A18CD1 0%, #FBC2EB 100%)';
+  return 'linear-gradient(90deg, #E0C3FC 0%, #8EC5FC 100%)';
+}
+</wxs>

@@ -1,0 +1,212 @@
+/* 全局重置：暖调纸质感 */
+page {
+  background-color: #FFFDF5;
+  font-family: "Songti SC", "SimSun", serif;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.ambient-glow {
+  position: absolute;
+  top: -10%; left: -10%;
+  width: 600rpx; height: 600rpx;
+  background: radial-gradient(circle, rgba(209, 196, 233, 0.2) 0%, rgba(255,253,245,0) 70%);
+  z-index: 0; pointer-events: none;
+}
+
+/* --- 核心卡片 --- */
+.result-card {
+  width: 680rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx; /* 稍微减小圆角，配合撕裂线 */
+  /* 差异点：弥散紫影 */
+  box-shadow: 0 20rpx 60rpx -10rpx rgba(106, 76, 156, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 50rpx 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  margin-bottom: 30rpx;
+  position: relative;
+  overflow: hidden; /* 为了切掉水印 */
+}
+
+/* 0. 差异点4：氛围水印 */
+.watermark-bg {
+  position: absolute;
+  right: -20rpx;
+  bottom: -40rpx;
+  font-family: "Didot", serif;
+  font-size: 240rpx;
+  font-weight: 700;
+  color: #000;
+  opacity: 0.03; /* 极淡 */
+  pointer-events: none;
+  z-index: 0;
+  transform: rotate(-10deg);
+}
+
+/* A. 头部 */
+.header-section { text-align: center; margin-bottom: 20rpx; z-index: 1;}
+.slogan-sub {
+  font-size: 24rpx; color: #9E9E9E; font-style: italic;
+  letter-spacing: 2rpx; margin-bottom: 12rpx; display: block;
+}
+.role-title {
+  font-size: 40rpx; color: #4A3B55; font-weight: bold; letter-spacing: 4rpx;
+}
+
+/* B. MBTI */
+.mbti-main {
+  position: relative; display: flex; align-items: center; margin: 10rpx 0 30rpx 0; z-index: 1;
+}
+.mbti-code {
+  font-family: "Didot", serif; font-size: 100rpx; font-weight: 300; line-height: 1;
+  background: linear-gradient(135deg, #673AB7 0%, #9575CD 100%);
+  -webkit-background-clip: text; color: transparent; letter-spacing: 6rpx;
+}
+.sparkle {
+  font-size: 32rpx; color: #FFD700; position: absolute; opacity: 0.8;
+  animation: twinkle 3s infinite ease-in-out;
+}
+.s-left { left: -40rpx; top: 10rpx; }
+.s-right { right: -40rpx; bottom: 10rpx; animation-delay: 1.5s; }
+@keyframes twinkle { 0%, 100% { opacity: 0.4; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+/* C. 信件 */
+.letter-section { width: 100%; margin-bottom: 10rpx; z-index: 1; }
+.letter-text {
+  font-size: 26rpx; color: #5D5D5D; line-height: 1.9; text-align: justify;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5; overflow: hidden;
+}
+
+/* ⚡️ 差异点1：撕裂线 (CSS绘图) */
+.ticket-tear-line {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 30rpx 0; /* 上下拉开间距 */
+  height: 40rpx;
+  z-index: 2;
+}
+/* 左右半圆：颜色必须和页面背景色(#FFFDF5)一致，制造"镂空"假象 */
+.half-circle-left, .half-circle-right {
+  width: 24rpx; height: 40rpx;
+  background-color: #FFFDF5;
+  position: absolute;
+  top: 0;
+}
+.half-circle-left { left: -40rpx; border-radius: 0 40rpx 40rpx 0; }
+.half-circle-right { right: -40rpx; border-radius: 40rpx 0 0 40rpx; }
+/* 中间虚线 */
+.dashed-line {
+  width: 100%; height: 1px;
+  border-bottom: 2px dashed #EEEEEE;
+  margin: 0 10rpx;
+}
+
+/* D. 极简进度条 */
+.gauge-list { width: 100%; margin-bottom: 40rpx; z-index: 1; }
+.gauge-item { margin-bottom: 24rpx; }
+.gauge-labels {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 22rpx; color: #888; margin-bottom: 8rpx;
+}
+/* 激活态和暗淡态 */
+.char-text.active { color: #333; font-weight: bold; }
+.char-text.dim { color: #CCC; transform: scale(0.9); }
+/* 描述词：极简灰 */
+.status-text { color: #999; font-size: 20rpx; }
+
+.progress-track {
+  height: 4rpx; /* 极细 */
+  background-color: #F5F5F5;
+  border-radius: 4rpx;
+  position: relative;
+  overflow: visible;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 4rpx;
+  background-color: #D1C4E9; /* 统一淡紫 */
+  position: relative;
+  transition: width 1s ease-out;
+}
+/* 小圆点装饰 */
+.progress-fill::after {
+  content: ''; position: absolute; right: 0; top: 50%;
+  transform: translate(50%, -50%);
+  width: 8rpx; height: 8rpx;
+  background-color: #9575CD; border-radius: 50%;
+}
+
+/* E. 手账贴纸 (差异点2：混搭风) */
+.sticker-area {
+  width: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 16rpx; z-index: 1;
+}
+/* 基础样式 */
+.sticker-tag {
+  padding: 8rpx 24rpx; font-size: 22rpx;
+  border-radius: 2rpx; /* 微圆角，接近纸片 */
+  box-shadow: 2rpx 4rpx 8rpx rgba(0,0,0,0.05);
+}
+/* 样式0：黑底白字 (酷) */
+.sticker-tag.style-0 {
+  background: #333333; color: #FFFFFF;
+  border: 1px solid #333;
+}
+/* 样式1：白底黑框 (杂志) */
+.sticker-tag.style-1 {
+  background: #FFFFFF; color: #333333;
+  border: 1px solid #333;
+}
+/* 样式2：浅色 (温柔) */
+.sticker-tag.style-2 {
+  background: #F3E5F5; color: #6A1B9A;
+  border: 1px solid rgba(106, 27, 154, 0.1);
+}
+/* 彩蛋特别款：淡黄+红字 */
+.sticker-tag.style-egg {
+  background: #FFF9C4 !important; color: #E65100 !important;
+  border: 1px dashed #E65100 !important;
+  transform: rotate(-3deg) !important;
+}
+
+/* 底部按钮 */
+.action-bar {
+  width: 680rpx; display: flex; justify-content: space-between; gap: 30rpx;
+}
+.btn-share, .btn-save {
+  flex: 1; height: 96rpx; border-radius: 48rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28rpx; font-weight: bold; letter-spacing: 2rpx;
+}
+.btn-share {
+  background: #FFFFFF; color: #4A3B55;
+  border: 1px solid #E0E0E0;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.03);
+}
+.btn-save {
+  background: #4A3B55; /* 深紫罗兰 */
+  color: #FFFDF5;
+  box-shadow: 0 10rpx 30rpx rgba(74, 59, 85, 0.3);
+}

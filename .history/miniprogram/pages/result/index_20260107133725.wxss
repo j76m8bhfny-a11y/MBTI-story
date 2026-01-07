@@ -1,0 +1,217 @@
+/* 全局重置：暖调纸质感 */
+page {
+  background-color: #FFFDF5;
+  font-family: "Songti SC", "SimSun", serif; /* 强制使用宋体/衬线体 */
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 背景光晕 */
+.ambient-glow {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 600rpx;
+  height: 600rpx;
+  background: radial-gradient(circle, rgba(255,220,220,0.4) 0%, rgba(255,253,245,0) 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* --- 核心卡片 --- */
+.result-card {
+  width: 680rpx;
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  box-shadow: 0 20rpx 60rpx rgba(186, 174, 158, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 50rpx 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  margin-bottom: 20rpx;
+}
+
+/* A. 头部 */
+.header-section {
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.slogan-sub {
+  font-size: 24rpx;
+  color: #8C8C8C;
+  font-style: italic;
+  letter-spacing: 2rpx;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.role-title {
+  font-size: 40rpx;
+  color: #2C2C2C;
+  font-weight: bold;
+  letter-spacing: 4rpx;
+}
+
+/* B. MBTI 大字 */
+.mbti-main {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 10rpx 0 30rpx 0;
+}
+
+.mbti-code {
+  font-family: "Didot", "Times New Roman", serif;
+  font-size: 100rpx;
+  font-weight: 300;
+  line-height: 1;
+  background: linear-gradient(135deg, #B58ECC 0%, #5DE6DE 50%, #B58ECC 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  letter-spacing: 6rpx;
+}
+
+.sparkle {
+  font-size: 32rpx;
+  position: absolute;
+  opacity: 0.8;
+  animation: twinkle 3s infinite ease-in-out;
+}
+.s-left { left: -40rpx; top: 10rpx; animation-delay: 0s; }
+.s-right { right: -40rpx; bottom: 10rpx; animation-delay: 1.5s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* C. 信件正文 */
+.letter-section {
+  width: 100%;
+  margin-bottom: 40rpx;
+}
+
+.letter-text {
+  font-size: 26rpx;
+  color: #555555;
+  line-height: 1.9;
+  text-align: justify;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+  opacity: 0.9;
+}
+
+/* D. 进度条区域 */
+.gauge-list {
+  width: 100%;
+  margin-bottom: 30rpx;
+}
+
+.gauge-item {
+  margin-bottom: 24rpx;
+}
+
+.gauge-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+
+.status-text {
+  color: #BFA6D9;
+  font-weight: bold;
+  font-size: 20rpx;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8rpx;
+  background: #F0F0F0;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4rpx;
+  transition: width 1s ease-out;
+}
+
+/* E. 贴纸区域 */
+.sticker-area {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16rpx;
+}
+
+.sticker-tag {
+  padding: 8rpx 20rpx;
+  background: #FEF9E7;
+  color: #5A4A42;
+  font-size: 22rpx;
+  border-radius: 4rpx;
+  box-shadow: 2rpx 2rpx 6rpx rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.02);
+}
+
+.sticker-tag.egg {
+  background: #FFF0F5;
+  color: #D63384;
+}
+
+/* 底部按钮 */
+.action-bar {
+  width: 680rpx;
+  display: flex;
+  justify-content: space-between;
+  gap: 30rpx;
+}
+
+.btn-share, .btn-save {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.btn-share {
+  background: #fff;
+  color: #666;
+  border: 1px solid #eee;
+}
+
+.btn-save {
+  background: #2C2C2C;
+  color: #fff;
+  box-shadow: 0 10rpx 20rpx rgba(44, 44, 44, 0.2);
+}

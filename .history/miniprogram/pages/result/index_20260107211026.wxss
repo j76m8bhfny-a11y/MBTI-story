@@ -1,0 +1,239 @@
+/* 全局重置 */
+page {
+  background-color: #FFFDF5; /* 页面大背景：暖米纸 */
+  font-family: "Songti SC", "SimSun", serif;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.ambient-glow {
+  position: absolute;
+  top: -10%; left: -10%;
+  width: 600rpx; height: 600rpx;
+  background: radial-gradient(circle, rgba(209, 196, 233, 0.25) 0%, rgba(255,253,245,0) 70%);
+  z-index: 0; pointer-events: none;
+}
+
+/* --- 核心卡片容器 --- */
+.result-card {
+  width: 680rpx;
+  /* ⚡️ 核心改动：卡片背景设为透明，由内部子元素决定颜色，以实现分层 */
+  background: transparent;
+  border-radius: 24rpx;
+  /* 整体阴影保持不变 */
+  box-shadow: 0 20rpx 60rpx -10rpx rgba(106, 76, 156, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  margin-bottom: 30rpx;
+  overflow: hidden;
+}
+
+/* === 上半部分：纯白背景 (White Zone) === */
+.card-top-half {
+  width: 100%;
+  background-color: #FFFFFF;
+  padding: 40rpx 40rpx 10rpx 40rpx; /* 底部留给撕裂线 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* A. 头部 Header */
+.header-section {
+  text-align: center;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+.slogan-sub {
+  font-size: 22rpx; color: #9E9E9E; letter-spacing: 4rpx; display: block; margin-bottom: 8rpx; text-transform: uppercase;
+}
+.role-title {
+  font-size: 44rpx; color: #4A3B55; font-weight: bold; letter-spacing: 2rpx;
+}
+
+/* ⚡️ 核心改动：插画叠压效果 */
+.hero-image-box {
+  width: 100%;
+  height: 280rpx;
+  margin-top: 20rpx;
+  margin-bottom: -40rpx; /* 负边距！让图片底部压住下面的文字 */
+  position: relative;
+  z-index: 1; /* 在文字下方，或者上方，看设计需求，这里设为1让它不遮挡关键文字 */
+  display: flex;
+  justify-content: center;
+  overflow: visible; /* 允许插画溢出 */
+}
+.hero-image {
+  width: 80%; /* 缩小一点，不要撑满 */
+  height: 100%;
+  object-fit: contain; /* 保持比例，适合去底插画 */
+}
+
+/* B. MBTI 代码 */
+.mbti-main {
+  position: relative; display: flex; align-items: center;
+  margin-top: 20rpx; margin-bottom: 40rpx;
+  z-index: 2; /* 确保在图片之上 */
+}
+.mbti-code {
+  font-family: "Didot", serif; font-size: 96rpx; font-weight: 300; line-height: 1;
+  background: linear-gradient(135deg, #673AB7 0%, #9575CD 100%);
+  -webkit-background-clip: text; color: transparent; letter-spacing: 6rpx;
+  text-shadow: 0 10rpx 20rpx rgba(255,255,255,0.8); /* 加白光晕，防止与图片混淆 */
+}
+.sparkle {
+  font-size: 32rpx; color: #FFD700; position: absolute; opacity: 0.8;
+  animation: twinkle 3s infinite ease-in-out;
+}
+.s-left { left: -30rpx; top: 0; }
+.s-right { right: -30rpx; bottom: 0; animation-delay: 1.5s; }
+@keyframes twinkle { 0%, 100% { opacity: 0.4; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+/* C. 数据区 */
+.data-zone { width: 100%; z-index: 2; }
+
+/* 进度条 */
+.gauge-list { width: 100%; margin-bottom: 30rpx; }
+.gauge-item { margin-bottom: 16rpx; }
+.gauge-labels {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 20rpx; color: #BBB; margin-bottom: 4rpx;
+}
+.char-text.active { color: #555; font-weight: bold; } /* 深灰，极简 */
+.char-text.dim { color: #EEE; }
+.status-text { color: #9E9E9E; font-size: 18rpx; }
+
+.progress-track {
+  height: 4rpx; background-color: #F5F5F5; border-radius: 4rpx; position: relative; overflow: visible;
+}
+.progress-fill {
+  height: 100%; border-radius: 4rpx; background-color: #D1C4E9; position: relative;
+}
+.progress-fill::after {
+  content: ''; position: absolute; right: 0; top: 50%; transform: translate(50%, -50%);
+  width: 8rpx; height: 8rpx; background-color: #9575CD; border-radius: 50%;
+}
+
+/* D. 贴纸区 (3+1) */
+.sticker-area {
+  width: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 20rpx; margin-bottom: 20rpx;
+}
+.sticker-item {
+  font-size: 22rpx; padding: 10rpx 24rpx; border-radius: 6rpx; font-weight: bold;
+  box-shadow: 2rpx 4rpx 8rpx rgba(0,0,0,0.06);
+}
+/* 核心人设：黑底 */
+.style-core {
+  background-color: #2C2C2C; color: #FFF; transform: rotate(-2deg);
+}
+/* 特质：白底黑框 */
+.style-trait {
+  background-color: #FFF; color: #2C2C2C; border: 2rpx solid #2C2C2C; transform: rotate(1.5deg);
+}
+/* ⚡️ 核心改动：彩蛋标签配色修正 */
+.style-egg {
+  background-color: #FFF9E6; /* 淡黄底 */
+  color: #8D6E63; /* 改为：深棕金色，高对比度 */
+  border: 2rpx dashed #8D6E63;
+  transform: rotate(-1deg);
+}
+
+/* === 中间：撕裂线 (Tear Line) === */
+/* 背景色必须跟随上半部分(#FFF) */
+.ticket-tear-line {
+  width: 100%; height: 30rpx; position: relative; background-color: #FFFFFF;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.half-circle-left, .half-circle-right {
+  width: 20rpx; height: 30rpx;
+  background-color: #FFFDF5; /* 必须等于页面大背景色，制造镂空感 */
+  position: absolute; top: 0; z-index: 2;
+}
+.half-circle-left { left: 0; border-radius: 0 30rpx 30rpx 0; }
+.half-circle-right { right: 0; border-radius: 30rpx 0 0 30rpx; }
+.dashed-line {
+  width: 100%; height: 1px; border-bottom: 4rpx dotted #E0E0E0; margin: 0 10rpx;
+}
+
+/* === 下半部分：导演手记 (Note Zone) === */
+.card-bottom-half {
+  width: 100%;
+  /* ⚡️ 核心改动：极淡的灰米色，与上半部分区分 */
+  background-color: #F9F7F2;
+  padding: 40rpx 50rpx 60rpx 50rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 装饰性标题 */
+.note-label {
+  font-size: 18rpx; color: #B0B0B0; letter-spacing: 4rpx; margin-bottom: 30rpx;
+  display: flex; align-items: center; gap: 16rpx;
+}
+.note-label::before, .note-label::after {
+  content: ""; width: 40rpx; height: 1px; background-color: #D7CCC8;
+}
+
+/* ⚡️ 核心改动：金句排版 */
+.note-text {
+  font-family: "Kaiti SC", "STKaiti", "KaiTi", serif; /* 优先楷体 */
+  font-size: 30rpx; /* 字号加大 */
+  color: #5D4037; /* 深咖啡色 */
+  line-height: 1.9;
+  text-align: center; /* 居中 */
+  margin-bottom: 30rpx;
+  position: relative;
+  padding: 0 20rpx;
+}
+/* 加双引号装饰 */
+.note-text::before { content: '""'; font-family: serif; font-size: 60rpx; color: #D7CCC8; position: absolute; top: -20rpx; left: -10rpx; }
+.note-text::after { content: '""'; font-family: serif; font-size: 60rpx; color: #D7CCC8; position: absolute; bottom: -40rpx; right: -10rpx; line-height: 0;}
+
+/* 签名 */
+.signature-box {
+  align-self: flex-end; /* 靠右 */
+  display: flex; flex-direction: column; align-items: flex-end; margin-top: 10rpx;
+}
+.sig-name {
+  font-family: cursive; font-size: 32rpx; color: #333; font-style: italic;
+}
+.sig-date { font-size: 20rpx; color: #999; letter-spacing: 2rpx; margin-top: 4rpx;}
+
+/* 底部按钮 */
+.action-bar {
+  width: 680rpx; display: flex; justify-content: space-between; gap: 30rpx;
+}
+.btn-share, .btn-save {
+  flex: 1; height: 96rpx; border-radius: 48rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28rpx; font-weight: bold; letter-spacing: 2rpx;
+}
+.btn-share {
+  background: #FFFFFF; color: #4A3B55; border: 1px solid #E0E0E0;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.03);
+}
+.btn-save {
+  background: #4A3B55; color: #FFFDF5;
+  box-shadow: 0 10rpx 30rpx rgba(74, 59, 85, 0.3);
+}

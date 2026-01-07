@@ -1,0 +1,62 @@
+<view class="page-container">
+  <view class="ambient-glow"></view>
+
+  <view class="result-card">
+
+    <view class="watermark-bg">{{ui.poster.type}}</view>
+
+    <view class="header-section">
+      <text class="slogan-sub">{{ui.poster.life_script || '致 独一无二的你'}}</text>
+      <text class="role-title">{{ui.poster.title}}</text>
+    </view>
+
+    <view class="mbti-main">
+      <text class="sparkle s-left">✨</text>
+      <text class="mbti-code">{{ui.poster.type}}</text>
+      <text class="sparkle s-right">✨</text>
+    </view>
+
+    <view class="letter-section">
+      <text class="letter-text">{{ui.poster.summary}}</text>
+    </view>
+
+    <view class="ticket-tear-line">
+      <view class="half-circle-left"></view>
+      <view class="dashed-line"></view>
+      <view class="half-circle-right"></view>
+    </view>
+
+    <view class="gauge-list">
+      <block wx:for="{{['EI', 'SN', 'TF', 'JP']}}" wx:key="*this" wx:for-item="dimKey">
+        <view class="gauge-item">
+          <view class="gauge-labels">
+            <text class="char-text {{ui.gauge[dimKey].score > 50 ? 'dim' : 'active'}}">{{dimKey[0]}}</text>
+            <text class="status-text">{{ui.gauge[dimKey].tag}}</text>
+            <text class="char-text {{ui.gauge[dimKey].score <= 50 ? 'dim' : 'active'}}">{{dimKey[1]}}</text>
+          </view>
+
+          <view class="progress-track">
+            <view class="progress-fill"
+                  style="width: {{ui.gauge[dimKey].score}}%;">
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <view class="sticker-area">
+      <block wx:for="{{ui.stickers}}" wx:key="text">
+        <view class="sticker-tag style-{{index % 3}} {{item.type === 'egg' ? 'style-egg' : ''}}"
+              style="transform: rotate({{index % 2 === 0 ? '-2deg' : '1.5deg'}})">
+          {{item.text}}
+        </view>
+      </block>
+    </view>
+
+  </view>
+
+  <view class="action-bar">
+    <button class="btn-share" open-type="share">分享给朋友</button>
+    <view class="btn-save" bindtap="onSaveImage">保存纪念卡片</view>
+  </view>
+</view>

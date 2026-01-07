@@ -4,8 +4,10 @@ Page({
   data: {
     ui: null as any,
     loading: true,
-    animStage: 'void', // 动画阶段: 'void' -> 'flipping' -> 'docked'
-    contentVisible: false // 内容是否显示
+
+    // 🎭 动画状态机
+    animStage: 'void', // 当前阶段: 'void'(混沌) -> 'reveal'(揭晓) -> 'docked'(归位)
+    isFlipped: false,  // 牌面翻转控制
   },
 
   onLoad() {
@@ -30,24 +32,20 @@ Page({
     }
   },
 
+  // 仪式流程控制器
   startCeremony() {
-    //1. 初始阶段：Void (卡片在中心悬浮)
+    // 第一幕：混沌 (0s) - 保持 void 状态，卡片悬浮在中心
 
-    //2. 翻转阶段 (0.5s后)
+    // 第二幕：揭晓 (1.5s后) - 翻转卡牌
     setTimeout(() => {
-      this.setData({ animStage: 'flipping' });
-      wx.vibrateShort({ type: 'heavy' });
-    }, 500);
+      this.setData({ isFlipped: true });
+      wx.vibrateShort({ type: 'heavy' }); // 触感反馈
+    }, 1200);
 
-    //3. 归位阶段 (2.5s后，卡片飞向右上角)
+    // 第三幕：归位 (3.0s后) - 卡牌飞回顶部，票据滑出
     setTimeout(() => {
       this.setData({ animStage: 'docked' });
-    }, 2500);
-
-    //4. 内容显现 (3.0s后，文字淡入)
-    setTimeout(() => {
-      this.setData({ contentVisible: true });
-    }, 3000);
+    }, 2800);
   },
 
   onSaveImage() {

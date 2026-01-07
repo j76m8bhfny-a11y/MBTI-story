@@ -1,0 +1,245 @@
+/* 全局重置 */
+page {
+  background-color: #FFFDF5;
+  font-family: "Songti SC", "SimSun", serif;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.ambient-glow {
+  position: absolute;
+  top: -10%; left: -10%;
+  width: 600rpx; height: 600rpx;
+  background: radial-gradient(circle, rgba(209, 196, 233, 0.2) 0%, rgba(255,253,245,0) 70%);
+  z-index: 0; pointer-events: none;
+}
+
+/* --- 核心卡片 --- */
+.result-card {
+  width: 680rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  /* 弥散紫影 */
+  box-shadow: 0 20rpx 60rpx -10rpx rgba(106, 76, 156, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  margin-bottom: 30rpx;
+  overflow: hidden; /* 裁剪内部溢出 */
+}
+
+/* 1. 头部 Header */
+.header-section {
+  text-align: center;
+  padding-top: 40rpx;
+  margin-bottom: 20rpx;
+  width: 100%;
+}
+.slogan-sub {
+  font-size: 24rpx; color: #9E9E9E; font-style: italic; letter-spacing: 2rpx; display: block; margin-bottom: 8rpx;
+}
+.role-title {
+  font-size: 40rpx; color: #4A3B55; font-weight: bold; letter-spacing: 4rpx;
+}
+
+/* [新增] 海报插画 */
+.hero-image-box {
+  width: 600rpx;
+  height: 320rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  margin: 10rpx 0 20rpx 0;
+  position: relative;
+  box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.05);
+}
+.hero-image {
+  width: 100%; height: 100%;
+}
+.watermark-overlay {
+  position: absolute;
+  bottom: -20rpx; right: -20rpx;
+  font-family: "Didot", serif;
+  font-size: 140rpx;
+  font-weight: 700;
+  color: #FFF;
+  opacity: 0.3; /* 半透明水印压在图上 */
+  transform: rotate(-10deg);
+}
+
+/* MBTI 代码 */
+.mbti-main {
+  position: relative; display: flex; align-items: center; margin-bottom: 20rpx;
+}
+.mbti-code {
+  font-family: "Didot", serif; font-size: 80rpx; font-weight: 300; line-height: 1;
+  background: linear-gradient(135deg, #673AB7 0%, #9575CD 100%);
+  -webkit-background-clip: text; color: transparent; letter-spacing: 6rpx;
+}
+.sparkle {
+  font-size: 32rpx; color: #FFD700; position: absolute; opacity: 0.8;
+  animation: twinkle 3s infinite ease-in-out;
+}
+.s-left { left: -30rpx; top: 0; }
+.s-right { right: -30rpx; bottom: 0; animation-delay: 1.5s; }
+
+/* 2. 数据区 Data */
+.data-zone {
+  width: 100%;
+  padding: 0 40rpx;
+  box-sizing: border-box;
+}
+
+/* 进度条 */
+.gauge-list { width: 100%; margin-bottom: 30rpx; }
+.gauge-item { margin-bottom: 16rpx; }
+.gauge-labels {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 20rpx; color: #888; margin-bottom: 4rpx;
+}
+.char-text.active { color: #333; font-weight: bold; }
+.char-text.dim { color: #DDD; transform: scale(0.9); }
+.status-text { color: #999; font-size: 18rpx; }
+
+.progress-track {
+  height: 4rpx; background-color: #F5F5F5; border-radius: 4rpx; position: relative; overflow: visible;
+}
+.progress-fill {
+  height: 100%; border-radius: 4rpx; background-color: #D1C4E9; position: relative; transition: width 1s ease-out;
+}
+.progress-fill::after {
+  content: ''; position: absolute; right: 0; top: 50%; transform: translate(50%, -50%);
+  width: 8rpx; height: 8rpx; background-color: #9575CD; border-radius: 50%;
+}
+
+/* E. 手账贴纸区域 */
+.sticker-area {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24rpx; /* 拉开一点间距 */
+  margin-top: 20rpx;
+  z-index: 1;
+}
+
+/* 通用基础样式 */
+.sticker-item {
+  font-size: 24rpx;
+  padding: 12rpx 28rpx;
+  border-radius: 8rpx; /* 方一点，像剪下来的纸条 */
+  font-weight: bold;
+  letter-spacing: 2rpx;
+  box-shadow: 4rpx 6rpx 12rpx rgba(0,0,0,0.08); /* 纸片悬浮感 */
+  display: flex;
+  align-items: center;
+}
+
+/* 样式 1：核心人设 (黑底白字，态度强硬) */
+.style-core {
+  background-color: #2C2C2C;
+  color: #FFFFFF;
+  border: 2rpx solid #2C2C2C;
+  transform: rotate(-2deg); /* 向左微倾 */
+}
+
+/* 样式 2：特质标签 (白底黑框，杂志风) */
+.style-trait {
+  background-color: #FFFFFF;
+  color: #2C2C2C;
+  border: 2rpx solid #2C2C2C;
+  transform: rotate(1.5deg); /* 向右微倾 */
+}
+
+/* 样式 3：惊喜彩蛋 (淡黄底金框，稀有感) */
+.style-egg {
+  background-color: #FFF9E6; /* 极淡的暖金底 */
+  color: #B78628; /* 暗金色文字，显贵 */
+  border: 2rpx dashed #B78628; /* 虚线边框，像邮票 */
+  transform: rotate(-1deg); /* 微调 */
+}
+
+/* 3. 撕裂线 */
+.ticket-tear-line {
+  width: 100%; position: relative; display: flex; align-items: center; justify-content: space-between;
+  height: 40rpx; margin: 20rpx 0;
+}
+.half-circle-left, .half-circle-right {
+  width: 24rpx; height: 40rpx; background-color: #FFFDF5; position: absolute; top: 0; z-index: 2;
+}
+.half-circle-left { left: 0; border-radius: 0 40rpx 40rpx 0; transform: translateX(-1px); }
+.half-circle-right { right: 0; border-radius: 40rpx 0 0 40rpx; transform: translateX(1px); }
+.dashed-line {
+  width: 100%; height: 1px; border-bottom: 2px dashed #E0E0E0; margin: 0 10rpx;
+}
+
+/* 4. 导演手记 (Footer) */
+.directors-note-container {
+  width: 100%;
+  background-color: #FFFCF7; /* 极微弱的底色区分 */
+  padding: 20rpx 50rpx 50rpx 50rpx; /* 底部留白多一点 */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.note-label {
+  font-size: 16rpx; color: #CCC; letter-spacing: 4rpx; margin-bottom: 20rpx; align-self: center;
+}
+
+.note-text {
+  display: block; /* 确保是块级元素 */
+  font-size: 26rpx;
+  color: #5D4037; /* 深咖啡色 */
+  line-height: 1.8;
+  text-align: justify;
+  margin-bottom: 30rpx;
+}
+
+/* 首字下沉效果 - 使用伪类在小程序中可能有限制，直接用首行样式模拟 */
+/* 这里的样式针对 text 组件内部 */
+
+.signature-box {
+  display: flex; flex-direction: column; align-items: flex-end; margin-top: 10rpx;
+}
+.sig-name {
+  font-family: serif; font-size: 32rpx; color: #333; font-style: italic; margin-bottom: 4rpx;
+}
+.sig-date {
+  font-size: 20rpx; color: #999; letter-spacing: 2rpx;
+}
+
+/* 底部按钮 */
+.action-bar {
+  width: 680rpx; display: flex; justify-content: space-between; gap: 30rpx;
+}
+.btn-share, .btn-save {
+  flex: 1; height: 96rpx; border-radius: 48rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28rpx; font-weight: bold; letter-spacing: 2rpx;
+}
+.btn-share {
+  background: #FFFFFF; color: #4A3B55; border: 1px solid #E0E0E0;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.03);
+}
+.btn-save {
+  background: #4A3B55; color: #FFFDF5;
+  box-shadow: 0 10rpx 30rpx rgba(74, 59, 85, 0.3);
+}

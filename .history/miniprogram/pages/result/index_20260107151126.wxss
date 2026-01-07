@@ -1,0 +1,248 @@
+/* 全局容器：暖米色纸质感 */
+page {
+  background-color: #FFFDF5;
+  font-family: "Songti SC", "SimSun", serif; /* 强制宋体 */
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 背景光晕：增加透气感 */
+.ambient-glow {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 600rpx;
+  height: 600rpx;
+  background: radial-gradient(circle, rgba(209, 196, 233, 0.25) 0%, rgba(255,253,245,0) 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* --- 核心卡片：悬浮杂志页 --- */
+.result-card {
+  width: 680rpx;
+  background: #FFFFFF;
+  border-radius: 32rpx; /* 卡片大圆角 */
+  /* ⚡️ 核心修正：弥散紫色阴影 */
+  box-shadow: 0 20rpx 60rpx -10rpx rgba(106, 76, 156, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 50rpx 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  margin-bottom: 30rpx;
+}
+
+/* A. 头部 */
+.header-section {
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.slogan-sub {
+  font-size: 24rpx;
+  color: #9E9E9E;
+  font-style: italic;
+  letter-spacing: 2rpx;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.role-title {
+  font-size: 40rpx;
+  color: #4A3B55; /* 深紫灰 */
+  font-weight: bold;
+  letter-spacing: 4rpx;
+}
+
+/* B. MBTI 大字 */
+.mbti-main {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 10rpx 0 30rpx 0;
+}
+
+.mbti-code {
+  font-family: "Didot", "Times New Roman", serif;
+  font-size: 100rpx;
+  font-weight: 300;
+  line-height: 1;
+  /* 修正：更稳重的深紫色渐变，去掉花哨的蓝绿 */
+  background: linear-gradient(135deg, #673AB7 0%, #9575CD 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  letter-spacing: 6rpx;
+}
+
+.sparkle {
+  font-size: 32rpx;
+  color: #FFD700; /* 金色星星 */
+  position: absolute;
+  opacity: 0.8;
+  animation: twinkle 3s infinite ease-in-out;
+}
+.s-left { left: -40rpx; top: 10rpx; animation-delay: 0s; }
+.s-right { right: -40rpx; bottom: 10rpx; animation-delay: 1.5s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* C. 信件正文 */
+.letter-section {
+  width: 100%;
+  margin-bottom: 40rpx;
+}
+
+.letter-text {
+  font-size: 26rpx;
+  color: #5D5D5D;
+  line-height: 1.9;
+  text-align: justify;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+}
+
+/* D. 进度条区域 */
+.gauge-list {
+  width: 100%;
+  margin-bottom: 40rpx;
+}
+
+.gauge-item {
+  margin-bottom: 24rpx;
+}
+
+.gauge-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 22rpx;
+  color: #BDBDBD;
+  margin-bottom: 4rpx;
+}
+
+.char-left, .char-right {
+  font-family: serif;
+  font-weight: bold;
+}
+
+.status-text {
+  color: #9575CD; /* 中紫色高亮 */
+  font-size: 20rpx;
+  letter-spacing: 1rpx;
+}
+
+/* ⚡️ 核心修正：极简圆头进度条 */
+.progress-track {
+  height: 6rpx; /* 极细 */
+  background-color: #F5F5F5; /* 极淡灰 */
+  border-radius: 6rpx; /* 圆头 */
+  overflow: visible; /* 允许圆点超出 */
+  position: relative;
+  margin-top: 8rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 6rpx; /* 圆头 */
+  position: relative;
+  transition: width 1s ease-out;
+  /* 颜色会在 wxml 中动态绑定，但这里给个默认 */
+  background-color: #D1C4E9;
+}
+
+/* 注入灵魂的小圆点 */
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(50%, -50%); /* 居中 */
+  width: 10rpx;
+  height: 10rpx;
+  background-color: #9575CD; /* 深一点的紫色 */
+  border-radius: 50%;
+  box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
+}
+
+/* E. 贴纸区域 */
+.sticker-area {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16rpx;
+}
+
+/* ⚡️ 核心修正：胶囊圆角 + 淡雅色调 */
+.sticker-tag {
+  padding: 8rpx 24rpx;
+  background: #F3E5F5; /* 极淡紫背景 */
+  color: #6A1B9A;      /* 深紫文字 */
+  font-size: 22rpx;
+  border-radius: 100rpx; /* 胶囊形状 */
+  border: 1px solid rgba(106, 27, 154, 0.05);
+}
+
+/* 彩蛋贴纸 */
+.sticker-tag.egg {
+  background: #FFF3E0; /* 淡橙 */
+  color: #E65100;
+  border: 1px solid rgba(230, 81, 0, 0.05);
+}
+
+/* 底部按钮 */
+.action-bar {
+  width: 680rpx;
+  display: flex;
+  justify-content: space-between;
+  gap: 30rpx;
+}
+
+.btn-share, .btn-save {
+  flex: 1;
+  height: 96rpx;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+}
+
+.btn-share {
+  background: #FFFFFF;
+  color: #4A3B55;
+  border: 1px solid #E0E0E0;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.03);
+}
+
+/* ⚡️ 核心修正：按钮重量感 (深紫罗兰) */
+.btn-save {
+  background: #4A3B55;
+  color: #FFFDF5;
+  box-shadow: 0 10rpx 30rpx rgba(74, 59, 85, 0.3); /* 有色阴影 */
+}

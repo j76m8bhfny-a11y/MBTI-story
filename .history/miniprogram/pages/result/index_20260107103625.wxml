@@ -1,0 +1,50 @@
+<view class="result-container" wx:if="{{ui}}">
+  <!-- 背景图 -->
+  <image class="bg-image" src="{{ui.poster.bg_image}}" mode="aspectFill"></image>
+
+  <!-- 遮罩层 -->
+  <view class="overlay"></view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- Header: 海报区 -->
+    <view class="poster-section">
+      <view class="poster-title">{{ui.poster.title}}</view>
+      <view class="poster-slogan">{{ui.poster.slogan}}</view>
+      <view class="poster-type">{{ui.poster.type}}</view>
+      <view class="poster-summary">{{ui.poster.summary}}</view>
+    </view>
+
+    <!-- Body: 数据区 -->
+    <view class="data-section">
+      <!-- Keywords: 核心特质 -->
+      <view class="keywords-row">
+        <view class="keyword-item" wx:for="{{ui.keywords}}" wx:key="char">
+          <view class="keyword-char">{{item.char}}</view>
+          <view class="keyword-text">{{item.text}}</view>
+        </view>
+      </view>
+
+      <!-- Gauge: 能量条 -->
+      <view class="gauge-section">
+        <view class="gauge-item" wx:for="{{ui.gauge}}" wx:key="index" wx:for-index="key">
+          <view class="gauge-header">
+            <view class="gauge-letter">{{key}}</view>
+            <view class="gauge-status">{{item.status}}</view>
+          </view>
+          <view class="gauge-bar-bg">
+            <view class="gauge-bar-fill" style="width: {{item.score}}%"></view>
+          </view>
+          <view class="gauge-tag">{{item.tag}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Footer: 贴纸墙 -->
+    <view class="stickers-section">
+      <view class="sticker-item" wx:for="{{ui.stickers}}" wx:key="index">
+        {{item.text}}
+      </view>
+    </view>
+  </view>
+</view>

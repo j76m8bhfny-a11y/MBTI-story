@@ -1,0 +1,184 @@
+/* 全局设定 */
+page {
+  background-color: #FFFDF5;
+  font-family: "Songti SC", "SimSun", serif;
+  height: 100vh; overflow: hidden;
+}
+
+.page-container {
+  width: 100%; height: 100%; position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  /* 开启3D透视，让翻转更有纵深感 */
+  perspective: 1500rpx;
+}
+
+/* 背景模糊层 */
+.bg-blur {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0.15; filter: blur(30px); z-index: 0;
+  transition: opacity 1s;
+}
+/* 归位后背景变淡，突出内容 */
+.page-container.docked .bg-blur { opacity: 0.05; }
+
+/* === 1. 塔罗牌神坛 (The Altar) === */
+.tarot-altar-container {
+  position: relative; z-index: 100;
+  width: 420rpx; height: 630rpx; /* 塔罗牌 2:3 比例 */
+  margin-top: 40rpx;
+  /* 关键动画：从中心(void) -> 归位(docked) */
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); /* 带一点回弹 */
+}
+
+/* 状态：混沌/揭晓阶段 - 居中放大 */
+.page-container.void .tarot-altar-container,
+.page-container.reveal .tarot-altar-container {
+  transform: translateY(calc(50vh - 400rpx)) scale(1.3);
+}
+/* 状态：归位阶段 - 回到顶部 */
+.page-container.docked .tarot-altar-container {
+  transform: translateY(0) scale(1);
+}
+
+/* 3D 翻转核心 */
+.flip-card {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.flip-card.flipped { transform: rotateY(180deg); }
+
+/* 正反面通用 */
+.card-face {
+  position: absolute; width: 100%; height: 100%;
+  backface-visibility: hidden; /* 背面不可见 */
+  border-radius: 24rpx;
+  box-shadow: 0 30rpx 60rpx rgba(44, 44, 44, 0.4);
+  overflow: hidden;
+}
+
+/* --- 正面 (结果图) --- */
+.front {
+  transform: rotateY(180deg); /* 初始背对观众 */
+  background: #FFF;
+  border: 4rpx solid #FFF;
+  /* 金边外发光 */
+  outline: 2rpx solid rgba(212, 175, 55, 0.5);
+}
+.tarot-img { width: 100%; height: 100%; }
+.watermark-overlay {
+  position: absolute; bottom: -10rpx; right: -10rpx;
+  font-family: "Didot", serif; font-size: 120rpx; font-weight: 700;
+  color: #FFF; opacity: 0.4; transform: rotate(-10deg);
+}
+/* 流光扫过 */
+.shine-effect {
+  position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+  transform: skewX(-25deg);
+  animation: shine 3s infinite;
+}
+@keyframes shine { 100% { left: 200%; } }
+
+/* --- 背面 (星空牌背) --- */
+.back {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); /* 深蓝星空底 */
+  border: 4rpx solid #D4AF37; /* 金边 */
+  display: flex; align-items: center; justify-content: center;
+}
+.card-back-pattern {
+  width: 90%; height: 94%;
+  border: 2rpx dashed rgba(212, 175, 55, 0.3);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 16rpx;
+}
+.mystic-circle {
+  width: 100rpx; height: 100rpx; border-radius: 50%;
+  border: 2rpx solid rgba(212, 175, 55, 0.5);
+  position: absolute;
+}
+.logo-text { color: #D4AF37; font-size: 48rpx; font-weight: bold; }
+
+/* === 2. 票据主体 (Ticket Body) === */
+.ticket-body {
+  width: 680rpx;
+  background: transparent;
+  margin-top: -60rpx; /* 向上插入卡牌下方 */
+  padding-bottom: 60rpx;
+  opacity: 0;
+  transform: translateY(100rpx);
+  transition: all 0.8s ease-out;
+  z-index: 10;
+}
+/* 归位后滑出 */
+.page-container.docked .ticket-body {
+  opacity: 1; transform: translateY(0);
+}
+
+/* A. 连接区 */
+.bridge-section { text-align: center; margin-bottom: 20rpx; padding-top: 80rpx; /* 留出空隙给卡牌 */ }
+.mbti-code {
+  font-family: "Didot", serif; font-size: 100rpx; font-weight: 300; line-height: 1;
+  background: linear-gradient(135deg, #673AB7 0%, #9575CD 100%);
+  -webkit-background-clip: text; color: transparent; letter-spacing: 6rpx;
+  margin-bottom: 10rpx;
+}
+.role-title { font-size: 36rpx; color: #4A3B55; font-weight: bold; letter-spacing: 2rpx; display: block;}
+.slogan-sub { font-size: 22rpx; color: #9E9E9E; letter-spacing: 2rpx; font-style: italic;}
+
+/* B. 数据区 */
+.data-zone { background: #FFF; border-radius: 24rpx 24rpx 0 0; padding: 0 40rpx 40rpx 40rpx; box-shadow: 0 -10rpx 40rpx rgba(0,0,0,0.02);}
+
+/* 撕裂线 */
+.ticket-tear-line {
+  width: 100%; height: 30rpx; position: relative; display: flex; align-items: center; margin-bottom: 30rpx; transform: translateY(-15rpx);
+}
+.half-circle-left, .half-circle-right {
+  width: 20rpx; height: 30rpx; background-color: #FFFDF5; position: absolute; top: 0; z-index: 2;
+}
+.half-circle-left { left: -40rpx; border-radius: 0 30rpx 30rpx 0; }
+.half-circle-right { right: -40rpx; border-radius: 30rpx 0 0 30rpx; }
+.dashed-line { width: 100%; height: 1px; border-bottom: 4rpx dotted #E0E0E0; }
+
+/* 进度条 & 贴纸 (保持之前样式) */
+.gauge-list { width: 100%; margin-bottom: 30rpx; }
+.gauge-item { margin-bottom: 16rpx; }
+.gauge-labels { display: flex; justify-content: space-between; font-size: 20rpx; color: #BBB; margin-bottom: 4rpx; }
+.char-text.active { color: #555; font-weight: bold; }
+.progress-track { height: 4rpx; background: #F5F5F5; border-radius: 4rpx; position: relative; overflow: visible;}
+.progress-fill { height: 100%; background: #D1C4E9; border-radius: 4rpx; position: relative; }
+.progress-fill::after { content:''; position:absolute; right:0; top:50%; transform:translate(50%,-50%); width:8rpx; height:8rpx; background:#9575CD; border-radius:50%; }
+
+.sticker-area { display: flex; justify-content: center; gap: 20rpx; }
+.sticker-item { font-size: 22rpx; padding: 10rpx 24rpx; border-radius: 6rpx; font-weight: bold; box-shadow: 2rpx 4rpx 8rpx rgba(0,0,0,0.06); }
+.style-core { background: #2C2C2C; color: #FFF; transform: rotate(-2deg); }
+.style-trait { background: #FFF; color: #2C2C2C; border: 2rpx solid #2C2C2C; transform: rotate(1.5deg); }
+.style-egg { background: #FFF9E6; color: #8D6E63; border: 2rpx dashed #8D6E63; transform: rotate(-1deg); }
+
+/* C. 导演手记 */
+.directors-note-container {
+  background-color: #F9F7F2;
+  padding: 40rpx 50rpx 60rpx 50rpx;
+  border-radius: 0 0 24rpx 24rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.03);
+}
+.note-label { font-size: 18rpx; color: #B0B0B0; letter-spacing: 4rpx; text-align: center; margin-bottom: 30rpx; display: flex; justify-content: center; gap: 10rpx; align-items: center;}
+.note-label::before, .note-label::after { content: ""; width: 30rpx; height: 1px; background: #E0E0E0; }
+.note-text {
+  font-family: "Kaiti SC", serif; font-size: 30rpx; color: #5D4037; line-height: 1.9; text-align: center;
+  margin-bottom: 30rpx; position: relative; padding: 0 20rpx;
+}
+.note-text::before { content: '""'; font-family: serif; font-size: 60rpx; color: #D7CCC8; position: absolute; top: -20rpx; left: -10rpx; }
+.note-text::after { content: '""'; font-family: serif; font-size: 60rpx; color: #D7CCC8; position: absolute; bottom: -40rpx; right: -10rpx; line-height: 0;}
+.signature-box { display: flex; flex-direction: column; align-items: flex-end; }
+.sig-name { font-family: cursive; font-size: 32rpx; color: #333; font-style: italic; }
+.sig-date { font-size: 20rpx; color: #999; letter-spacing: 2rpx; }
+
+/* 底部按钮 */
+.action-bar {
+  width: 100%; display: flex; justify-content: space-between; gap: 30rpx; margin-top: 30rpx;
+}
+.btn-share, .btn-save { flex: 1; height: 88rpx; border-radius: 44rpx; display: flex; align-items: center; justify-content: center; font-size: 28rpx; font-weight: bold; }
+.btn-share { background: #FFF; color: #4A3B55; border: 1px solid #E0E0E0; }
+.btn-save { background: #4A3B55; color: #FFF; box-shadow: 0 10rpx 20rpx rgba(74, 59, 85, 0.3); }
