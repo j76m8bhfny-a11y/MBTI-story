@@ -1,6 +1,6 @@
 // 引入相关配置文件
-const ACH_DEFINITIONS = require('../data/achievements.js');
-const EGG_TRIGGERS = require('../data/egg_triggers.js');
+const ACH_DEFINITIONS = require('./achievements.js');
+const EGG_TRIGGERS = require('./egg_triggers.js');
 
 class LogicCore {
   constructor() {

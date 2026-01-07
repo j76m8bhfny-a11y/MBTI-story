@@ -45,7 +45,7 @@ Page<TestPageData, any>({
 
   data: {
     currentQIndex: 0, // ⚠️ 必须叫 currentQIndex，与 WXML 对应
-    currentQuestion: {} as any,
+    currentQuestion: questions[0],
     rulerValue: 3, // 修复：传递索引 (0-6) 而不是值 (-3 到 3)
     currentRulerIndex: 3, // 默认中间位置 (索引3对应值0)
     hasAnswered: false,
