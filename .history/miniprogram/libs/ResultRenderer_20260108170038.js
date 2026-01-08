@@ -50,15 +50,8 @@ class ResultRenderer {
 
       // === [A] 获取胶囊文案 (Status Text) ===
       // 逻辑：根据分数段去 spectrum_status.js 找严谨的定义
-      // === 胶囊文案 (严谨) ===
-      let rangeKey = "41-60";
-      if (score <= 20) rangeKey = "0-20";
-      else if (score <= 40) rangeKey = "21-40";
-      else if (score <= 60) rangeKey = "41-60";
-      else if (score <= 80) rangeKey = "61-80";
-      else rangeKey = "81-100";
-      
-      const statusText = STATUS_MAP[dimKey][rangeKey] || "未知";
+      const rangeKey = this._getScoreRangeKey(score);
+      const statusText = STATUS_MAP[dimKey][rangeKey] || "未知状态";
 
       // === [B] 获取贴纸文案 (Fun Tag) ===
       // 逻辑：根据 1-10 级去 tags_pool.js 找趣味标签
@@ -70,22 +63,6 @@ class ResultRenderer {
       const tagList = pool[String(level)] || pool["5"];
       const funTag = tagList[Math.floor(Math.random() * tagList.length)];
 
-      // === 🔥 核心修复：计算气泡的对齐方式 ===
-      // score 是左边维度的分值 (0-100)
-      // 如果 score 很小 (偏右 I/N/F/P)，或者很大 (偏左 E/S/T/J)，需要特殊处理
-      let pillClass = ''; 
-      
-      // 注意：这里我们假设 WXML 里会用 {{item.score}}% 来定位
-      // 如果 score > 85 (也就是在最右边 85%-100%) -> 气泡要靠右对齐 (避免出界)
-      // 如果 score < 15 (也就是在最左边 0%-15%)  -> 气泡要靠左对齐
-      // (具体的方向取决于你的 left 写法，下面 WXML 我会统一成正向逻辑)
-      
-      if (score >= 85) {
-        pillClass = 'pos-left'; // 靠右
-      } else if (score <= 15) {
-        pillClass = 'pos-right';  // 靠左
-      }
-
       return {
         key,
         leftChar: chars[0],
@@ -93,8 +70,7 @@ class ResultRenderer {
         score: score,
         isLeftWin,
         statusText, // 用于趋势图胶囊
-        funTag,      // 用于生成贴纸
-        pillClass
+        funTag      // 用于生成贴纸
       };
     });
   }

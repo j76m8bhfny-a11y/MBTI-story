@@ -20,15 +20,23 @@
 
     <view class="trends-section">
       <block wx:for="{{ui.trends}}" wx:key="key">
-        <view class="trend-row-flex">
+        <view class="trend-row">
           
-          <view class="side-char left {{item.isLeftWin ? 'winner' : 'loser'}}">
-            {{item.leftChar}}
+          <view class="trend-info">
+            <view class="char-group left {{item.isLeftWin ? 'winner' : 'loser'}}">
+              <text class="char">{{item.leftChar}}</text>
+            </view>
+
+            <view class="spacer"></view>
+
+            <view class="char-group right {{!item.isLeftWin ? 'winner' : 'loser'}}">
+              <text class="char">{{item.rightChar}}</text>
+            </view>
           </view>
 
-          <view class="bar-container">
+          <view class="trend-bar">
             <view class="bar-track">
-              <view class="bar-fill" style="width: {{100 - item.score}}%;"></view>
+              <view class="bar-fill" style="width: {{100 -item.score}}%;"></view>
               
               <view class="bar-dot" style="left: {{100 - item.score}}%;"></view>
 
@@ -36,10 +44,6 @@
                 {{item.statusText}}
               </view>
             </view>
-          </view>
-
-          <view class="side-char right {{!item.isLeftWin ? 'winner' : 'loser'}}">
-            {{item.rightChar}}
           </view>
 
         </view>
@@ -56,14 +60,13 @@
       <view class="recipe-container">
         <view class="recipe-title">✨ 你的专属灵魂配方 ✨</view>
         <view class="sticker-row">
-          <block wx:for="{{stickers}}" wx:key="index">
-            <view class="sticker style-{{item.type}}" style="{{item.randomStyle}}">
+          <block wx:for="{{tags}}" wx:key="index">
+            <view class="sticker {{item.styleClass}}" style="{{item.randomStyle}}">
               {{item.text}}
             </view>
           </block>
         </view>
       </view>
-      
       <view class="note-box">
         <text class="note-text">{{ui.poster.summary}}</text>
       </view>

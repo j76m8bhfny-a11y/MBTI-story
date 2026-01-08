@@ -61,8 +61,8 @@ page {
 /* --- [B] 动态趋势区 (Trends) --- */
 .trends-section {
   background: #FFFFFF;
-  padding-top: 80rpx;
-  padding-bottom: 10rpx;
+  padding-top: 60rpx;    /* 👆 顶部加量：让趋势图往下移 40rpx (60-20) */
+  padding-bottom: 0rpx;  /* 👇 底部减量：把底部空间收回来，防止总高度变高 */
   padding-left: 40rpx;
   padding-right: 40rpx;
   width: 100%; box-sizing: border-box;
@@ -73,7 +73,7 @@ page {
   display: flex;
   align-items: center; /* 垂直居中 */
   justify-content: space-between;
-  margin-bottom: 20rpx; /* 行间距 */
+  margin-bottom: 40rpx; /* 行间距 */
   position: relative;
 }
 

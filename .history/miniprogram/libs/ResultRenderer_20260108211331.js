@@ -81,9 +81,9 @@ class ResultRenderer {
       // (具体的方向取决于你的 left 写法，下面 WXML 我会统一成正向逻辑)
       
       if (score >= 85) {
-        pillClass = 'pos-left'; // 靠右
+        pillClass = 'pos-right'; // 靠右
       } else if (score <= 15) {
-        pillClass = 'pos-right';  // 靠左
+        pillClass = 'pos-left';  // 靠左
       }
 
       return {

@@ -20,26 +20,28 @@
 
     <view class="trends-section">
       <block wx:for="{{ui.trends}}" wx:key="key">
-        <view class="trend-row-flex">
+        <view class="trend-row">
           
-          <view class="side-char left {{item.isLeftWin ? 'winner' : 'loser'}}">
-            {{item.leftChar}}
-          </view>
+          <view class="trend-info">
+            <view class="char-group left {{item.isLeftWin ? 'winner' : 'loser'}}">
+              <text class="char">{{item.leftChar}}</text>
+              <view wx:if="{{item.isLeftWin}}" class="status-pill">{{item.statusText}}</view>
+            </view>
 
-          <view class="bar-container">
-            <view class="bar-track">
-              <view class="bar-fill" style="width: {{100 - item.score}}%;"></view>
-              
-              <view class="bar-dot" style="left: {{100 - item.score}}%;"></view>
+            <view class="spacer"></view>
 
-              <view class="floating-pill {{item.pillClass}}" style="left: {{100 - item.score}}%;">
-                {{item.statusText}}
-              </view>
+            <view class="char-group right {{!item.isLeftWin ? 'winner' : 'loser'}}">
+              <view wx:if="{{!item.isLeftWin}}" class="status-pill">{{item.statusText}}</view>
+              <text class="char">{{item.rightChar}}</text>
             </view>
           </view>
 
-          <view class="side-char right {{!item.isLeftWin ? 'winner' : 'loser'}}">
-            {{item.rightChar}}
+          <view class="trend-bar">
+            <view class="bar-track">
+              <view class="bar-fill" style="width: {{item.score}}%;"></view>
+              <view class="bar-dot" style="left: {{item.score}}%;"></view>
+              </view>
+            </view>
           </view>
 
         </view>
@@ -53,17 +55,12 @@
     </view>
 
     <view class="card-stub">
-      <view class="recipe-container">
-        <view class="recipe-title">✨ 你的专属灵魂配方 ✨</view>
-        <view class="sticker-row">
-          <block wx:for="{{stickers}}" wx:key="index">
-            <view class="sticker style-{{item.type}}" style="{{item.randomStyle}}">
-              {{item.text}}
-            </view>
-          </block>
-        </view>
+      <view class="sticker-row">
+        <view class="sticker style-core">{{ui.stickers[0].text}}</view>
+        <view class="sticker style-trait">{{ui.stickers[1].text}}</view>
+        <view class="sticker style-egg">✨ {{ui.stickers[2].text}}</view>
       </view>
-      
+
       <view class="note-box">
         <text class="note-text">{{ui.poster.summary}}</text>
       </view>
@@ -79,7 +76,8 @@
   </view>
 
   <view class="tarot-layer {{isFlipped ? 'fly-mode' : ''}}">
-    <view class="flipper {{isFlipped ? 'flipped' : ''}}">
+    <view class="tarot-wrapper">
+      <view class="flipper {{isFlipped ? 'flipped' : ''}}">
       <view class="face front">
         <image class="tarot-img" src="{{ui.poster.bg_image}}" mode="aspectFill"></image>
         <view class="shine"></view>

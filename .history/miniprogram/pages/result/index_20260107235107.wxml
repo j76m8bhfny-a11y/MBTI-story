@@ -1,0 +1,74 @@
+<view class="page-container">
+  <image class="bg-blur" src="{{ui.poster.bg_image}}" mode="aspectFill"></image>
+  <view class="ambient-glow"></view>
+
+  <view class="result-card">
+
+    <view class="magazine-header">
+      <view class="header-text-col {{contentVisible ? 'fade-in' : ''}}">
+        <view class="mbti-big">{{ui.poster.type}}</view>
+        <view class="role-title">{{ui.poster.title}}</view>
+        <view class="slogan-box">
+          <text class="slogan-text">"{{ui.poster.life_script}}"</text>
+        </view>
+      </view>
+
+      <view class="tarot-fly-container {{animStage}}">
+        <view class="flipper">
+          <view class="front">
+            <image class="tarot-img" src="{{ui.poster.bg_image}}" mode="aspectFill"></image>
+            <view class="shine"></view>
+          </view>
+          <view class="back">
+            <view class="back-pattern">Ω</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="data-section {{contentVisible ? 'fade-in' : ''}}">
+      <view class="gauge-list">
+        <block wx:for="{{['EI', 'SN', 'TF', 'JP']}}" wx:key="*this" wx:for-item="dimKey">
+          <view class="gauge-row">
+            <text class="char {{ui.gauge[dimKey].score > 50 ? 'dim' : ''}}">{{dimKey[0]}}</text>
+            <view class="progress-track">
+              <view class="progress-bar" style="width: {{ui.gauge[dimKey].score}}%;"></view>
+            </view>
+            <text class="char {{ui.gauge[dimKey].score <= 50 ? 'dim' : ''}}">{{dimKey[1]}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view class="tear-line-container {{contentVisible ? 'fade-in' : ''}}">
+      <view class="half-circle left"></view>
+      <view class="dashed-line"></view>
+      <view class="half-circle right"></view>
+    </view>
+
+    <view class="ticket-footer {{contentVisible ? 'fade-in' : ''}}">
+
+      <view class="sticker-row">
+        <view class="sticker style-core">{{ui.stickers[0].text}}</view>
+        <view class="sticker style-trait">{{ui.stickers[1].text}}</view>
+        <view class="sticker style-egg">✨ {{ui.stickers[2].text}}</view>
+      </view>
+
+      <view class="director-note">
+        <text class="note-content">"{{ui.poster.summary}}"</text>
+        <view class="signature">
+          <text class="sig-name">@Omega_AI</text>
+          <text class="sig-date">2026.01.07</text>
+        </view>
+      </view>
+
+      <view class="zigzag-bottom"></view>
+    </view>
+
+  </view>
+
+  <view class="action-bar {{contentVisible ? 'fade-in' : ''}}">
+    <button class="btn-share" open-type="share">分享</button>
+    <view class="btn-save" bindtap="onSaveImage">保存票根</view>
+  </view>
+</view>

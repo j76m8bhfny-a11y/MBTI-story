@@ -61,10 +61,7 @@ page {
 /* --- [B] 动态趋势区 (Trends) --- */
 .trends-section {
   background: #FFFFFF;
-  padding-top: 80rpx;
-  padding-bottom: 10rpx;
-  padding-left: 40rpx;
-  padding-right: 40rpx;
+  padding: 20rpx 40rpx; /* 整体留白 */
   width: 100%; box-sizing: border-box;
 }
 
@@ -73,7 +70,7 @@ page {
   display: flex;
   align-items: center; /* 垂直居中 */
   justify-content: space-between;
-  margin-bottom: 20rpx; /* 行间距 */
+  margin-bottom: 40rpx; /* 行间距 */
   position: relative;
 }
 
