@@ -1,0 +1,121 @@
+const Renderer = require('../../libs/ResultRenderer.js');
+
+Page({
+  data: {
+    ui: null as any,
+    stickers: [] as any[], // 🔥 修改 1: 变量名必须叫 stickers，和 WXML 对应
+    loading: true,
+    animStage: 'void', 
+    isFlipped: false,
+  },
+
+  onLoad() {
+    const rawResult = wx.getStorageSync('USER_MBTI_RESULT');
+    if (!rawResult) {
+      // 如果没有数据，调试期间可以注释掉下面这行，防止无限跳转
+      // wx.reLaunch({ url: '/pages/index/index' });
+      console.warn("没有找到测试结果数据");
+      // return;
+    }
+
+    try {
+      const viewModel = Renderer.render(rawResult || {}); // 防止空数据报错
+      
+      // 处理贴纸：生成随机旋转角度
+      const processedStickers = (viewModel.stickers || []).map((item: any) => {
+        return {
+          text: item.text,
+          type: item.type, // 保留 type
+          styleClass: `style-${item.type}`, 
+          // 生成 -4deg 到 4deg 的随机微小旋转
+          randomStyle: `transform: rotate(${(Math.random() * 8 - 4).toFixed(1)}deg);`
+        };
+      });
+
+      this.setData({
+        ui: viewModel,
+        stickers: processedStickers, // 🔥 修改 2: 这里也要赋值给 stickers
+        loading: false
+      }, () => {
+        this.startCeremony();
+      });
+    } catch (err) {
+      console.error("渲染错误:", err);
+    }
+  },
+
+  startCeremony() {
+    // 1. 翻牌 (1.2s)
+    setTimeout(() => { this.setData({ isFlipped: true }); }, 2000);
+    // 2. 归位 (3.0s)
+    setTimeout(() => { this.setData({ animStage: 'docked' }); }, 3600);
+  },
+
+  onSaveImage() {
+    wx.showToast({ title: '正在冲印...', icon: 'loading' });
+    setTimeout(() => { wx.showToast({ title: '已保存到相册', icon: 'success' }); }, 1500);
+  },
+
+  // 选择头像并保存结果
+  onChooseAvatar(e: any) {
+    const avatarUrl = e.detail.avatarUrl;
+    if (!avatarUrl) {
+      wx.showToast({ title: '未选择头像', icon: 'none' });
+      return;
+    }
+
+    wx.showLoading({ title: '保存中...' });
+
+    // 1. 上传头像到云存储
+    wx.cloud.uploadFile({
+      cloudPath: `avatars/${Date.now()}.jpg`,
+      filePath: avatarUrl,
+      success: (uploadRes) => {
+        const fileID = uploadRes.fileID;
+        
+        // 2. 获取原始测试结果数据
+        const rawResult = wx.getStorageSync('USER_MBTI_RESULT');
+        if (!rawResult) {
+          wx.hideLoading();
+          wx.showToast({ title: '测试数据丢失', icon: 'none' });
+          return;
+        }
+
+        // 3. 调用云函数保存结果
+        wx.cloud.callFunction({
+          name: 'saveTestResult',
+          data: {
+            mbti_result: rawResult.mbti_type,
+            dimension_scores: rawResult.spectrum_scores,
+            avatar_file_id: fileID,
+            answers_snapshot: rawResult.answers || []
+          }
+        }).then((res: any) => {
+          wx.hideLoading();
+          if (res.result?.success) {
+            wx.showToast({ title: '保存成功', icon: 'success' });
+          } else {
+            wx.showToast({ title: '保存失败', icon: 'none' });
+          }
+        }).catch(err => {
+          wx.hideLoading();
+          console.error('保存结果失败', err);
+          wx.showToast({ title: '保存失败', icon: 'none' });
+        });
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        console.error('上传头像失败', err);
+        wx.showToast({ title: '上传失败', icon: 'none' });
+      }
+    });
+  },
+
+  // 分享配置
+  onShareAppMessage() {
+    return {
+      title: this.data.ui?.poster?.life_script || '测测你的灵魂配方',
+      path: '/pages/index/index'
+    };
+  }
+});

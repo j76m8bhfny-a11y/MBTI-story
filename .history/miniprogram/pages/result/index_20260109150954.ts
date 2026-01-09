@@ -36,6 +36,7 @@ Page({
       this.setData({
         ui: viewModel,
         stickers: processedStickers, // 🔥 修改 2: 这里也要赋值给 stickers
+        rawResult: rawResult,
         loading: false
       }, () => {
         this.startCeremony();
@@ -50,29 +51,6 @@ Page({
     setTimeout(() => { this.setData({ isFlipped: true }); }, 2000);
     // 2. 归位 (3.0s)
     setTimeout(() => { this.setData({ animStage: 'docked' }); }, 3600);
-  },
-  async autoArchiveToCloud() {
-    const { rawResult } = this.data;
-    if (!rawResult) return;
-
-    console.log('正在后台自动归档...');
-    
-    try {
-      // 直接调用云函数，不需要传头像ID了
-      await wx.cloud.callFunction({
-        name: 'saveTestResult',
-        data: {
-          mbti_result: rawResult?.mbti_result,
-          dimension_scores: rawResult?.scores,
-          answers_snapshot: [], 
-          avatar_file_id: "" // 既然不用头像，传空即可
-        }
-      });
-      console.log('✅ 自动归档成功');
-    } catch (err) {
-      console.error('❌ 自动归档失败', err);
-      // 失败了也不要弹窗打扰用户，自己记录日志即可
-    }
   },
 
   onSaveImage() {

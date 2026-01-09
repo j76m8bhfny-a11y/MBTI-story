@@ -97,7 +97,6 @@
 
   <view class="action-bar {{animStage === 'docked' ? 'visible' : ''}}">
     <button class="btn-share" open-type="share">分享给朋友</button>
-    
-    <view class="btn-save" bindtap="onSaveImage">保存纪念卡片</view>
+    <button class="btn-save" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">保存纪念卡片</button>
   </view>
 </view>

@@ -7,7 +7,6 @@ Page({
     loading: true,
     animStage: 'void', 
     isFlipped: false,
-    rawResult: null as any
   },
 
   onLoad() {
@@ -51,29 +50,6 @@ Page({
     // 2. 归位 (3.0s)
     setTimeout(() => { this.setData({ animStage: 'docked' }); }, 3600);
   },
-  async autoArchiveToCloud() {
-    const { rawResult } = this.data;
-    if (!rawResult) return;
-
-    console.log('正在后台自动归档...');
-    
-    try {
-      // 直接调用云函数，不需要传头像ID了
-      await wx.cloud.callFunction({
-        name: 'saveTestResult',
-        data: {
-          mbti_result: rawResult?.mbti_result,
-          dimension_scores: rawResult?.scores,
-          answers_snapshot: [], 
-          avatar_file_id: "" // 既然不用头像，传空即可
-        }
-      });
-      console.log('✅ 自动归档成功');
-    } catch (err) {
-      console.error('❌ 自动归档失败', err);
-      // 失败了也不要弹窗打扰用户，自己记录日志即可
-    }
-  },
 
   onSaveImage() {
     wx.showToast({ title: '正在冲印...', icon: 'loading' });
@@ -81,7 +57,59 @@ Page({
   },
 
   // 选择头像并保存结果
-  
+  onChooseAvatar(e: any) {
+    const avatarUrl = e.detail.avatarUrl;
+    if (!avatarUrl) {
+      wx.showToast({ title: '未选择头像', icon: 'none' });
+      return;
+    }
+
+    wx.showLoading({ title: '保存中...' });
+
+    // 1. 上传头像到云存储
+    wx.cloud.uploadFile({
+      cloudPath: `avatars/${Date.now()}.jpg`,
+      filePath: avatarUrl,
+      success: (uploadRes) => {
+        const fileID = uploadRes.fileID;
+        
+        // 2. 获取原始测试结果数据
+        const rawResult = wx.getStorageSync('USER_MBTI_RESULT');
+        if (!rawResult) {
+          wx.hideLoading();
+          wx.showToast({ title: '测试数据丢失', icon: 'none' });
+          return;
+        }
+
+        // 3. 调用云函数保存结果
+        wx.cloud.callFunction({
+          name: 'saveTestResult',
+          data: {
+            mbti_result: rawResult.mbti_type,
+            dimension_scores: rawResult.spectrum_scores,
+            avatar_file_id: fileID,
+            answers_snapshot: rawResult.answers || []
+          }
+        }).then((res: any) => {
+          wx.hideLoading();
+          if (res.result?.success) {
+            wx.showToast({ title: '保存成功', icon: 'success' });
+          } else {
+            wx.showToast({ title: '保存失败', icon: 'none' });
+          }
+        }).catch(err => {
+          wx.hideLoading();
+          console.error('保存结果失败', err);
+          wx.showToast({ title: '保存失败', icon: 'none' });
+        });
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        console.error('上传头像失败', err);
+        wx.showToast({ title: '上传失败', icon: 'none' });
+      }
+    });
+  },
 
   // 分享配置
   onShareAppMessage() {
@@ -89,7 +117,7 @@ Page({
       title: this.data.ui?.poster?.life_script || '测测你的灵魂配方',
       path: '/pages/index/index'
     };
-  },
+  }
   async onChooseAvatar(e: any) {
     const { avatarUrl } = e.detail;
     
