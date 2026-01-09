@@ -84,13 +84,8 @@
         <image class="tarot-img" src="{{ui.poster.bg_image}}" mode="aspectFill"></image>
         <view class="shine"></view>
       </view>
-
       <view class="face back">
-        <image 
-          class="card-back-img" 
-          src="/images/card_back.jpg" 
-          mode="aspectFill"
-        ></image>
+        <view class="back-pattern">Ω</view>
       </view>
     </view>
   </view>

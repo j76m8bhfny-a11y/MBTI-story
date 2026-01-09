@@ -65,9 +65,8 @@
   /* 深碳灰 */
   color: #555555;
   letter-spacing: 4rpx;
-  font-weight: 300;
+  font-weight: 600;
   text-align: center;
-  white-space: nowrap;
   max-width: 95%;
   line-height: 1.8;
 }

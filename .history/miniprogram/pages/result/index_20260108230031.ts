@@ -46,9 +46,9 @@ Page({
 
   startCeremony() {
     // 1. 翻牌 (1.2s)
-    setTimeout(() => { this.setData({ isFlipped: true }); }, 2000);
+    setTimeout(() => { this.setData({ isFlipped: true }); }, 2200);
     // 2. 归位 (3.0s)
-    setTimeout(() => { this.setData({ animStage: 'docked' }); }, 3600);
+    setTimeout(() => { this.setData({ animStage: 'docked' }); }, 4500);
   },
 
   onSaveImage() {

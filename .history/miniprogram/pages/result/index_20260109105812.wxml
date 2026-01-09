@@ -88,7 +88,7 @@
       <view class="face back">
         <image 
           class="card-back-img" 
-          src="/images/card_back.jpg" 
+          src="/images/card_back.png" 
           mode="aspectFill"
         ></image>
       </view>

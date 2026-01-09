@@ -80,19 +80,7 @@
 
   <view class="tarot-layer {{animStage === 'docked' ? 'fly-mode' : ''}}">
     <view class="flipper {{isFlipped ? 'flipped' : ''}}">
-      <view class="face front">
-        <image class="tarot-img" src="{{ui.poster.bg_image}}" mode="aspectFill"></image>
-        <view class="shine"></view>
       </view>
-
-      <view class="face back">
-        <image 
-          class="card-back-img" 
-          src="/images/card_back.jpg" 
-          mode="aspectFill"
-        ></image>
-      </view>
-    </view>
   </view>
 
   <view class="action-bar {{animStage === 'docked' ? 'visible' : ''}}">

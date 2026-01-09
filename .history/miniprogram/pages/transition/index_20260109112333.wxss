@@ -67,7 +67,6 @@
   letter-spacing: 4rpx;
   font-weight: 300;
   text-align: center;
-  white-space: nowrap;
   max-width: 95%;
   line-height: 1.8;
 }
