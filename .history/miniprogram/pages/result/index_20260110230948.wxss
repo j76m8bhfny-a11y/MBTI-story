@@ -402,12 +402,12 @@ background-repeat: repeat-x;}
   /* 不要覆盖 top/left/right/margin ! */
   
   /* 最终的 transform：位移 + 缩放 + 旋转 */
-  transform: translate(calc(-50% + 50vw - 209rpx), calc(-50% + 210.5rpx - 50vh)) scale(0.43) rotate(5deg) !important;
+  transform: translate(calc(-50% + 50vw - 209rpx), calc(-50% + 303.5rpx - 50vh)) scale(0.43) rotate(5deg) !important;
 }
 
 /* 状态 B: Focused (中心 + 放大) */
 .tarot-layer.focused {
-  transform: translate(-50%, -60%) scale(1) rotate(0deg) !important;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg) !important;
   
   z-index: 2000 !important;
 }

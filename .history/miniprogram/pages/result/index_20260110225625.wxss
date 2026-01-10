@@ -369,17 +369,15 @@ background-repeat: repeat-x;}
 .tarot-layer {
   
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 50vh;
+  left: 50vw;
   width: 600rpx;
   height: 900rpx;
 
   transform: translate(-50%, -50%) scale(1) rotate(0deg);
   
   z-index: 1000;
-  transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s;
-  will-change: transform;
-
+  transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   visibility: visible;
   pointer-events: auto;
   overflow: visible;
@@ -387,27 +385,31 @@ background-repeat: repeat-x;}
 
 /* 状态 A: Docked (右上角) */
 .tarot-layer.docked {
+  /* 必须显式重置 top/left/right */
+  top: -240rpx !important;
+  right: -90rpx !important;
+  left: auto !important;
+  bottom: auto !important;
   
-  /* 核心算法：
-     1. 保持 top: 50%, left: 50% 不变。
-     2. 使用 translate 把卡片移到右上角。
-     
-     计算公式：
-     X轴偏移 = (屏幕宽的一半) - (右边距 40rpx) - (卡片缩放后的一半宽 129rpx) = 50vw - 169rpx
-     Y轴偏移 = (上边距 140rpx) + (卡片缩放后的一半高 193.5rpx) - (屏幕高的一半) = 333.5rpx - 50vh
-     
-     注意：translate(-50%, -50%) 是基础基准，必须保留在计算中。
-  */
-  
-  /* 不要覆盖 top/left/right/margin ! */
-  
-  /* 最终的 transform：位移 + 缩放 + 旋转 */
-  transform: translate(calc(-50% + 50vw - 209rpx), calc(-50% + 210.5rpx - 50vh)) scale(0.43) rotate(5deg) !important;
+  margin: 0 !important;
+
+  /* 归位时，取消居中位移 (0,0)，并缩小 */
+  transform: translate(0, 0) scale(0.43) rotate(5deg) !important;
 }
 
 /* 状态 B: Focused (中心 + 放大) */
 .tarot-layer.focused {
-  transform: translate(-50%, -60%) scale(1) rotate(0deg) !important;
+  top: 50% !important; 
+  left: 50% !important; 
+  right: auto !important;
+  
+  bottom: auto !important;
+  margin: 0 !important;
+
+  margin-left: 0 !important; /* 清理 margin */
+  margin-top: 0 !important;
+  
+  transform: translate(-50%, -65%) scale(1) rotate(0deg) !important;
   
   z-index: 2000 !important;
 }
@@ -491,7 +493,6 @@ background-repeat: repeat-x;}
   animation: rotate-magic 4s linear infinite; /* 匀速旋转 */
   opacity: 0;
   transition: opacity 0.5s;
-  will-change: transform; /* 加上这一行 */
 }
 .magic-border.animating {
   opacity: 1;
