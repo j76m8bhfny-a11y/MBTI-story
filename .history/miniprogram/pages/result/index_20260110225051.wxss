@@ -386,14 +386,15 @@ background-repeat: repeat-x;}
 /* 状态 A: Docked (右上角) */
 .tarot-layer.docked {
   /* 必须显式重置 top/left/right */
-  top: -240rpx !important;
-  right: -90rpx !important;
+  top: 140rpx !important;
+  right: 40rpx !important;
   left: auto !important;
   bottom: auto !important;
   
   margin: 0 !important;
 
   /* 归位时，取消居中位移 (0,0)，并缩小 */
+  -webkit-transform: translate(0, 0) scale(0.43) rotate(5deg) !important;
   transform: translate(0, 0) scale(0.43) rotate(5deg) !important;
 }
 
@@ -409,7 +410,8 @@ background-repeat: repeat-x;}
   margin-left: 0 !important; /* 清理 margin */
   margin-top: 0 !important;
   
-  transform: translate(-50%, -70%) scale(1) rotate(0deg) !important;
+  -webkit-transform: translate(-50%, -50%) scale(1) rotate(0deg) !important;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg) !important;
   
   z-index: 2000 !important;
 }

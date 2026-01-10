@@ -51,7 +51,7 @@ Page({
     // 1. 翻牌 (1.2s)
     setTimeout(() => { this.setData({ isFlipped: true }); }, 1200);
     // 2. 归位 (3.0s)
-    setTimeout(() => { this.setData({ animStage: 'docked' }); }, 2500);
+    setTimeout(() => { this.setData({ animStage: 'docked' }); }, 2400);
   },
   async autoArchiveToCloud() {
     const { rawResult } = this.data;

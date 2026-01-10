@@ -51,7 +51,7 @@ Page({
     // 1. 翻牌 (1.2s)
     setTimeout(() => { this.setData({ isFlipped: true }); }, 1200);
     // 2. 归位 (3.0s)
-    setTimeout(() => { this.setData({ animStage: 'docked' }); }, 2500);
+    setTimeout(() => { this.setData({ animStage: 'docked' }); }, 2400);
   },
   async autoArchiveToCloud() {
     const { rawResult } = this.data;
@@ -77,20 +77,57 @@ Page({
     }
   },
 
-  // 进入沉浸式聚焦模式
-  onViewTarot() {
-    this.setData({ isFocused: true });
-    wx.vibrateShort({ type: 'medium' });
-  },
-
-  // 退出沉浸式聚焦模式
-  onDismissTarot() {
-    this.setData({ isFocused: false });
-  },
-
   async onSaveImage() {
-    // 简单提示用户长按保存或截屏
-    wx.showToast({ title: '长按保存或截屏', icon: 'none' });
+    console.log('✅ 点击了保存按钮'); // 添加日志，确认点击是否生效
+
+    // 1. 权限检查
+    try {
+      const setting = await wx.getSetting({});
+      if (setting.authSetting['scope.writePhotosAlbum'] === false) {
+        return wx.showModal({
+          title: '需要权限',
+          content: '请在设置中允许保存图片到相册',
+          success: (res) => { if (res.confirm) wx.openSetting(); }
+        });
+      }
+    } catch (e) { /* ignore */ }
+
+    wx.showLoading({ title: '正在绘制海报...', mask: true });
+
+    try {
+      // 2. 实例化海报绘制器
+      const painter = new PosterPainter({
+        canvasId: 'shareCanvas',
+        width: 375,
+        height: 667,
+        ui: this.data.ui,
+        stickers: this.data.stickers,
+        context: this // 🔥 必须传入当前页面实例
+      });
+
+      // 3. 开始绘制
+      await painter.drawPoster();
+
+      // 🔥🔥🔥 之前你漏掉了下面这一大段代码 🔥🔥🔥
+      
+      // 4. 导出为临时图片路径
+      const tempFilePath = await painter.exportToImage();
+      console.log('✅ 海报导出成功:', tempFilePath);
+      
+      // 5. 保存到系统相册
+      await wx.saveImageToPhotosAlbum({
+        filePath: tempFilePath
+      });
+
+      // 6. 成功提示
+      wx.hideLoading();
+      wx.showToast({ title: '已保存到相册', icon: 'success' });
+      
+    } catch (err) {
+      console.error('❌ 保存海报失败:', err);
+      wx.hideLoading();
+      wx.showToast({ title: '保存失败，请重试', icon: 'none' });
+    }
   },
 
   // 选择头像并保存结果

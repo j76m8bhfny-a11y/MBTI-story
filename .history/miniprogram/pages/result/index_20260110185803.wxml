@@ -82,13 +82,8 @@
     </view>
 
   </view>
-  <view class="action-bar {{animStage === 'docked' ? 'visible' : ''}}">
-    <button class="btn-share" open-type="share">分享给朋友</button>
-    
-    <view class="btn-save" bindtap="onViewTarot">查看命运塔罗</view>
-  </view>
-</view>
-<view class="tarot-layer {{animStage}} {{isFocused ? 'focused' : ''}}" catchtap="{{isFocused ? 'onDismissTarot' : 'onViewTarot'}}">
+
+  <view class="tarot-layer {{animStage}} {{isFocused ? 'focused' : ''}}" catchtap="{{isFocused ? 'onDismissTarot' : 'onViewTarot'}}">
     <view class="levitate-wrapper">
       <view class="magic-particles" wx:if="{{isFlipped}}">
         <view class="particle" wx:for="{{[1,2,3,4,5,6,7,8,9,10,11,12]}}" wx:key="*this"></view>
@@ -96,7 +91,6 @@
       
       <view class="flipper {{isFlipped ? 'flipped' : ''}}">
         <view class="face front">
-          <view class="magic-border {{isFlipped ? 'animating' : ''}}"></view>
           <image class="tarot-img" src="{{ui.poster.bg_image}}" mode="aspectFill"></image>
           <view class="shine"></view>
         </view>
@@ -129,7 +123,13 @@
       </view>
     </view>
   </view>
-<canvas 
+
+  <view class="action-bar {{animStage === 'docked' ? 'visible' : ''}}">
+    <button class="btn-share" open-type="share">分享给朋友</button>
+    
+    <view class="btn-save" bindtap="onViewTarot">👁️ 查看命运塔罗</view>
+  </view>
+</view><canvas 
   canvas-id="shareCanvas" 
   style="width: 375px; height: 667px; position: fixed; left: 9999px; top: 0;"
 ></canvas>

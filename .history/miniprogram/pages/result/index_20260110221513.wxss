@@ -367,14 +367,15 @@ background-repeat: repeat-x;}
 /* === 动画层：塔罗牌飞行 (Flying Card) === */
 
 .tarot-layer {
-  
   position: fixed;
-  top: 50vh;
-  left: 50vw;
+  top: 50%; left: 50%;
   width: 600rpx;
   height: 900rpx;
 
-  transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  transform: translate(-50%, -50%) scale(1) !important;
+  
+  margin-left: 0 !important;
+  margin-top: 0 !important;
   
   z-index: 1000;
   transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -385,15 +386,13 @@ background-repeat: repeat-x;}
 
 /* 状态 A: Docked (右上角) */
 .tarot-layer.docked {
-  /* 必须显式重置 top/left/right */
-  top: -240rpx !important;
-  right: -90rpx !important;
-  left: auto !important;
-  bottom: auto !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
   
-  margin: 0 !important;
+  left: auto; 
+  top: 140rpx !important;   /* 距离顶部：根据你的导航栏高度调整，正数！不要负数 */
+  right: 40rpx !important;  /* 距离右边 */
 
-  /* 归位时，取消居中位移 (0,0)，并缩小 */
   transform: translate(0, 0) scale(0.43) rotate(5deg) !important;
 }
 
@@ -403,13 +402,11 @@ background-repeat: repeat-x;}
   left: 50% !important; 
   right: auto !important;
   
-  bottom: auto !important;
-  margin: 0 !important;
-
   margin-left: 0 !important; /* 清理 margin */
   margin-top: 0 !important;
   
-  transform: translate(-50%, -70%) scale(1) rotate(0deg) !important;
+  /* 摆正卡片 */
+  transform: translate(-50%, -50%) scale(1) rotate(0deg) !important;
   
   z-index: 2000 !important;
 }
@@ -519,73 +516,12 @@ background-repeat: repeat-x;}
   }
 }
 
-.back {
-  /* 基础定位：必须是 absolute 且 top/left 为 0，否则会错位 */
-  position: absolute; 
-  top: 0; 
-  left: 0;
-  width: 100%; 
-  height: 100%;
-  
-  /* 布局与外观 */
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  background: #1a1a2e; 
-  border-radius: 20rpx; 
-  
-  /* 【关键】必须隐藏溢出，否则旋转的光圈会变成一个大方块挡住屏幕 */
-  overflow: hidden; 
-  
-  /* 层级管理 */
-  z-index: 1; 
-  box-shadow: 0 30rpx 60rpx rgba(0,0,0,0.3);
-  
-  /* 清除旧边框 */
-  border: none;
-}
-/* 2. 背后的旋转光晕 (比卡片大很多) */
-.back::before {
-  content: '';
-  position: absolute;
-  /* 这里的定位是相对于 .back 的，让光晕居中 */
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  
-  /* 金色锥形渐变 */
-  background: conic-gradient(
-    transparent, 
-    #ffd700, 
-    #ff8c00, 
-    transparent 30%
-  );
-  
-  /* 动画 */
-  animation: rotate-magic 4s linear infinite;
-  z-index: -2; 
-}
-
-/* 3. 中间的遮挡层 (模拟边框效果) */
-.back::after {
-  content: '';
-  position: absolute;
-  /* inset 控制金边的粗细，这里设为 6rpx */
-  inset: 6rpx; 
-  
-  /* 颜色必须和 .back 背景一致 */
-  background: #1a1a2e; 
-  border-radius: 16rpx; 
-  z-index: -1; 
-}
+.back { background: #1a1a2e;border: 4rpx solid #f0d57eff; }
 .card-back-img { 
   width: 100%; 
   height: 100%; 
   display: block; 
   border-radius: 16rpx; /* 稍微比外框小一点点，或者设为 inherit */
-  position: relative;
-  z-index: 1; /* 浮在 ::after 遮挡层上面 */
 }
 .tarot-img { width: 100%; height: 100%; }
 

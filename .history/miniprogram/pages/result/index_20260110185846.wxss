@@ -7,6 +7,7 @@ page {
 .page-container {
   width: 100%; height: 100%; position: relative;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
+  perspective: 1500rpx; /* 3D透视 */
 }
 
 /* === 聚焦遮罩层 === */
@@ -50,7 +51,7 @@ page {
 /* 归位后滑入 */
 .page-container.docked .result-card {
   opacity: 1; transform: translateY(0);
-  transition-delay: 1.0s;
+  transition-delay: 1.8s;
 }
 
 /* --- [A] 头部身份区 (Magazine Header) --- */
@@ -367,57 +368,31 @@ background-repeat: repeat-x;}
 /* === 动画层：塔罗牌飞行 (Flying Card) === */
 
 .tarot-layer {
-  
   position: fixed;
-  top: 50vh;
-  left: 50vw;
-  width: 600rpx;
-  height: 900rpx;
-
-  transform: translate(-50%, -50%) scale(1) rotate(0deg);
-  
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 1000;
-  transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
   visibility: visible;
   pointer-events: auto;
-  overflow: visible;
 }
 
 /* 状态 A: Docked (右上角) */
 .tarot-layer.docked {
-  /* 必须显式重置 top/left/right */
-  top: -240rpx !important;
-  right: -90rpx !important;
-  left: auto !important;
-  bottom: auto !important;
-  
-  margin: 0 !important;
-
-  /* 归位时，取消居中位移 (0,0)，并缩小 */
-  transform: translate(0, 0) scale(0.43) rotate(5deg) !important;
+  top: 60rpx; left: auto; right: 40rpx;
+  transform: translate(0, 0) scale(0.35) rotate(5deg);
 }
 
 /* 状态 B: Focused (中心 + 放大) */
 .tarot-layer.focused {
-  top: 50% !important; 
-  left: 50% !important; 
-  right: auto !important;
-  
-  bottom: auto !important;
-  margin: 0 !important;
-
-  margin-left: 0 !important; /* 清理 margin */
-  margin-top: 0 !important;
-  
-  transform: translate(-50%, -70%) scale(1) rotate(0deg) !important;
-  
+  top: 50% !important; left: 50% !important; right: auto !important;
+  transform: translate(-50%, -60%) scale(1) rotate(0deg) !important;
   z-index: 2000 !important;
 }
 
 /* 悬浮包装器 - 用于呼吸动画 */
 .levitate-wrapper {
   position: relative;
-  perspective: 1500rpx;
   transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -445,7 +420,7 @@ background-repeat: repeat-x;}
 }
 .flipper {
   width: 600rpx; height: 900rpx; position: relative;
-  margin-bottom: 0rpx;
+  margin-bottom: 140rpx;
   transform-style: preserve-3d;
   transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   animation: fadeInBlur 1.0s cubic-bezier(0.23, 1, 0.32, 1);
@@ -457,135 +432,13 @@ background-repeat: repeat-x;}
   backface-visibility: hidden; border-radius: 20rpx; overflow: hidden;
   box-shadow: 0 30rpx 60rpx rgba(0,0,0,0.3);
 }
-.front {
-  transform: rotateY(180deg);
-  background: #1a1a2e; /* 改为深色背景，让金色更亮 */
-  border: none;        /* 去掉原有的白色边框 */
-  outline: none;       /* 去掉原有的轮廓 */
-  position: relative;
-  overflow: hidden;    /* 确保旋转的光晕不超出圆角 */
-}
-/* 2. ✨ 核心：旋转的魔法光辉 */
-.magic-border {
-  position: absolute;
-  top: -50%; 
-  left: -50%;
-  width: 200%; 
-  height: 200%;
-  z-index: 0; /* 放在最底层 */
-  
-  
-  /* 核心魔法配方：
-     1. conic-gradient: 制造锥形光束
-     2. url(...): 复用你已有的 SVG 噪点，制造“粒子”颗粒感
-  */
-  background: 
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E"),
-    conic-gradient(
-      transparent 0deg, 
-      transparent 60deg,
-      #ffd700 90deg,     /* 金色 */
-      #ff8c00 120deg,    /* 橙金过渡 */
-      transparent 180deg
-    );
-    
-  background-blend-mode: overlay; /* 让噪点和金色融合 */
-  animation: rotate-magic 4s linear infinite; /* 匀速旋转 */
-  opacity: 0;
-  transition: opacity 0.5s;
-}
-.magic-border.animating {
-  opacity: 1;
-}
-/* 3. 调整图片：稍微缩小，露出边缘的光晕 */
-.front .tarot-img {
-  position: absolute;
-  top: 10rpx;          /* 上边距 */
-  left: 10rpx;         /* 左边距 */
-  width: calc(100% - 20rpx) !important;  /* 宽度减去两倍边距 */
-  height: calc(100% - 20rpx) !important; /* 高度减去两倍边距 */
-  border-radius: 16rpx; /* 圆角稍微比外层小一点 */
-  z-index: 1;         /* 盖在光晕上面 */
-  background-color: #fff; /* 防止图片透明部分透出背景 */
-}
-
-/* 4. 定义旋转动画 */
-@keyframes rotate-magic {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.back {
-  /* 基础定位：必须是 absolute 且 top/left 为 0，否则会错位 */
-  position: absolute; 
-  top: 0; 
-  left: 0;
-  width: 100%; 
-  height: 100%;
-  
-  /* 布局与外观 */
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  background: #1a1a2e; 
-  border-radius: 20rpx; 
-  
-  /* 【关键】必须隐藏溢出，否则旋转的光圈会变成一个大方块挡住屏幕 */
-  overflow: hidden; 
-  
-  /* 层级管理 */
-  z-index: 1; 
-  box-shadow: 0 30rpx 60rpx rgba(0,0,0,0.3);
-  
-  /* 清除旧边框 */
-  border: none;
-}
-/* 2. 背后的旋转光晕 (比卡片大很多) */
-.back::before {
-  content: '';
-  position: absolute;
-  /* 这里的定位是相对于 .back 的，让光晕居中 */
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  
-  /* 金色锥形渐变 */
-  background: conic-gradient(
-    transparent, 
-    #ffd700, 
-    #ff8c00, 
-    transparent 30%
-  );
-  
-  /* 动画 */
-  animation: rotate-magic 4s linear infinite;
-  z-index: -2; 
-}
-
-/* 3. 中间的遮挡层 (模拟边框效果) */
-.back::after {
-  content: '';
-  position: absolute;
-  /* inset 控制金边的粗细，这里设为 6rpx */
-  inset: 6rpx; 
-  
-  /* 颜色必须和 .back 背景一致 */
-  background: #1a1a2e; 
-  border-radius: 16rpx; 
-  z-index: -1; 
-}
+.front { transform: rotateY(180deg); background: #FFF; border: 4rpx solid #FFF; outline: 1px solid rgba(255,215,0,0.3); }
+.back { background: #1a1a2e;border: 4rpx solid #f0d57eff; }
 .card-back-img { 
   width: 100%; 
   height: 100%; 
   display: block; 
   border-radius: 16rpx; /* 稍微比外框小一点点，或者设为 inherit */
-  position: relative;
-  z-index: 1; /* 浮在 ::after 遮挡层上面 */
 }
 .tarot-img { width: 100%; height: 100%; }
 
@@ -593,7 +446,7 @@ background-repeat: repeat-x;}
 .qr-stub {
   position: absolute; top: 98%; left: 5%; width: 90%;
   background-color: #EFEBE4;
-  border-radius: 0 0 0rpx 0rpx;
+  border-radius: 0 0 12rpx 12rpx;
   padding: 30rpx 20rpx 40rpx 20rpx;
   box-sizing: border-box;
   box-shadow: 0 20rpx 40rpx rgba(0,0,0,0.2);
@@ -607,12 +460,10 @@ background-repeat: repeat-x;}
 
 .stub-content {
   display: flex; align-items: center; gap: 20rpx;
-  margin-top: 20rpx;
-  margin-left: 20rpx;
 }
 
 .qr-placeholder {
-  width: 120rpx; height: 120rpx;
+  width: 80rpx; height: 80rpx;
   background: #FFF;
   border-radius: 8rpx;
   display: flex; align-items: center; justify-content: center;
@@ -643,7 +494,6 @@ background-repeat: repeat-x;}
 
 .stub-text {
   flex: 1; display: flex; flex-direction: column; gap: 8rpx;
-  margin-left: 40rpx;
 }
 
 .scan-hint {
@@ -655,7 +505,7 @@ background-repeat: repeat-x;}
 }
 
 .stub-zigzag {
-  position: absolute; bottom: -10rpx; left: 0; width: 100%; height: 20rpx;
+  position: absolute; bottom: -20rpx; left: 0; width: 100%; height: 20rpx;
   background-image:
     linear-gradient(135deg, #EFEBE4 50%, transparent 50%),
     linear-gradient(225deg, #EFEBE4 50%, transparent 50%);
@@ -686,6 +536,68 @@ background-repeat: repeat-x;}
   0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; }
 }
 
+/* === 趋势图悬浮胶囊 === */
+.floating-pill {
+  position: absolute;
+  bottom: 24rpx; /* 距离圆点上方的高度 */
+  
+  /* 核心定位：X轴居中，抵消自身宽度的一半 */
+  transform: translateX(-50%); 
+  
+  background: #F3E5F5;   /* 浅紫色背景 */
+  color: #6A4C9C;        /* 深紫色文字 */
+  font-size: 20rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+  font-weight: bold;
+  white-space: nowrap;   /* 防止文字换行 */
+  box-shadow: 0 4rpx 8rpx rgba(106, 76, 156, 0.15); /* 淡淡的投影 */
+  z-index: 5;            /* 保证在圆点上面 */
+  transition: all 0.3s ease;
+}
+
+/* 可选：加一个小三角，让它看起来像气泡 */
+.floating-pill::after {
+  content: "";
+  position: absolute;
+  bottom: -8rpx;       /* 放在胶囊底部 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0; 
+  height: 0; 
+  border-left: 8rpx solid transparent;
+  border-right: 8rpx solid transparent;
+  border-top: 8rpx solid #F3E5F5; /* 颜色要和背景一致 */
+  transition: left 0.3s ease;
+}
+/* === 🔥 边缘对齐修正 === */
+
+/* 情况1：圆点在最左边 (0-15%) */
+/* 气泡左对齐，transform 归零 */
+.floating-pill.pos-left {
+  transform: translateX(0); /* 不再居中，而是以 left 点为起点 */
+  left: 0 !important;       /* 强制靠左（相对于圆点位置稍微修整也可以，但这就够了） */
+  margin-left: -10rpx;      /* 微调：让气泡稍微盖住圆点一点点，更自然 */
+}
+/* 调整小三角位置：跑到气泡左侧 */
+.floating-pill.pos-left::after {
+  left: 20rpx; /* 大概在第一个字下面 */
+  transform: none;
+}
+
+/* 情况2：圆点在最右边 (85-100%) */
+/* 气泡右对齐 */
+.floating-pill.pos-right {
+  transform: translateX(-100%); /* 整个气泡往左移 100% 宽度 */
+  /* 这里不需要改 left，因为 WXML 里的 style left已经定位到了圆点 */
+  margin-left: 10rpx;           /* 微调 */
+}
+/* 调整小三角位置：跑到气泡右侧 */
+.floating-pill.pos-right::after {
+  left: auto; 
+  right: 20rpx; /* 大概在最后一个字下面 */
+  transform: none;
+}
 /* 粒子容器：居中定位 */
 .magic-particles {
   position: absolute;
