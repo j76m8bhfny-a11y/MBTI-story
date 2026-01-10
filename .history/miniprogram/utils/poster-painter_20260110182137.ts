@@ -18,7 +18,7 @@ export class PosterPainter {
   private stickers: any[];
   private context: any;
 
-  // 颜色常量 (与 CSS 保持一致)
+  // 颜色常量 (必须与 CSS index.wxss 保持 100% 一致)
   private colors = {
     bg: '#FFFDF9',        // 全局背景
     white: '#FFFFFF',
@@ -26,8 +26,8 @@ export class PosterPainter {
     primaryLight: '#D1C4E9', // 浅紫进度条
     pillBg: '#F3E5F5',    // 胶囊背景
     secondary: '#8D6E63', // 深咖
-    line: '#D7CCC8',      // 虚线/括号颜色
-    cardStub: '#EFEBE4',  // 票根背景
+    line: '#D7CCC8',      // 虚线颜色
+    cardStub: '#EFEBE4',  // 票根背景 (关键：要和 CSS .card-stub 一致)
     textMain: '#333333',
     textSub: '#666666',
     grayText: '#E0E0E0'
@@ -44,8 +44,8 @@ export class PosterPainter {
     this.ctx = wx.createCanvasContext(this.canvasId, this.context);
   }
 
-  // 预加载图片资源
-  private async preloadBgImage() {
+  // 预加载逻辑保持不变
+  async preloadBgImage() {
     const bgImage = this.ui?.poster?.bg_image;
     if (bgImage && bgImage.startsWith('cloud://')) {
       try {
@@ -70,25 +70,25 @@ export class PosterPainter {
       // 卡片布局参数
       const cardX = 20; 
       const cardWidth = this.width - 40;
-      // 头部高度包含：Icon + MBTI + Title + Slogan + Trends
-      // CSS padding 是 70rpx(35px) 等，这里给足空间
-      const headerHeight = 440; 
+      // 动态计算高度：CSS中 padding 是 70rpx + 内容，这里我们要估算得准一点
+      // 头部高度包含：Icon + MBTI(100rpx) + Title + Slogan + Trends
+      const headerHeight = 460; 
 
-      // 🔥 开启卡片阴影 (模拟 CSS drop-shadow)
-      this.ctx.setShadow(0, 10, 30, 'rgba(106, 76, 156, 0.2)');
+      // 开启卡片阴影 (模拟 drop-shadow)
+      this.ctx.setShadow(0, 10, 30, 'rgba(106, 76, 156, 0.15)');
 
       // 2. 绘制白色卡片头部
       this.drawCardHeader(cardX, 60, cardWidth, headerHeight);
 
       // 3. 绘制撕裂线 (连接处)
-      // 暂时关闭阴影，以免接缝处有黑线
+      // 注意：撕裂线不需要阴影，或者阴影要连贯，这里为了简单先关掉阴影，防止接缝处有黑线
       this.ctx.setShadow(0, 0, 0, 'transparent'); 
       const tearY = 60 + headerHeight;
       this.drawTearLine(cardX, tearY, cardWidth);
 
       // 4. 绘制票根 (Card Stub)
-      const stubY = tearY + 24; // 撕裂线高度的一半作为衔接
-      const stubHeight = this.height - stubY - 40; // 底部留白
+      const stubY = tearY + 24; // 撕裂线高度是 24
+      const stubHeight = this.height - stubY - 50; // 底部留白
       this.drawCardStub(cardX, stubY, cardWidth, stubHeight);
 
       // 5. 绘制锯齿底边
@@ -100,12 +100,10 @@ export class PosterPainter {
     });
   }
 
-  // === 1. 背景 ===
   private drawGlobalBackground() {
     if (this.ui?.poster?.bg_image) {
        this.ctx.drawImage(this.ui.poster.bg_image, 0, 0, this.width, this.height);
-       // 叠加一层白色半透明，模拟 blur 后的变亮效果
-       this.ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; 
+       this.ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; // 加重一点白色遮罩，模仿 CSS 的 noise+overlay
        this.ctx.fillRect(0, 0, this.width, this.height);
     } else {
        this.ctx.fillStyle = this.colors.bg;
@@ -113,11 +111,11 @@ export class PosterPainter {
     }
   }
 
-  // === 2. 头部 (Header) ===
+  // === 2. 头部 ===
   private drawCardHeader(x: number, y: number, w: number, h: number) {
     this.ctx.save();
     
-    // 绘制圆角矩形背景 (只上面圆角)
+    // 背景
     this.ctx.beginPath();
     const r = 12; 
     this.ctx.moveTo(x + r, y);
@@ -127,11 +125,10 @@ export class PosterPainter {
     this.ctx.lineTo(x, y + h);     
     this.ctx.arc(x + r, y + r, r, Math.PI, -Math.PI / 2);
     this.ctx.closePath();
-    
     this.ctx.fillStyle = this.colors.white;
     this.ctx.fill();
     
-    // 内容绘制：关闭阴影，防止文字模糊
+    // 关闭阴影绘制内容，防止文字模糊
     this.ctx.setShadow(0, 0, 0, 'transparent');
 
     const padding = 20;
@@ -142,36 +139,36 @@ export class PosterPainter {
     this.ctx.font = '20px serif';
     this.ctx.fillText('✨', contentX - 5, y + 40);
 
-    // MBTI Type (Didot bold)
+    // MBTI Type (Didot font style -> serif bold)
     this.ctx.fillStyle = this.colors.primary;
-    this.ctx.font = 'bold 50px serif'; 
+    this.ctx.font = 'bold 50px serif'; // 对应 CSS 100rpx
     this.ctx.textAlign = 'left';
     this.ctx.fillText(this.ui.poster.type || 'MBTI', contentX, y + 80);
 
     // Role Title
     this.ctx.fillStyle = this.colors.textMain;
-    this.ctx.font = 'bold 17px sans-serif';
+    this.ctx.font = 'bold 17px sans-serif'; // 对应 CSS 34rpx
     this.ctx.fillText(this.ui.poster.title || '角色', contentX, y + 115);
 
     // Slogan
     this.ctx.fillStyle = this.colors.textSub;
-    this.ctx.font = '12px sans-serif'; 
+    this.ctx.font = '12px sans-serif'; // 对应 CSS 24rpx
     this.drawWrappedText(`"${this.ui.poster.life_script}"`, contentX, y + 145, w - padding * 2, 18);
 
     // Trends Chart
-    this.drawTrends(contentX, y + 210, w - padding * 2); 
+    this.drawTrends(contentX, y + 220, w - padding * 2); // 下移一点给 Slogan 留空间
 
     this.ctx.restore();
   }
 
-  // === 🔥 核心修复：趋势图 + 胶囊气泡 ===
+  // === 核心修复：趋势图 + 胶囊 ===
   private drawTrends(x: number, y: number, w: number) {
     const trends = this.ui.trends || [];
-    const rowHeight = 45; // 增加高度给气泡
+    const rowHeight = 45; // 增加行高，给胶囊留位置
 
     trends.forEach((item: any, i: number) => {
         const rowY = y + i * rowHeight;
-        const cy = rowY + 12; // 进度条中心线
+        const cy = rowY + 10; // 进度条垂直中心
 
         // 1. 左右字母
         const leftIsWin = item.isLeftWin;
@@ -187,80 +184,85 @@ export class PosterPainter {
         this.ctx.font = !leftIsWin ? 'bold 20px serif' : '16px serif';
         this.ctx.fillText(item.rightChar, x + w - 10, cy);
 
-        // 2. 进度条轨道
+        // 2. 进度条容器
         const barX = x + 35;
         const barW = w - 70;
-        const barH = 3; 
+        const barH = 3; // CSS 是 6rpx -> 3px
         
+        // 灰色轨道
         this.ctx.fillStyle = '#F5F5F5';
         this.roundRect(barX, cy - barH/2, barW, barH, barH/2);
         this.ctx.fill();
 
-        // 3. 填充条
-        const pct = (100 - item.score) / 100; // 假设数据结构是这样
+        // 紫色填充
+        // item.score 是输的一方的分数(0-50)？还是赢的百分比？
+        // 根据 WXML: style="width: {{100 - item.score}}%;"
+        // 假设 item.score 是右边的权重，100-score 是左边的长度
+        const pct = (100 - item.score) / 100;
         const fillW = barW * pct;
 
         this.ctx.fillStyle = this.colors.primaryLight;
         this.roundRect(barX, cy - barH/2, fillW, barH, barH/2);
         this.ctx.fill();
 
-        // 4. 圆点
+        // 3. 圆点 (Dot)
         const dotX = barX + fillW;
         this.ctx.fillStyle = this.colors.primary;
         this.ctx.beginPath();
         this.ctx.arc(dotX, cy, 4, 0, 2 * Math.PI);
         this.ctx.fill();
-        // 给圆点加白边
+        // 圆点白色描边
         this.ctx.strokeStyle = '#FFFFFF';
-        this.ctx.lineWidth = 1.5;
+        this.ctx.lineWidth = 2;
         this.ctx.stroke();
 
-        // === 5. 绘制气泡 (Pill) ===
-        const text = item.statusText || '';
+        // 4. 🔥 绘制胶囊 (Pill) 🔥
+        // 胶囊位置：圆点上方，cy - 10(margin) - 10(half height)
+        const text = item.statusText;
         this.ctx.font = 'bold 10px sans-serif';
         const metrics = this.ctx.measureText(text);
         const textW = metrics.width;
-        
-        const pillW = textW + 16; // 左右各8px padding
+        const pillW = textW + 16; // padding
         const pillH = 18;
-        const pillY = cy - 22; // 圆点上方
+        const pillY = cy - 20; 
 
-        // 计算气泡位置 (居中于圆点)
+        // 计算胶囊 X 坐标 (注意边缘碰撞逻辑)
         let pillX = dotX - pillW / 2;
-        let triangleX = dotX; // 三角形尖角位置
-
-        // 边缘碰撞检测 (防止气泡超出进度条左右边界)
+        let triangleX = dotX; // 三角形尖角始终指向圆点
+        
+        // 左边界处理
         if (pillX < barX) {
-            pillX = barX - 5; // 左对齐微调
-        } else if (pillX + pillW > barX + barW) {
-            pillX = barX + barW - pillW + 5; // 右对齐微调
+            pillX = barX - 5; // 稍微左移一点，类似 CSS margin-left: -10rpx
+        }
+        // 右边界处理
+        if (pillX + pillW > barX + barW) {
+            pillX = barX + barW - pillW + 5;
         }
 
-        // 画气泡背景
+        // 画胶囊背景
         this.ctx.fillStyle = this.colors.pillBg;
-        this.roundRect(pillX, pillY, pillW, pillH, 9); // 圆角9
+        this.roundRect(pillX, pillY, pillW, pillH, 6);
         this.ctx.fill();
 
         // 画小三角 (指向圆点)
         this.ctx.beginPath();
         this.ctx.moveTo(triangleX, pillY + pillH + 4); // 尖端
-        this.ctx.lineTo(triangleX - 3, pillY + pillH); // 左上
-        this.ctx.lineTo(triangleX + 3, pillY + pillH); // 右上
+        this.ctx.lineTo(triangleX - 4, pillY + pillH); // 左上
+        this.ctx.lineTo(triangleX + 4, pillY + pillH); // 右上
         this.ctx.fill();
 
-        // 画文字
+        // 画胶囊文字
         this.ctx.fillStyle = this.colors.primary;
         this.ctx.textAlign = 'left';
         this.ctx.textBaseline = 'top';
-        // 垂直居中修正
-        this.ctx.fillText(text, pillX + 8, pillY + 4);
+        this.ctx.fillText(text, pillX + 8, pillY + 3); // +8 是 padding-left
     });
   }
 
   // === 3. 撕裂线 ===
   private drawTearLine(x: number, y: number, w: number) {
     const height = 24;
-    const r = 8; // 缺口半径
+    const r = 10; // 缺口半径
 
     // 上半截：白色
     this.ctx.fillStyle = this.colors.white;
@@ -270,8 +272,10 @@ export class PosterPainter {
     this.ctx.fillRect(x, y + height/2, w, height/2);
 
     // 绘制左右缺口 (用背景色覆盖)
-    // 注意：如果有复杂背景图，这里最好用 globalCompositeOperation='destination-out'
-    // 但为了兼容性，我们暂时用背景色覆盖
+    // 这里要注意：如果背景是复杂的图，这种覆盖法会露馅。
+    // 但因为我们前面画了带透明的背景，这里最好是用 globalCompositeOperation = 'destination-out' 擦除，
+    // 不过小程序 Canvas 上下文不一定完全支持 complex 模式，且背景有图。
+    // 妥协方案：画一个和背景图近似颜色的圆，或者如果不追求透明背景，就画 colors.bg
     this.ctx.fillStyle = this.colors.bg; 
     
     // 左缺口
@@ -287,7 +291,7 @@ export class PosterPainter {
     // 中间虚线
     this.ctx.strokeStyle = this.colors.line;
     this.ctx.setLineDash([4, 4]);
-    this.ctx.lineWidth = 1;
+    this.ctx.lineWidth = 2; // 稍微粗一点
     this.ctx.beginPath();
     this.ctx.moveTo(x + r + 5, y + height/2);
     this.ctx.lineTo(x + w - r - 5, y + height/2);
@@ -303,60 +307,61 @@ export class PosterPainter {
     const centerX = x + w / 2;
     const recipeY = y + 20;
     
-    // 🔥 绘制大括号 (精细版)
-    const bracketW = w * 0.88; // 宽度
+    // 1. 绘制大括号 (模仿 CSS border 样式)
+    const bracketW = w * 0.9;
     const bx = x + (w - bracketW) / 2;
-    const bh = 110; // 高度
-    const br = 8;   // 圆角
+    const bh = 110; // 括号高度
+    const br = 6;   // 拐角半径
 
-    this.ctx.strokeStyle = '#D7CCC8';
-    this.ctx.lineWidth = 2.5;
+    this.ctx.strokeStyle = this.colors.line;
+    this.ctx.lineWidth = 2;
     this.ctx.lineCap = 'round';
 
     // 左括号 [
     this.ctx.beginPath();
-    this.ctx.moveTo(bx + 10, recipeY); 
+    this.ctx.moveTo(bx + 8, recipeY); 
     this.ctx.lineTo(bx + br, recipeY);
     this.ctx.arc(bx + br, recipeY + br, br, -Math.PI/2, -Math.PI, true);
     this.ctx.lineTo(bx, recipeY + bh - br);
-    this.ctx.arc(bx + br, recipeY + bh - br, br, -Math.PI, -Math.PI*1.5, true); 
-    this.ctx.lineTo(bx + 10, recipeY + bh);
+    this.ctx.arc(bx + br, recipeY + bh - br, br, -Math.PI, -Math.PI*1.5, true); // Math.PI/2
+    this.ctx.lineTo(bx + 8, recipeY + bh);
     this.ctx.stroke();
 
     // 右括号 ]
     const rx = bx + bracketW;
     this.ctx.beginPath();
-    this.ctx.moveTo(rx - 10, recipeY);
+    this.ctx.moveTo(rx - 8, recipeY);
     this.ctx.lineTo(rx - br, recipeY);
     this.ctx.arc(rx - br, recipeY + br, br, -Math.PI/2, 0, false);
     this.ctx.lineTo(rx, recipeY + bh - br);
     this.ctx.arc(rx - br, recipeY + bh - br, br, 0, Math.PI/2, false);
-    this.ctx.lineTo(rx - 10, recipeY + bh);
+    this.ctx.lineTo(rx - 8, recipeY + bh);
     this.ctx.stroke();
 
-    // 标题
+    // 2. 标题
     this.ctx.fillStyle = this.colors.secondary;
     this.ctx.font = 'bold 10px sans-serif';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText('✨ 你的专属灵魂配方 ✨', centerX, recipeY + 15);
+    this.ctx.fillText('✨ 你的专属灵魂配方 ✨', centerX, recipeY + 14);
 
-    // 贴纸
+    // 3. 贴纸
     this.drawStickers(centerX, recipeY + 55);
 
-    // 金句
+    // 4. 金句 (Quote)
     const quoteY = recipeY + 140;
     // 引号
     this.ctx.fillStyle = '#DDDDDD';
     this.ctx.font = 'bold 40px serif';
-    this.ctx.fillText('“', x + 30, quoteY - 5);
-    this.ctx.fillText('”', x + w - 30, quoteY + 25);
+    this.ctx.fillText('“', x + 40, quoteY - 10);
+    this.ctx.fillText('”', x + w - 40, quoteY + 20);
 
     // 文字
     this.ctx.fillStyle = '#62433A';
-    this.ctx.font = '13px serif';
-    this.drawWrappedText(this.ui.poster.summary || '', centerX, quoteY, w - 80, 22);
+    this.ctx.font = '13px serif'; // 楷体替代
+    // 增加行高
+    this.drawWrappedText(this.ui.poster.summary || '', centerX, quoteY, w - 100, 22);
 
-    // 签名
+    // 5. 签名
     const sigY = y + h - 30;
     this.ctx.textAlign = 'right';
     this.ctx.fillStyle = this.colors.textMain;
@@ -368,32 +373,34 @@ export class PosterPainter {
     this.ctx.fillText('Date: 2026.01.07', x + w - 30, sigY + 16);
   }
 
-  // === 贴纸绘制 (保持原逻辑，微调位置) ===
   private drawStickers(centerX: number, startY: number) {
     const stickers = this.stickers || [];
+    // 简单的排版逻辑：三个一行，或者根据宽度流式
+    // 这里为了还原 CSS flex-wrap center，我们手动计算每一行的宽度
     
     let currentLine: any[] = [];
     let currentW = 0;
-    const maxW = 240; 
+    const maxW = 260; 
     let lineY = startY;
     const lines = [];
 
-    // 分行逻辑
+    // 1. 分行逻辑
     stickers.forEach(s => {
-      const w = s.text.length * 12 + 24; 
+      const w = s.text.length * 12 + 24; // 估算宽度
       if (currentW + w > maxW) {
         lines.push({ items: currentLine, totalW: currentW });
         currentLine = [];
         currentW = 0;
       }
-      s._width = w; 
+      s._width = w; // 暂存宽度
       currentLine.push(s);
-      currentW += w + 12; 
+      currentW += w + 10; // gap
     });
     if (currentLine.length > 0) lines.push({ items: currentLine, totalW: currentW });
 
+    // 2. 绘制逻辑
     lines.forEach(line => {
-      let startX = centerX - (line.totalW - 12) / 2; 
+      let startX = centerX - (line.totalW - 10) / 2; // 居中起始点
       
       line.items.forEach((s: any) => {
         const itemX = startX + s._width / 2;
@@ -401,13 +408,13 @@ export class PosterPainter {
         
         this.ctx.save();
         this.ctx.translate(itemX, itemY);
-        // 随机角度
+        // 解析 randomStyle 里的 rotate，这里直接随机模拟
         const angle = (Math.random() * 6 - 3) * Math.PI / 180;
         this.ctx.rotate(angle);
 
         // 绘制贴纸矩形
         const hw = s._width / 2;
-        const hh = 12; 
+        const hh = 12; // height/2
         
         if (s.type === 'core') {
           this.ctx.fillStyle = '#2C2C2C';
@@ -418,12 +425,15 @@ export class PosterPainter {
           this.ctx.fillStyle = '#FFF9E6';
           this.roundRect(-hw, -hh, s._width, 24, 4);
           this.ctx.fill();
+          // 虚线边框
           this.ctx.strokeStyle = '#8D6E63';
           this.ctx.setLineDash([3, 2]);
+          this.ctx.lineWidth = 1;
           this.ctx.stroke();
           this.ctx.setLineDash([]);
           this.ctx.fillStyle = '#8D6E63';
         } else {
+          // trait
           this.ctx.fillStyle = '#FFFFFF';
           this.roundRect(-hw, -hh, s._width, 24, 4);
           this.ctx.fill();
@@ -439,7 +449,7 @@ export class PosterPainter {
 
         this.ctx.restore();
 
-        startX += s._width + 12;
+        startX += s._width + 10;
       });
 
       lineY += 36; // 行高
@@ -448,15 +458,18 @@ export class PosterPainter {
 
   // === 5. 锯齿底边 ===
   private drawZigzagBottom(x: number, y: number, w: number) {
+    // CSS 中 background-size: 40rpx 20rpx; -> 意味着一个完整的尖角宽 40rpx (20px)，高 20rpx (10px)
+    // 但是 CSS gradient 实际上是两个三角形拼的，这里我们画倒三角形
     const toothW = 20; 
     const toothH = 10;
     const count = Math.ceil(w / toothW);
 
-    this.ctx.fillStyle = this.colors.cardStub; 
+    this.ctx.fillStyle = this.colors.cardStub; // 和票根同色
     this.ctx.beginPath();
-    this.ctx.moveTo(x, y); 
+    this.ctx.moveTo(x, y); // 起点：票根左下角
 
     for (let i = 0; i < count; i++) {
+        // 画一个向下的尖角
         const thisX = x + i * toothW;
         this.ctx.lineTo(thisX + toothW / 2, y + toothH);
         this.ctx.lineTo(thisX + toothW, y);
@@ -470,7 +483,7 @@ export class PosterPainter {
     return new Promise((resolve, reject) => {
       wx.canvasToTempFilePath({
         canvasId: this.canvasId,
-        // 🔥 3倍超清导出
+        // 🔥 关键：乘以 3 倍像素，保证保存到相册高清
         destWidth: this.width * 3,
         destHeight: this.height * 3,
         fileType: 'png',
@@ -498,9 +511,14 @@ export class PosterPainter {
     const words = text.split('');
     let line = '';
     
+    // 如果没有内容，直接返回
     if (words.length === 0) return;
 
-    this.ctx.textAlign = 'center'; 
+    this.ctx.textAlign = 'center'; // 强制居中
+    // 稍微复杂的居中换行逻辑：先计算总行数，如果想完全模拟 flexbox 比较麻烦
+    // 这里简单处理：每行都居中画
+    
+    // 先分行
     const lines = [];
     for (let n = 0; n < words.length; n++) {
       const testLine = line + words[n];
@@ -514,6 +532,7 @@ export class PosterPainter {
     }
     lines.push(line);
 
+    // 绘制
     lines.forEach((l, i) => {
         this.ctx.fillText(l, x, y + i * lineHeight);
     });
