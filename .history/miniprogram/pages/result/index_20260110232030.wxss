@@ -407,7 +407,7 @@ background-repeat: repeat-x;}
 
 /* 状态 B: Focused (中心 + 放大) */
 .tarot-layer.focused {
-  transform: translate(-50%, -70%) scale(1) rotate(0deg) !important;
+  transform: translate(-50%, -60%) scale(1) rotate(0deg) !important;
   
   z-index: 2000 !important;
 }
