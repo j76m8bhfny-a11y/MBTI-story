@@ -417,8 +417,6 @@ background-repeat: repeat-x;}
   width: 680rpx; display: flex; justify-content: space-between; gap: 30rpx; 
   margin-top: 50rpx;
   opacity: 0; transition: opacity 0.5s;
-  position: relative;
-  z-index: 999;
 }
 .action-bar.visible { opacity: 1; }
 .btn-share, .btn-save { flex: 1; height: 96rpx; border-radius: 48rpx; display: flex; align-items: center; justify-content: center; font-size: 28rpx; font-weight: bold; }

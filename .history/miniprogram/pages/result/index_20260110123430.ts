@@ -77,23 +77,24 @@ Page({
   },
 
   async onSaveImage() {
-    console.log('✅ 点击了保存按钮'); // 添加日志，确认点击是否生效
+  // 1. 检查相册权限
+  try {
+    const setting = await wx.getSetting({});
+    if (setting.authSetting['scope.writePhotosAlbum'] === false) {
+      // 如果用户之前拒绝过，引导去设置页开启
+      return wx.showModal({
+        title: '需要权限',
+        content: '请在设置中允许保存图片到相册',
+        success: (res) => {
+          if (res.confirm) wx.openSetting();
+        }
+      });
+    }
+  } catch (e) { /* ignore */ }
 
-    // 1. 权限检查
-    try {
-      const setting = await wx.getSetting({});
-      if (setting.authSetting['scope.writePhotosAlbum'] === false) {
-        return wx.showModal({
-          title: '需要权限',
-          content: '请在设置中允许保存图片到相册',
-          success: (res) => { if (res.confirm) wx.openSetting(); }
-        });
-      }
-    } catch (e) { /* ignore */ }
+  wx.showLoading({ title: '正在绘制海报...', mask: true });
 
-    wx.showLoading({ title: '正在绘制海报...', mask: true });
-
-    try {
+  try {
       // 2. 实例化海报绘制器
       const painter = new PosterPainter({
         canvasId: 'shareCanvas',
@@ -101,33 +102,33 @@ Page({
         height: 667,
         ui: this.data.ui,
         stickers: this.data.stickers,
-        context: this // 🔥 必须传入当前页面实例
+        context: this // 🔥 新增：传入当前页面实例
       });
-
-      // 3. 开始绘制
       await painter.drawPoster();
-
-      // 🔥🔥🔥 之前你漏掉了下面这一大段代码 🔥🔥🔥
-      
-      // 4. 导出为临时图片路径
+      // 🔥🔥🔥【补全这里缺少的代码】🔥🔥🔥
+      // 4. 导出为图片路径
       const tempFilePath = await painter.exportToImage();
-      console.log('✅ 海报导出成功:', tempFilePath);
-      
-      // 5. 保存到系统相册
+    
+      // 5. 保存到手机相册
       await wx.saveImageToPhotosAlbum({
         filePath: tempFilePath
       });
 
       // 6. 成功提示
       wx.hideLoading();
-      wx.showToast({ title: '已保存到相册', icon: 'success' });
+      wx.showToast({ title: '已保存到相册', icon: 'success' }); 
       
-    } catch (err) {
-      console.error('❌ 保存海报失败:', err);
-      wx.hideLoading();
-      wx.showToast({ title: '保存失败，请重试', icon: 'none' });
+  }catch (err) {
+    console.error('保存海报失败:', err);
+    wx.hideLoading();
+    // 区分错误类型提示
+    if (err && (err as any).errMsg && (err as any).errMsg.includes('auth')) {
+       wx.showToast({ title: '保存需要相册权限', icon: 'none' });
+    } else {
+       wx.showToast({ title: '保存失败，请重试', icon: 'none' });
     }
-  },
+  }
+},
 
   // 选择头像并保存结果
   

@@ -92,7 +92,7 @@
       <view class="face back">
         <image 
           class="card-back-img" 
-          src="cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833/images/subPackages/card_back.jpg" 
+          src="/images/card_back.jpg" 
           mode="aspectFill"
         ></image>
       </view>
@@ -108,7 +108,4 @@
     
     <view class="btn-save" bindtap="onSaveImage">保存纪念卡片</view>
   </view>
-</view><canvas 
-  canvas-id="shareCanvas" 
-  style="width: 750rpx; height: 1334rpx; position: fixed; left: 9999px; top: 0;"
-></canvas>
+</view><canvas canvas-id="shareCanvas" style="width: 750rpx; height: 1334rpx; position: fixed; left: 9999px; top: 0;"></canvas>

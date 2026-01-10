@@ -10,7 +10,7 @@
     <image class="obj-item obj-gamepad float-delay-1" src="cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833/images/home/gamepad.png" mode="widthFix" />
     <image class="obj-item obj-letter float-delay-2" src="cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833/images/home/letter.png" mode="widthFix" />
     <image class="obj-item obj-coffee float-delay-3" src="cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833/images/home/coffee.png" mode="widthFix" />
-    <image class="obj-item obj-main float-delay-0" src="cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833/images/home/cat1.png" mode="widthFix" />
+    <image class="obj-item obj-main float-delay-0" src="cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833/images/home/cat.png" mode="widthFix" />
   </view>
 
   <view class="title-area">

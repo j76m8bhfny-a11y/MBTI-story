@@ -48,9 +48,9 @@ Page({
 
   startCeremony() {
     // 1. 翻牌 (1.2s)
-    setTimeout(() => { this.setData({ isFlipped: true }); }, 1200);
+    setTimeout(() => { this.setData({ isFlipped: true }); }, 2000);
     // 2. 归位 (3.0s)
-    setTimeout(() => { this.setData({ animStage: 'docked' }); }, 2400);
+    setTimeout(() => { this.setData({ animStage: 'docked' }); }, 3600);
   },
   async autoArchiveToCloud() {
     const { rawResult } = this.data;
@@ -77,57 +77,52 @@ Page({
   },
 
   async onSaveImage() {
-    console.log('✅ 点击了保存按钮'); // 添加日志，确认点击是否生效
-
-    // 1. 权限检查
-    try {
-      const setting = await wx.getSetting({});
-      if (setting.authSetting['scope.writePhotosAlbum'] === false) {
-        return wx.showModal({
-          title: '需要权限',
-          content: '请在设置中允许保存图片到相册',
-          success: (res) => { if (res.confirm) wx.openSetting(); }
-        });
-      }
-    } catch (e) { /* ignore */ }
-
-    wx.showLoading({ title: '正在绘制海报...', mask: true });
-
-    try {
-      // 2. 实例化海报绘制器
-      const painter = new PosterPainter({
-        canvasId: 'shareCanvas',
-        width: 375,
-        height: 667,
-        ui: this.data.ui,
-        stickers: this.data.stickers,
-        context: this // 🔥 必须传入当前页面实例
+  // 1. 检查相册权限
+  try {
+    const setting = await wx.getSetting({});
+    if (setting.authSetting['scope.writePhotosAlbum'] === false) {
+      // 如果用户之前拒绝过，引导去设置页开启
+      return wx.showModal({
+        title: '需要权限',
+        content: '请在设置中允许保存图片到相册',
+        success: (res) => {
+          if (res.confirm) wx.openSetting();
+        }
       });
-
-      // 3. 开始绘制
-      await painter.drawPoster();
-
-      // 🔥🔥🔥 之前你漏掉了下面这一大段代码 🔥🔥🔥
-      
-      // 4. 导出为临时图片路径
-      const tempFilePath = await painter.exportToImage();
-      console.log('✅ 海报导出成功:', tempFilePath);
-      
-      // 5. 保存到系统相册
-      await wx.saveImageToPhotosAlbum({
-        filePath: tempFilePath
-      });
-
-      // 6. 成功提示
-      wx.hideLoading();
-      wx.showToast({ title: '已保存到相册', icon: 'success' });
-      
-    } catch (err) {
-      console.error('❌ 保存海报失败:', err);
-      wx.hideLoading();
-      wx.showToast({ title: '保存失败，请重试', icon: 'none' });
     }
-  },
+  } catch (e) { /* ignore */ }
+
+  wx.showLoading({ title: '正在绘制海报...', mask: true });
+
+  try {
+    // 2. 实例化海报绘制器
+    // 注意：这里传入了当前的 ui 数据和 stickers
+    const painter = new PosterPainter({
+      canvasId: 'shareCanvas',
+      width: 375, // Canvas 宽度（逻辑像素）
+      height: 667, // Canvas 高度
+      ui: this.data.ui,
+      stickers: this.data.stickers
+    });
+
+    // 3. 开始绘制
+    await painter.drawPoster();
+
+    // 4. 导出为临时图片路径
+    const tempFilePath = await painter.exportToImage();
+
+    // 5. 保存到相册
+    await wx.saveImageToPhotosAlbum({ filePath: tempFilePath });
+
+    wx.hideLoading();
+    wx.showToast({ title: '已保存到相册', icon: 'success' });
+
+  } catch (err) {
+    console.error('保存海报失败:', err);
+    wx.hideLoading();
+    wx.showToast({ title: '保存失败，请重试', icon: 'none' });
+  }
+},
 
   // 选择头像并保存结果
   

@@ -1,4 +1,5 @@
 import { decodeSharePayload, SharePayload } from '../../utils/payload-helper';
+import { PosterPainter } from '../../utils/poster-painter';
 
 Page({
   data: {

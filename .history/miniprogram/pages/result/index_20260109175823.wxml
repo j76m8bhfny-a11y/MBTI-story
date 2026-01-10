@@ -79,10 +79,6 @@
   </view>
 
   <view class="tarot-layer {{animStage === 'docked' ? 'fly-mode' : ''}}">
-    <view class="magic-particles" wx:if="{{isFlipped}}">
-      <view class="particle" wx:for="{{[1,2,3,4,5,6,7,8,9,10,11,12]}}" wx:key="*this"></view>
-    </view>
-    
     <view class="flipper {{isFlipped ? 'flipped' : ''}}">
       <view class="face front">
         <image class="tarot-img" src="{{ui.poster.bg_image}}" mode="aspectFill"></image>
@@ -92,12 +88,11 @@
       <view class="face back">
         <image 
           class="card-back-img" 
-          src="cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833/images/subPackages/card_back.jpg" 
+          src="/images/card_back.jpg" 
           mode="aspectFill"
         ></image>
       </view>
     </view>
-
     <view class="magic-particles" wx:if="{{isFlipped}}">
       <view class="particle" wx:for="{{[1,2,3,4,5,6,7,8,9,10,11,12]}}" wx:key="*this"></view>
     </view>
@@ -108,7 +103,5 @@
     
     <view class="btn-save" bindtap="onSaveImage">保存纪念卡片</view>
   </view>
-</view><canvas 
-  canvas-id="shareCanvas" 
-  style="width: 750rpx; height: 1334rpx; position: fixed; left: 9999px; top: 0;"
-></canvas>
+  <canvas canvas-id="shareCanvas" style="width: 750rpx; height: 1334rpx; position: fixed; left: 9999px; top: 0;"></canvas>
+</view>
