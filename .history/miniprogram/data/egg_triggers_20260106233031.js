@@ -63,7 +63,7 @@ module.exports = [
     "q_id": 40,
     "opt_idx": 0,
     "tag_key": "money_machine",
-    "desc": "Q40 高薪挖角 -> 立马跳槽 (马上跳槽)"
+    "desc": "Q40 高薪挖角 -> 立马跳槽 (莫得感情的杀手)"
   },
   {
     "q_id": 42,

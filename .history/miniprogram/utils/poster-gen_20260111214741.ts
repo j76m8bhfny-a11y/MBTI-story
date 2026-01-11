@@ -186,7 +186,7 @@ export const drawPoster = async (canvas: any, ctx: any, data: any, ui: any) => {
   ctx.fillStyle = '#FFFFFF';
   ctx.fillRect(cardX, cursorY, cardW, trendsH);
 
-  let trendY = cursorY + rpx(60);
+  let trendY = cursorY + rpx(70);
   (ui.trends || []).forEach((item: any) => {
     const rowY = trendY + rpx(35);
     const barW = cardW - rpx(180);
@@ -437,12 +437,10 @@ export const drawPoster = async (canvas: any, ctx: any, data: any, ui: any) => {
   ctx.fillRect(qrX + rpx(10), qrTop + rpx(10), qrSize - rpx(20), qrSize - rpx(20));
 
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = '#333'; 
-  ctx.font = `italic ${rpx(28)}px "Xingkai SC", "STKaiti", "KaiTi", "Kaiti SC", serif`;
-  ctx.fillText('Signature: 另一个世界的你', qrX + qrSize + rpx(30), qrTop + rpx(50));
+  ctx.fillStyle = '#333'; ctx.font = `italic ${rpx(28)}px serif`;
+  ctx.fillText('Signature: @LifeMBTI', qrX + qrSize + rpx(30), qrTop + rpx(50));
   
-  ctx.fillStyle = '#999'; 
-  ctx.font = `italic ${rpx(22)}px "Xingkai SC", "STKaiti", "KaiTi", "Kaiti SC", serif`;
+  ctx.fillStyle = '#999'; ctx.font = `${rpx(22)}px sans-serif`;
   ctx.fillText(`Date: 2026.01.07`, qrX + qrSize + rpx(30), qrTop + rpx(90));
 
   return true;

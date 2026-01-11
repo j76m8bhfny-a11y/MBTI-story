@@ -335,16 +335,10 @@ background-repeat: repeat-x;}
 .signature-box { text-align: right; border-top: 1px solid #EAEAEA; padding-top: 20rpx; width: 100%; }
 .sig-name { 
   font-family: "Xingkai SC", "STKaiti", "KaiTi", "Kaiti SC", serif; 
-  font-style: italic;
-  font-size: 24rpx; 
+  font-size: 26rpx; 
   color: #333; 
   display: block; }
-.sig-date { 
-  font-size: 20rpx; 
-  color: #999; 
-  letter-spacing: 2rpx; 
-  display: block; 
-  margin-top: 6rpx;}
+.sig-date { font-size: 20rpx; color: #999; letter-spacing: 2rpx; display: block; margin-top: 6rpx;}
 
 /* 底部锯齿 */
 .zigzag-bottom {

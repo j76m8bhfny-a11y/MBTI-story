@@ -4,13 +4,14 @@ Page({
   data: {
     userCode: 'Loading...',
     dateStr: '',
-    images: app.globalData.preloadImages || {}
+    images: {} as Record<string, string> // 新增 images 对象
   },
   onLoad() {
     this.generateDate();
-    
-    // 2. 获取真实用户数量
     this.fetchRealUserCount();
+    this.setData({
+      images: app.globalData.preloadImages
+    });
   },
   generateDate() {
     const now: Date = new Date();

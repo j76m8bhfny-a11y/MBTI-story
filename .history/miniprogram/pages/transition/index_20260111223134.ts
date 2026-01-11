@@ -69,7 +69,7 @@ Page({
     // 留出 500ms 进场 + 2500ms 阅读 + 500ms 出场
     this.timer = setTimeout(() => {
       this.skipTransition();
-    }, 1600);
+    }, 2000);
   },
 
   // 点击屏幕立即跳过

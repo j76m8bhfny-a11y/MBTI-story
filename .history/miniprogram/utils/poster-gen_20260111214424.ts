@@ -181,12 +181,12 @@ export const drawPoster = async (canvas: any, ctx: any, data: any, ui: any) => {
   // --- [B] 动态趋势区 ---
   const trendsCount = (ui.trends || []).length;
   const trendRowH = rpx(70);
-  const trendsH = rpx(80) + (trendsCount * trendRowH) + rpx(20);
+  const trendsH = rpx(40) + (trendsCount * trendRowH) + rpx(20);
 
   ctx.fillStyle = '#FFFFFF';
   ctx.fillRect(cardX, cursorY, cardW, trendsH);
 
-  let trendY = cursorY + rpx(60);
+  let trendY = cursorY + rpx(20);
   (ui.trends || []).forEach((item: any) => {
     const rowY = trendY + rpx(35);
     const barW = cardW - rpx(180);
@@ -272,111 +272,45 @@ export const drawPoster = async (canvas: any, ctx: any, data: any, ui: any) => {
 
   // --- [D] 票根区域 ---
   const stubY = cursorY;
-  
-  // 1. 预先计算动态内容高度，以便先画背景
-  //    (我们需要先知道 textHeight 才能确定 cardBottomY)
-  const contentWidth = cardW - rpx(140);
-  const summaryText = ui.poster.summary || '';
-  
-  // 模拟计算文字高度 (不绘制)
-  let textLines = 0;
-  if (summaryText) {
-    const chars = summaryText.split('');
-    let line = '';
-    let currLineCount = 1;
-    for (let n = 0; n < chars.length; n++) {
-      const testLine = line + chars[n];
-      if (ctx.measureText(testLine).width > contentWidth && n > 0) {
-        line = chars[n];
-        currLineCount++;
-      } else {
-        line = testLine;
-      }
-    }
-    textLines = currLineCount;
-  }
-  const lineHeight = rpx(42);
-  const textSectionHeight = textLines * lineHeight;
+  // 先画一个足够长的底，最后裁切
+  ctx.fillStyle = '#EFEBE4';
+  //ctx.fillRect(cardX, stubY, cardW, rpx(600)); 
 
-  // 2. 计算各部分布局坐标
-  const titleTop = stubY + rpx(40);
-  const bracketTop = titleTop + rpx(24) + rpx(40); // 标题高+间距
-  const bracketH = rpx(100);
-  const quoteTop = bracketTop + bracketH + rpx(60);
-  const textTop = quoteTop + rpx(30);
-  const qrTop = textTop + textSectionHeight + rpx(80); // 这里的 80 是文字和二维码的间距
-  const qrSize = rpx(120);
-  
-  // 🔥 计算最终底部坐标
-  const cardBottomY = qrTop + qrSize + rpx(50);
+  let stubCursorY = stubY + rpx(40);
 
-  // =============================================
-  // 🎨 先画票根背景 (带锯齿 + 阴影)
-  // =============================================
-  ctx.save();
-  ctx.fillStyle = '#EFEBE4'; // 票根米色
-  // 设置阴影
-  ctx.shadowColor = 'rgba(106, 76, 156, 0.15)'; 
-  ctx.shadowBlur = rpx(40);
-  ctx.shadowOffsetY = rpx(10);
-
-  const toothW = rpx(20); 
-  const toothH = rpx(15);
-  const teethCount = Math.ceil(cardW / toothW);
-
-  ctx.beginPath();
-  ctx.moveTo(cardX, stubY); // A. 左上
-  ctx.lineTo(cardX + cardW, stubY); // B. 右上
-  ctx.lineTo(cardX + cardW, cardBottomY); // C. 右下
-
-  // D. 底部锯齿 (从右向左)
-  for (let i = 0; i < teethCount; i++) {
-    const segmentRightX = cardX + cardW - i * toothW;
-    ctx.lineTo(segmentRightX - toothW / 2, cardBottomY - toothH); 
-    ctx.lineTo(segmentRightX - toothW, cardBottomY); 
-  }
-
-  ctx.lineTo(cardX, stubY); // E. 回到左上
-  ctx.closePath();
-  ctx.fill();
-  ctx.restore(); // 恢复无阴影状态
-
-  // =============================================
-  // ✍️ 再画内容 (现在画在米色背景之上了)
-  // =============================================
-  
-  // 1. 灵魂配方标题
+  // 1. 灵魂配方贴纸
   ctx.fillStyle = '#8D6E63'; ctx.font = `bold ${rpx(24)}px sans-serif`; ctx.textAlign = 'center';
-  ctx.fillText('✨ 你的专属灵魂配方 ✨', cardX + cardW/2, titleTop);
+  ctx.fillText('✨ 你的专属灵魂配方 ✨', cardX + cardW/2, stubCursorY);
   
-  // 2. 绘制大括号 (Bracket)
+  stubCursorY += rpx(60);
+  const bracketTop = stubCursorY;
+  const bracketH = rpx(100); // 括号高度
   const bracketBottom = bracketTop + bracketH;
   const bracketLeft = cardX + rpx(40);
   const bracketRight = cardX + cardW - rpx(40);
-  const hook = rpx(15); 
+  const hook = rpx(15); // 钩的长度
 
   ctx.beginPath();
   ctx.strokeStyle = '#D7CCC8'; 
   ctx.lineWidth = rpx(3);
   ctx.lineCap = 'round';
   
-  // 左括号
+  // 左括号 [
   ctx.moveTo(bracketLeft + hook, bracketTop);
   ctx.lineTo(bracketLeft, bracketTop);
   ctx.lineTo(bracketLeft, bracketBottom);
   ctx.lineTo(bracketLeft + hook, bracketBottom);
   
-  // 右括号
+  // 右括号 ]
   ctx.moveTo(bracketRight - hook, bracketTop);
   ctx.lineTo(bracketRight, bracketTop);
   ctx.lineTo(bracketRight, bracketBottom);
   ctx.lineTo(bracketRight - hook, bracketBottom);
   ctx.stroke();
 
-  // 3. 绘制贴纸
   const stickers = data.stickers || [];
   let stickerCenterY = bracketTop + bracketH / 2;
-  
+  // 简单计算总宽度以居中
   ctx.font = `bold ${rpx(26)}px sans-serif`;
   let totalW = 0;
   const stickerData = stickers.slice(0, 3).map((item: any) => {
@@ -384,13 +318,14 @@ export const drawPoster = async (canvas: any, ctx: any, data: any, ui: any) => {
     totalW += w + rpx(20);
     return { ...item, w };
   });
-  totalW -= rpx(20); 
+  totalW -= rpx(20); // 减去最后一个间距
 
   let currentStickerX = cardX + (cardW - totalW) / 2;
 
   stickerData.forEach((item: any) => {
     ctx.save();
     ctx.fillStyle = item.type === 'core' ? '#333' : '#FFF';
+    // 垂直居中画
     drawRoundRectPath(ctx, currentStickerX, stickerCenterY - rpx(25), item.w, rpx(50), rpx(8));
     ctx.fill();
     ctx.lineWidth = 1; ctx.strokeStyle = '#333'; ctx.stroke();
@@ -403,47 +338,94 @@ export const drawPoster = async (canvas: any, ctx: any, data: any, ui: any) => {
     currentStickerX += item.w + rpx(20);
   });
 
-  // 4. 绘制金句大引号
+  stubCursorY = bracketBottom + rpx(60);
+
+  // 🔥 [调整点 3] 绘制金句大引号 (Quotes) 🔥
   const quoteSize = rpx(80);
   ctx.font = `bold ${quoteSize}px serif`;
-  ctx.fillStyle = '#D7CCC8'; 
+  ctx.fillStyle = '#D7CCC8'; // 浅色引用符号
   ctx.textAlign = 'left'; 
   ctx.textBaseline = 'top';
   
   // 左引号
-  ctx.fillText('“', cardX + rpx(40), quoteTop);
+  ctx.fillText('“', cardX + rpx(40), stubCursorY);
 
-  // 文字内容
+  // 文字内容 (稍微缩进)
   ctx.fillStyle = '#5D4037'; 
-  ctx.font = `${rpx(28)}px "Kaiti", "STKaiti", serif`;
-  // 这里直接画，因为高度已经算好了
-  drawWrappedText(ctx, summaryText, cardX + rpx(80), textTop, contentWidth, lineHeight);
+  ctx.font = `${rpx(28)}px "Kaiti", "STKaiti", serif`; // 尽量用衬线或楷体
+  const textH = drawWrappedText(ctx, ui.poster.summary || '', cardX + rpx(80), stubCursorY + rpx(30), cardW - rpx(140), rpx(42));
   
-  // 右引号
+  // 右引号 (在文字结束位置下方)
   ctx.fillStyle = '#D7CCC8'; 
   ctx.font = `bold ${quoteSize}px serif`;
-  // 计算一下右引号位置：根据文字实际高度
-  const actualTextBottom = textTop + textSectionHeight;
-  ctx.fillText('”', cardX + cardW - rpx(100), actualTextBottom + rpx(10));
+  ctx.fillText('”', cardX + cardW - rpx(100), textH + rpx(10));
 
-  // 5. 底部二维码与签名
-  const qrX = cardX + rpx(50);
+  stubCursorY = textH + rpx(40);
+
+  // 3. 底部二维码与签名
+  const qrSize = rpx(120);
+  const qrX = cardX + rpx(40);
   
+  // 二维码框
   ctx.fillStyle = '#FFF'; ctx.strokeStyle = '#D7CCC8';
-  drawRoundRectPath(ctx, qrX, qrTop, qrSize, qrSize, rpx(8));
+  drawRoundRectPath(ctx, qrX, stubCursorY, qrSize, qrSize, rpx(8));
   ctx.fill(); ctx.stroke();
   
-  ctx.fillStyle = '#6A4C9C'; 
-  ctx.fillRect(qrX + rpx(10), qrTop + rpx(10), qrSize - rpx(20), qrSize - rpx(20));
+  // 模拟二维码
+  ctx.fillStyle = '#6A4C9C'; ctx.fillRect(qrX + rpx(10), stubCursorY + rpx(10), qrSize - rpx(20), qrSize - rpx(20));
 
-  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = '#333'; 
-  ctx.font = `italic ${rpx(28)}px "Xingkai SC", "STKaiti", "KaiTi", "Kaiti SC", serif`;
-  ctx.fillText('Signature: 另一个世界的你', qrX + qrSize + rpx(30), qrTop + rpx(50));
+  // 签名
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#333'; ctx.font = `italic ${rpx(28)}px serif`;
+  ctx.fillText('Signature: 另一个世界的你', qrX + qrSize + rpx(30), stubCursorY + rpx(40));
   
-  ctx.fillStyle = '#999'; 
-  ctx.font = `italic ${rpx(22)}px "Xingkai SC", "STKaiti", "KaiTi", "Kaiti SC", serif`;
-  ctx.fillText(`Date: 2026.01.07`, qrX + qrSize + rpx(30), qrTop + rpx(90));
+  ctx.fillStyle = '#999'; ctx.font = `${rpx(22)}px sans-serif`;
+  ctx.fillText('长按识别解锁你的命运', qrX + qrSize + rpx(30), stubCursorY + rpx(80));
+
+  const cardBottomY = stubCursorY + qrSize + rpx(40);
+
+  // --- [E] 底部锯齿 ---
+  // --- [E] 底部锯齿 (终极路径绘制法) ---
+  
+  // 1. 设置绘制模式：destination-over (画在现有文字/二维码的下面)
+  ctx.save();
+  ctx.globalCompositeOperation = 'destination-over'; 
+  
+  // 2. 设置票根颜色 & 阴影
+  ctx.fillStyle = '#EFEBE4'; // 票根的米色
+  // 补回阴影，让票根有悬浮感
+  ctx.shadowColor = 'rgba(106, 76, 156, 0.15)'; 
+  ctx.shadowBlur = rpx(40);
+  ctx.shadowOffsetY = rpx(10);
+
+  // 3. 开始绘制带锯齿的矩形路径
+  const toothW = rpx(20); 
+  const toothH = rpx(15);
+  const teethCount = Math.ceil(cardW / toothW);
+
+  ctx.beginPath();
+  ctx.moveTo(cardX, stubY); // A. 左上角起点
+  ctx.lineTo(cardX + cardW, stubY); // B. 右上角
+  ctx.lineTo(cardX + cardW, cardBottomY); // C. 右下角（锯齿开始处）
+
+  // D. 底部锯齿循环 (从右向左画)
+  for (let i = 0; i < teethCount; i++) {
+    // 当前锯齿段的右侧 X 坐标
+    const segmentRightX = cardX + cardW - i * toothW;
+    
+    // 关键逻辑：
+    // 1. 先往左走一半，同时往上凹 (y - toothH)
+    ctx.lineTo(segmentRightX - toothW / 2, cardBottomY - toothH); 
+    // 2. 再往左走一半，回到基准线 (y)
+    ctx.lineTo(segmentRightX - toothW, cardBottomY); 
+  }
+
+  ctx.lineTo(cardX, stubY); // E. 回到左上角闭合
+  ctx.closePath();
+  
+  // 4. 填充 (同时产生阴影)
+  ctx.fill();
+  ctx.restore();
 
   return true;
 };
