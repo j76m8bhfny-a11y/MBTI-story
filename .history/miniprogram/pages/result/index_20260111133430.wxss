@@ -736,10 +736,11 @@ background-repeat: repeat-x;}
 
 /* 1. 隐藏 Canvas (不能用 display:none，否则画不出来) */
 .poster-canvas {
-  width: 750rpx;
-  height: 2000rpx; /* 🔥 必须足够大以容纳 塔罗牌+卡片 */
   position: fixed;
-  left: 9999px;
+  left: 9999px; /* 移出屏幕 */
+  top: 0;
+  width: 750rpx; /* 设定宽度，建议与设计稿一致 */
+  height: 1334rpx; /* 设定一个足够的高度 */
   z-index: -1;
 }
 
@@ -778,17 +779,19 @@ background-repeat: repeat-x;}
 
 .image-wrapper {
   width: 100%;
-  flex: 1; /* 关键：让它占满 modal-content 除去按钮外的所有剩余空间 */
-  overflow: hidden; /* 防止圆角溢出 */
+  flex: 1;
+  overflow: hidden;
   border-radius: 20rpx;
-  background-color: #f5f5f5; /* 加个底色，防止图片加载慢时是空的 */
-  margin-bottom: 20rpx; /* 和下方按钮保持距离 */
+  box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .poster-preview {
   width: 100%;
   height: auto;
-  display: block; /* 消除图片底部的微小缝隙 */
+  border-radius: 20rpx;
 }
 
 .modal-actions {

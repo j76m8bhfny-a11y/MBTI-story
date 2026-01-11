@@ -736,10 +736,11 @@ background-repeat: repeat-x;}
 
 /* 1. 隐藏 Canvas (不能用 display:none，否则画不出来) */
 .poster-canvas {
-  width: 750rpx;
-  height: 2000rpx; /* 🔥 必须足够大以容纳 塔罗牌+卡片 */
   position: fixed;
-  left: 9999px;
+  left: 9999px; /* 移出屏幕 */
+  top: 0;
+  width: 750rpx; /* 设定宽度，建议与设计稿一致 */
+  height: 1800rpx; /* 设定一个足够的高度 */
   z-index: -1;
 }
 
@@ -788,7 +789,7 @@ background-repeat: repeat-x;}
 .poster-preview {
   width: 100%;
   height: auto;
-  display: block; /* 消除图片底部的微小缝隙 */
+  border-radius: 20rpx;
 }
 
 .modal-actions {

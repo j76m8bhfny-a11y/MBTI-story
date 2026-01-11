@@ -143,27 +143,32 @@ Page({
       // 1. 获取当前 MBTI 类型 (转小写，如 intp)
       // 注意：请确保你的 ui 数据里有 type 字段，如果没有，从 rawResult 获取
       const mbtiType = (this.data.ui?.poster?.type || this.data.rawResult?.mbti_result || 'intp').toLowerCase();
-      console.log('当前 MBTI 类型:', mbtiType); // 调试：看看是不是 "t"
 
-      const CLOUD_ROOT = 'cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833/images/subPackages/';
-      const tarotCloudId = `${CLOUD_ROOT}bg_${mbtiType}.jpg`;
-
-      console.log('准备加载资源:', { tarotCloudId });
+      // 2. 拼接云存储路径 (请替换为你自己的云环境 ID 前缀)
+      // ⚠️ 注意：这里必须是你真实的云存储路径前缀
+      const CLOUD_BASE = 'cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833'; 
       
-      const localTarotPath = await ensureLocalImage(tarotCloudId);
-      if (!localTarotPath) {
-        throw new Error(`云图片下载失败: ${tarotCloudId}`);
-      }
+      // 动态构造背景图和塔罗牌路径
+      // 假设你的云存储里有 images/subPackages/bg_intp.jpg 和 images/subPackages/intp.jpg
+      const bgCloudId = `${CLOUD_BASE}/images/subPackages/bg_${mbtiType}.png`; 
+      const tarotCloudId = `${CLOUD_BASE}/images/subPackages/${mbtiType}.jpg`; // 假设塔罗牌是 jpg
 
-      // 检查下载结果，防止空路径导致 Canvas 报错
-      // 3. 获取 Canvas 节点
+      console.log('准备下载图片:', { bgCloudId, tarotCloudId });
+
+      // 3. 🔥 关键：并行下载图片到本地
+      const [localBg, localTarot] = await Promise.all([
+        ensureLocalImage(bgCloudId),
+        ensureLocalImage(tarotCloudId)
+      ]);
+
+      // --- 第二步：获取 Canvas 并绘制 ---
+      
       const query = wx.createSelectorQuery();
       query.select('#posterCanvas')
         .fields({ node: true, size: true })
         .exec(async (res) => {
           if (!res[0]) {
             wx.hideLoading();
-            console.error('Canvas 节点未找到');
             return;
           }
 
@@ -175,31 +180,28 @@ Page({
           canvas.height = res[0].height * dpr;
           ctx.scale(dpr, dpr);
 
-          ctx.fillStyle = '#FFFDF9'; 
-          ctx.fillRect(0, 0, res[0].width, res[0].height);
-
-          // 4. 构造绘图数据
+          // 构造绘图数据
           const drawData = {
             stickers: this.data.stickers,
             tarot: {
-              // 如果下载成功用下载的图，失败了用默认图或空
-              image: localTarotPath || '/assets/images/default_cover.png', 
+              image: localTarot, // ✅ 传入下载好的本地路径
               name: this.data.ui?.poster?.title || '命运之牌'
             }
           };
 
+          // 构造 UI 数据 (替换背景图为本地路径)
           const uiData = {
             ...this.data.ui,
             poster: {
               ...this.data.ui?.poster,
-              bg_image: '' // 传入本地背景图路径
+              bg_image: localBg // ✅ 传入下载好的本地路径
             }
           };
 
-          // 5. 执行绘制
+          // 执行绘制
           await drawPoster(canvas, ctx, drawData, uiData);
 
-          // 6. 导出图片
+          // 导出图片
           wx.canvasToTempFilePath({
             canvas,
             x: 0, y: 0,
@@ -215,9 +217,9 @@ Page({
               wx.hideLoading();
             },
             fail: (err) => {
-              console.error('导出失败', err);
+              console.error('导出图片失败', err);
               wx.hideLoading();
-              wx.showToast({ title: '保存失败', icon: 'none' });
+              wx.showToast({ title: '生成失败', icon: 'none' });
             }
           });
         });

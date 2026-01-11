@@ -146,17 +146,11 @@
   <view class="share-modal {{showShareModal ? 'show' : ''}}" catchtouchmove="preventBubble">
     <view class="modal-mask" bindtap="closeShareModal"></view>
     <view class="modal-content">
-      <scroll-view scroll-y class="image-wrapper" show-scrollbar="{{true}}">
-        <image 
-          src="{{shareImage}}" 
-          mode="widthFix" 
-          class="poster-preview" 
-          show-menu-by-longpress
-        ></image>
-      </scroll-view>
-
+      <view class="image-wrapper">
+        <image src="{{shareImage}}" mode="widthFix" class="poster-preview" show-menu-by-longpress></image>
+      </view>
       <view class="modal-actions">
-        <button class="save-btn" bindtap="onSaveImage">长按保存图片</button>
+        <button class="save-btn" bindtap="onSaveImage">保存图片发朋友圈</button>
         <view class="close-text" bindtap="closeShareModal">关闭</view>
       </view>
     </view>

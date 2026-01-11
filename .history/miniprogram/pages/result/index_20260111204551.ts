@@ -143,17 +143,13 @@ Page({
       // 1. 获取当前 MBTI 类型 (转小写，如 intp)
       // 注意：请确保你的 ui 数据里有 type 字段，如果没有，从 rawResult 获取
       const mbtiType = (this.data.ui?.poster?.type || this.data.rawResult?.mbti_result || 'intp').toLowerCase();
-      console.log('当前 MBTI 类型:', mbtiType); // 调试：看看是不是 "t"
 
       const CLOUD_ROOT = 'cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833/images/subPackages/';
       const tarotCloudId = `${CLOUD_ROOT}bg_${mbtiType}.jpg`;
 
       console.log('准备加载资源:', { tarotCloudId });
-      
-      const localTarotPath = await ensureLocalImage(tarotCloudId);
-      if (!localTarotPath) {
-        throw new Error(`云图片下载失败: ${tarotCloudId}`);
-      }
+      // 2. 并行准备资源
+      const [finalBgPath, localTarotPath] = await ensureLocalImage(tarotCloudId);
 
       // 检查下载结果，防止空路径导致 Canvas 报错
       // 3. 获取 Canvas 节点

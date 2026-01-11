@@ -150,10 +150,7 @@ Page({
 
       console.log('准备加载资源:', { tarotCloudId });
       
-      const localTarotPath = await ensureLocalImage(tarotCloudId);
-      if (!localTarotPath) {
-        throw new Error(`云图片下载失败: ${tarotCloudId}`);
-      }
+      const [localTarotPath] = await ensureLocalImage(tarotCloudId);
 
       // 检查下载结果，防止空路径导致 Canvas 报错
       // 3. 获取 Canvas 节点

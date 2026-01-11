@@ -737,7 +737,7 @@ background-repeat: repeat-x;}
 /* 1. 隐藏 Canvas (不能用 display:none，否则画不出来) */
 .poster-canvas {
   width: 750rpx;
-  height: 2000rpx; /* 🔥 必须足够大以容纳 塔罗牌+卡片 */
+  height: 2400rpx; /* 🔥 必须足够大以容纳 塔罗牌+卡片 */
   position: fixed;
   left: 9999px;
   z-index: -1;

@@ -2,34 +2,6 @@ const Renderer = require('../../libs/ResultRenderer.js');
 import { PosterPainter } from '../../utils/poster-painter';
 import { drawPoster } from '../../utils/poster-gen';
 
-const ensureLocalImage = async (src: string) => {
-  if (!src) return '';
-  
-  // 情况 A: 如果是云存储文件 ID (cloud://...)
-  if (src.startsWith('cloud://')) {
-    try {
-      const res = await wx.cloud.downloadFile({ fileID: src });
-      return res.tempFilePath; // 返回下载后的本地路径
-    } catch (e) {
-      console.error('云文件下载失败', src, e);
-      return ''; // 失败返回空，防止卡死
-    }
-  }
-
-  // 情况 B: 如果是网络图片 (http://...)
-  if (src.startsWith('http')) {
-    try {
-      const res = await wx.getImageInfo({ src });
-      return res.path;
-    } catch (e) {
-      return src; // 试着返回原路径作为兜底
-    }
-  }
-
-  // 情况 C: 本地路径 /assets/...
-  return src;
-}
-
 Page({
   data: {
     ui: null as any,
@@ -130,6 +102,7 @@ Page({
   
   // 分享配置
   async onShareTap() {
+    // 1. 如果已经生成过，直接弹窗
     if (this.data.shareImage) {
       this.setData({ showShareModal: true });
       return;
@@ -138,75 +111,43 @@ Page({
     wx.showLoading({ title: '正在冲印海报...', mask: true });
 
     try {
-      // --- 第一步：准备图片路径 ---
-      
-      // 1. 获取当前 MBTI 类型 (转小写，如 intp)
-      // 注意：请确保你的 ui 数据里有 type 字段，如果没有，从 rawResult 获取
-      const mbtiType = (this.data.ui?.poster?.type || this.data.rawResult?.mbti_result || 'intp').toLowerCase();
-      console.log('当前 MBTI 类型:', mbtiType); // 调试：看看是不是 "t"
-
-      const CLOUD_ROOT = 'cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833/images/subPackages/';
-      const tarotCloudId = `${CLOUD_ROOT}bg_${mbtiType}.jpg`;
-
-      console.log('准备加载资源:', { tarotCloudId });
-      
-      const localTarotPath = await ensureLocalImage(tarotCloudId);
-      if (!localTarotPath) {
-        throw new Error(`云图片下载失败: ${tarotCloudId}`);
-      }
-
-      // 检查下载结果，防止空路径导致 Canvas 报错
-      // 3. 获取 Canvas 节点
+      // 2. 获取 Canvas 节点
       const query = wx.createSelectorQuery();
       query.select('#posterCanvas')
         .fields({ node: true, size: true })
         .exec(async (res) => {
           if (!res[0]) {
-            wx.hideLoading();
-            console.error('Canvas 节点未找到');
-            return;
+            throw new Error('Canvas not found');
           }
 
           const canvas = res[0].node;
           const ctx = canvas.getContext('2d');
+
+          // 3. 处理高清屏倍率
           const dpr = wx.getSystemInfoSync().pixelRatio;
-          
           canvas.width = res[0].width * dpr;
           canvas.height = res[0].height * dpr;
           ctx.scale(dpr, dpr);
 
-          ctx.fillStyle = '#FFFDF9'; 
-          ctx.fillRect(0, 0, res[0].width, res[0].height);
-
-          // 4. 构造绘图数据
-          const drawData = {
-            stickers: this.data.stickers,
-            tarot: {
-              // 如果下载成功用下载的图，失败了用默认图或空
-              image: localTarotPath || '/assets/images/default_cover.png', 
-              name: this.data.ui?.poster?.title || '命运之牌'
-            }
+          // 4. 绘制海报 (传入 ui 数据)
+          // 注意：这里用 this.data.ui.poster 作为绘图数据源，你可以根据实际情况调整
+          const posterData = {
+            type: this.data.ui?.poster?.type || 'MBTI',
+            name: this.data.ui?.poster?.title || '测试者',
+            tags: (this.data.stickers || []).map((s:any) => s.text).slice(0, 3), // 取前3个标签
+            desc: this.data.ui?.poster?.summary || '暂无描述'
           };
+          
+          await drawPoster(canvas, ctx, posterData, 1);
 
-          const uiData = {
-            ...this.data.ui,
-            poster: {
-              ...this.data.ui?.poster,
-              bg_image: '' // 传入本地背景图路径
-            }
-          };
-
-          // 5. 执行绘制
-          await drawPoster(canvas, ctx, drawData, uiData);
-
-          // 6. 导出图片
+          // 5. 生成临时图片路径
           wx.canvasToTempFilePath({
             canvas,
             x: 0, y: 0,
-            width: res[0].width, height: res[0].height,
-            destWidth: res[0].width * dpr, destHeight: res[0].height * dpr,
-            fileType: 'jpg',
-            quality: 0.85,
+            width: res[0].width,
+            height: res[0].height,
+            destWidth: res[0].width * dpr,
+            destHeight: res[0].height * dpr,
             success: (fileRes) => {
               this.setData({
                 shareImage: fileRes.tempFilePath,
@@ -215,17 +156,17 @@ Page({
               wx.hideLoading();
             },
             fail: (err) => {
-              console.error('导出失败', err);
+              console.error('生成图片失败', err);
               wx.hideLoading();
-              wx.showToast({ title: '保存失败', icon: 'none' });
+              wx.showToast({ title: '海报生成失败', icon: 'none' });
             }
           });
         });
 
     } catch (e) {
-      console.error('整体流程失败', e);
+      console.error(e);
       wx.hideLoading();
-      wx.showToast({ title: '网络开小差了', icon: 'none' });
+      wx.showToast({ title: '发生错误', icon: 'none' });
     }
   },
 

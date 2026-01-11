@@ -85,7 +85,7 @@
   <view class="action-bar {{animStage === 'docked' ? 'visible' : ''}}">
     <button class="btn-share" open-type="share">分享给朋友</button>
     
-    <view class="btn-save" bindtap="onShareTap">分享到朋友圈 📸</view>
+    <view class="btn-save" bindtap="onViewTarot">查看命运卡牌</view>
   </view>
 </view>
 <view class="tarot-layer {{animStage}} {{isFocused ? 'focused' : ''}}" catchtap="{{isFocused ? 'onDismissTarot' : 'onViewTarot'}}">
@@ -146,17 +146,11 @@
   <view class="share-modal {{showShareModal ? 'show' : ''}}" catchtouchmove="preventBubble">
     <view class="modal-mask" bindtap="closeShareModal"></view>
     <view class="modal-content">
-      <scroll-view scroll-y class="image-wrapper" show-scrollbar="{{true}}">
-        <image 
-          src="{{shareImage}}" 
-          mode="widthFix" 
-          class="poster-preview" 
-          show-menu-by-longpress
-        ></image>
-      </scroll-view>
-
+      <view class="image-wrapper">
+        <image src="{{shareImage}}" mode="widthFix" class="poster-preview" show-menu-by-longpress></image>
+      </view>
       <view class="modal-actions">
-        <button class="save-btn" bindtap="onSaveImage">长按保存图片</button>
+        <button class="save-btn" bindtap="onSaveImage">保存图片发朋友圈</button>
         <view class="close-text" bindtap="closeShareModal">关闭</view>
       </view>
     </view>
