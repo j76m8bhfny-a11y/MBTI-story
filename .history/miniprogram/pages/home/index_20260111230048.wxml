@@ -1,7 +1,7 @@
 <view class="home-container">
   <view class="noise-overlay"></view>
 
-  <view class="top-slogan">如果人生电影可以重剪...</view>
+  <view class="top-slogan">如果人生可以重来...</view>
 
   <view class="hero-collage">
     <view class="doodle-star star-1">✦</view>
@@ -34,7 +34,7 @@
 
   <view class="title-area">
     <text class="main-title">16人格·人生剧本</text>
-    <text class="sub-title">这一次，请按照你最喜欢的样子去演</text>
+    <text class="sub-title">如果人生是一部可以重剪的电影，这一次，请按照你最喜欢的样子去演</text>
   </view>
 
   <view class="receipt-card">

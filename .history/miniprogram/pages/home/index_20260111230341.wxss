@@ -74,7 +74,7 @@
 .main-title {
   display: block;
   font-family: "Didot", "Songti SC", serif;
-  font-size: 60rpx;
+  font-size: 80rpx;
   color: #4A3B3B;
   font-weight: bold;
   letter-spacing: -2rpx;
@@ -104,8 +104,8 @@
   animation: slideInUp 1s ease-out 1s forwards;
 }
 .receipt-line {
-  font-family: "Courier New", monospace;
-  font-size: 20rpx;
+  font-family: "Songti SC", "Noto Serif SC", serif;
+  font-size: 28rpx;
   color: #666;
   line-height: 1.6;
 }

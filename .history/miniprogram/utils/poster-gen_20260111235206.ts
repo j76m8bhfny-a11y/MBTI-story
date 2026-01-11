@@ -406,7 +406,7 @@ export const drawPoster = async (canvas: any, ctx: any, data: any, ui: any) => {
   // 4. 绘制金句大引号
   const quoteSize = rpx(80);
   ctx.font = `bold ${quoteSize}px serif`;
-  ctx.fillStyle = '#d2adf4ff'; 
+  ctx.fillStyle = '#D7CCC8'; 
   ctx.textAlign = 'left'; 
   ctx.textBaseline = 'top';
   
@@ -420,7 +420,7 @@ export const drawPoster = async (canvas: any, ctx: any, data: any, ui: any) => {
   drawWrappedText(ctx, summaryText, cardX + rpx(80), textTop, contentWidth, lineHeight);
   
   // 右引号
-  ctx.fillStyle = '#d2adf4ff'; 
+  ctx.fillStyle = '#D7CCC8'; 
   ctx.font = `bold ${quoteSize}px serif`;
   // 计算一下右引号位置：根据文字实际高度
   const actualTextBottom = textTop + textSectionHeight;

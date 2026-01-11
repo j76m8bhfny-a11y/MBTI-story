@@ -6,7 +6,7 @@ import { Answer, MBTIResult } from '../../types';
 
 // ⚠️ 新增：阶段映射配置
 const STAGE_MAP: Record<string, { start: number, end: number, nextStage: string | null }> = {
-  '1': { start: 0,  end: 9,  nextStage: '2' }, // 0-9 是 10 道题
+  '1': { start: 0,  end: 1,  nextStage: '2' }, // 0-9 是 10 道题
   '2': { start: 10, end: 19, nextStage: '3' },
   '3': { start: 20, end: 29, nextStage: '4' },
   '4': { start: 30, end: 39, nextStage: '5' }, // 第 31-40 题
@@ -381,16 +381,7 @@ Page<TestPageData, any>({
   onTouchEnd(e: any) {
     // 如果正在动画，或者不是从顶部图片区域开始滑的，忽略
     if (this.data.isAnimating || !this.touchStartX) return;
-    if (!this.data.hasInteracted) {
-      // 1. 触发震动
-      wx.vibrateShort({ type: 'heavy' }); 
-      // 2. 触发 CSS 抖动动画
-      this.setData({ isShaking: true });
-      setTimeout(() => { this.setData({ isShaking: false }); }, 500);
-      // 3. 提示
-      wx.showToast({ title: '请先选个答案鸭~', icon: 'none', duration: 1500 });
-      return; // ⛔️ 拦截成功，不再往下执行
-    }
+
     const diff = this.currentMoveX;
     const absDiff = Math.abs(diff);
 
@@ -514,7 +505,6 @@ Page<TestPageData, any>({
       // 3. 注入所有答案
       finalAnswers.forEach((ans: Answer, index: number) => {
         // 容错：防止数组越界
-        if (!ans) return;
         if (index < questions.length) {
           const qItem = questions[index];
           // 核心调用：传入题目和用户选的 0-6 索引
@@ -668,7 +658,7 @@ Page<TestPageData, any>({
 
     // ⚠️ 边界防御：如果是最后一题，禁止跳转下一题，而是去结算
     if (this.data.currentQIndex >= maxIndex) {
-      this.finishAllTests(); // 跳转结算页
+      this.goToResult(); // 跳转结算页
       return;
     }
 

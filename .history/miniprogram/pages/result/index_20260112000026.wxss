@@ -328,8 +328,8 @@ background-repeat: repeat-x;}
   padding-top: 35rpx;
   padding-bottom: 10rpx;
 }
-.note-text::before { content: '“'; font-family: serif; font-size: 80rpx; color: #d2adf4ff; position: absolute; top: -40rpx; left: -40rpx; }
-.note-text::after { content: '”'; font-family: serif; font-size: 80rpx; color: #d2adf4ff; position: absolute; bottom: -40rpx; right: -40rpx; line-height: 0; }
+.note-text::before { content: '“'; font-family: serif; font-size: 80rpx; color: #DDD; position: absolute; top: -40rpx; left: -40rpx; }
+.note-text::after { content: '”'; font-family: serif; font-size: 80rpx; color: #DDD; position: absolute; bottom: -40rpx; right: -40rpx; line-height: 0; }
 
 /* 签名 */
 .signature-box { text-align: right; border-top: 1px solid #EAEAEA; padding-top: 20rpx; width: 100%; }

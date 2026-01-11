@@ -381,16 +381,7 @@ Page<TestPageData, any>({
   onTouchEnd(e: any) {
     // 如果正在动画，或者不是从顶部图片区域开始滑的，忽略
     if (this.data.isAnimating || !this.touchStartX) return;
-    if (!this.data.hasInteracted) {
-      // 1. 触发震动
-      wx.vibrateShort({ type: 'heavy' }); 
-      // 2. 触发 CSS 抖动动画
-      this.setData({ isShaking: true });
-      setTimeout(() => { this.setData({ isShaking: false }); }, 500);
-      // 3. 提示
-      wx.showToast({ title: '请先选个答案鸭~', icon: 'none', duration: 1500 });
-      return; // ⛔️ 拦截成功，不再往下执行
-    }
+
     const diff = this.currentMoveX;
     const absDiff = Math.abs(diff);
 
