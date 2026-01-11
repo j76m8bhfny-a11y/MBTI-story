@@ -64,7 +64,7 @@ Page<TestPageData, any>({
     isCardSelected: false,
     hasInteracted: false, // ⚠️ 新增：是否已操作滑块
     isSceneReady: false, // ⚠️ 新增：场景是否准备好（用于揭幕）
-    currentStage: '1', // ⚠️ 新增：默认第一阶段
+    currentStage: '1' // ⚠️ 新增：默认第一阶段
     isShaking: false, // ⚠️ 新增：默认不抖
   },
 
