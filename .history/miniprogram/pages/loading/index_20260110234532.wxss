@@ -1,0 +1,21 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #FFFBF5;
+}
+.progress-bar {
+  width: 60%;
+  height: 4px;
+  background: #eee;
+  border-radius: 2px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+.progress {
+  height: 100%;
+  background: #333;
+  transition: width 0.3s ease;
+}

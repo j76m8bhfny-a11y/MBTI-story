@@ -1,0 +1,6 @@
+<view class="loading-container">
+  <view class="loading-text">资源加载中...</view>
+  <view class="progress-bar">
+    <view class="progress" style="width: {{progress}}%"></view>
+  </view>
+</view>

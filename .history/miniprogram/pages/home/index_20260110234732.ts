@@ -7,9 +7,6 @@ Page({
   },
   onLoad() {
     this.generateIdentity();
-    this.setData({
-      images: app.globalData.preloadImages
-    });
   },
   generateIdentity() {
     const randomNum: number = Math.floor(10000 + Math.random() * 90000);
