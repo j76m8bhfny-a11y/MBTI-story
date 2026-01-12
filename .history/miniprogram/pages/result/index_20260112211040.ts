@@ -144,7 +144,7 @@ Page({
       const mbtiType = (this.data.ui?.poster?.type || this.data.rawResult?.mbti_result || 'intp').toLowerCase();
       // ⚠️ 确认下你的云存储路径前缀
       const CLOUD_ROOT = 'cloud://cloud1-2gygzrzj1714d360.636c-cloud1-2gygzrzj1714d360-1394992833/images/subPackages/';
-      const tarotCloudId = `${CLOUD_ROOT}bg_${mbtiType}.jpg`; 
+      const tarotCloudId = `${CLOUD_ROOT}bg_${mbtiType}.png`; 
 
       // 下载背景图
       const localTarotPath = await ensureLocalImage(tarotCloudId);
